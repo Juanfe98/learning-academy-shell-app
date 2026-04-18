@@ -10,7 +10,7 @@ import {
   Settings,
   Zap,
 } from "lucide-react";
-import { useSidebarStore } from "@/lib/store/sidebar";
+import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -129,7 +129,8 @@ export function DesktopSidebar() {
 /* ── Mobile drawer (slide-in) ───────────────────────────────────────────── */
 
 export function MobileDrawer() {
-  const { isOpen, close } = useSidebarStore();
+  const { sidebarOpen: isOpen, setSidebarOpen } = useUIStore();
+  const close = () => setSidebarOpen(false);
 
   return (
     <AnimatePresence>

@@ -2,10 +2,11 @@
 
 import { Menu, Zap } from "lucide-react";
 import { motion } from "framer-motion";
-import { useSidebarStore } from "@/lib/store/sidebar";
+import { useUIStore } from "@/lib/store";
 
 export default function TopBar() {
-  const toggle = useSidebarStore((s) => s.toggle);
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
+  const toggle = () => setSidebarOpen(!sidebarOpen);
 
   return (
     <header

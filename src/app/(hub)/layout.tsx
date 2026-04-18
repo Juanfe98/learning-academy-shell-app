@@ -1,12 +1,16 @@
 import { DesktopSidebar, MobileDrawer } from "@/components/hub/Sidebar";
 import TopBar from "@/components/hub/TopBar";
 import PageTransition from "@/components/hub/PageTransition";
+import StoreHydrator from "@/components/hub/StoreHydrator";
 
 export default function HubLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       {/* Desktop: fixed sidebar */}
       <DesktopSidebar />
+
+      {/* Hydrate persisted store on client */}
+      <StoreHydrator />
 
       {/* Mobile: slide-in drawer + backdrop */}
       <MobileDrawer />

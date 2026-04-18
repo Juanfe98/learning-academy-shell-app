@@ -7,7 +7,7 @@ import { ArrowRight, Flame, Clock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui";
 import PathCard from "@/components/hub/PathCard";
 import { MOCK_ACADEMIES } from "@/lib/mock-data";
-import { useProgressStore } from "@/lib/store/progress";
+import { useProgressStore } from "@/lib/store";
 
 /* ─── Helpers ────────────────────────────────────────────��───────────────── */
 
@@ -241,12 +241,12 @@ function StatsSection({
 function ResumeCTA({
   lastVisited,
 }: {
-  lastVisited: { academy: string; slug: string } | null;
+  lastVisited: { academy: string; moduleSlug: string; moduleTitle: string } | null;
 }) {
   if (!lastVisited) return null;
 
   const academy = MOCK_ACADEMIES.find((a) => a.slug === lastVisited.academy);
-  const route = academy?.routes.find((r) => r.slug === lastVisited.slug);
+  const route = academy?.routes.find((r) => r.slug === lastVisited.moduleSlug);
   if (!academy || !route) return null;
 
   return (
@@ -254,7 +254,7 @@ function ResumeCTA({
       <div className="max-w-5xl mx-auto">
         <motion.div {...inView(0)}>
           <Link
-            href={`/learn/${lastVisited.academy}/${lastVisited.slug}`}
+            href={`/learn/${lastVisited.academy}/${lastVisited.moduleSlug}`}
             className="group block"
           >
             <div
@@ -285,7 +285,7 @@ function ResumeCTA({
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
-  const { academies, lastVisited } = useProgressStore();
+  const { academies, lastVisited, streak, totalMinutesStudied } = useProgressStore();
 
   useEffect(() => {
     setMounted(true);
@@ -297,7 +297,7 @@ export default function HomePage() {
           a.slug,
           getAcademyProgress(
             a.slug,
-            academies[a.slug]?.routes ?? {},
+            academies[a.slug]?.modules ?? {},
             a.moduleCount
           ),
         ])
@@ -306,7 +306,7 @@ export default function HomePage() {
 
   const modulesCompleted = mounted
     ? Object.values(academies)
-        .flatMap((a) => Object.values(a.routes))
+        .flatMap((a) => Object.values(a.modules))
         .filter((r) => r.completed).length
     : 0;
 
@@ -316,8 +316,8 @@ export default function HomePage() {
       <PathsSection academyProgress={academyProgress} />
       <StatsSection
         modulesCompleted={modulesCompleted}
-        hoursStudied={0}
-        dayStreak={0}
+        hoursStudied={mounted ? Math.floor(totalMinutesStudied / 60) : 0}
+        dayStreak={mounted ? streak.current : 0}
       />
       {mounted && <ResumeCTA lastVisited={lastVisited} />}
     </>
