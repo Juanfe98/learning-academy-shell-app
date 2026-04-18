@@ -4,10 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { useProgressStore } from "@/lib/store";
-import type { MockAcademy } from "@/lib/mock-data";
+
+interface SidebarAcademy {
+  slug: string;
+  title: string;
+  icon: string;
+  accentColor: string;
+  routes: Array<{ slug: string; title: string }>;
+  learningPath: string[];
+}
 
 interface LearnSidebarProps {
-  academy: MockAcademy;
+  academy: SidebarAcademy;
   currentSlug: string;
 }
 
@@ -37,7 +45,7 @@ export default function LearnSidebar({ academy, currentSlug }: LearnSidebarProps
         </div>
         <div className="min-w-0">
           <p className="text-xs font-semibold text-primary truncate">{academy.title}</p>
-          <p className="text-[10px] text-muted">{academy.moduleCount} modules</p>
+          <p className="text-[10px] text-muted">{academy.learningPath.length} modules</p>
         </div>
       </div>
 

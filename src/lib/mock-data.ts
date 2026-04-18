@@ -2,7 +2,8 @@ import type { AcademyManifest, AcademyRoute } from "./types/academy";
 
 export type MockAcademyRoute = Omit<AcademyRoute, "component">;
 
-export interface MockAcademy extends Omit<AcademyManifest, "routes"> {
+export interface MockAcademy
+  extends Omit<AcademyManifest, "routes" | "totalEstimatedMinutes"> {
   comingSoon?: boolean;
   moduleCount: number;
   totalHours: number;
@@ -121,6 +122,26 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
       "federation",
       "production",
     ],
+  },
+  {
+    slug: "web-fundamentals",
+    title: "Web Fundamentals",
+    description:
+      "A ground-up tour of the web platform — HTTP, HTML, CSS, JavaScript, and how browsers turn bytes into pixels.",
+    version: "1.0.0",
+    icon: "🌐",
+    accentColor: "#0ea5e9",
+    moduleCount: 5,
+    totalHours: 1.5,
+    comingSoon: false,
+    routes: [
+      { slug: "intro", title: "Introduction to the Web", order: 0, estimatedMinutes: 10, tags: ["fundamentals", "http"] },
+      { slug: "html-structure", title: "HTML Structure", order: 1, estimatedMinutes: 15, tags: ["html", "semantics"] },
+      { slug: "css-fundamentals", title: "CSS Fundamentals", order: 2, estimatedMinutes: 20, tags: ["css", "layout"] },
+      { slug: "javascript-basics", title: "JavaScript Basics", order: 3, estimatedMinutes: 25, tags: ["javascript", "dom"] },
+      { slug: "how-browsers-work", title: "How Browsers Work", order: 4, estimatedMinutes: 15, tags: ["browser", "performance"] },
+    ],
+    learningPath: ["intro", "html-structure", "css-fundamentals", "javascript-basics", "how-browsers-work"],
   },
   {
     slug: "graphql-core",

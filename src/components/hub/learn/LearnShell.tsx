@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,16 +14,32 @@ import {
 } from "lucide-react";
 import { Badge, Skeleton } from "@/components/ui";
 import { useProgressStore } from "@/lib/store";
+import type { TocItem } from "@/lib/types/academy";
 import ErrorBoundary from "./ErrorBoundary";
-import MockModuleContent, { MOCK_TOC, type TocItem } from "./MockModuleContent";
 import ProgressToast from "./ProgressToast";
-import type { MockAcademy, MockAcademyRoute } from "@/lib/mock-data";
+
+interface ShellAcademy {
+  slug: string;
+  title: string;
+  accentColor: string;
+  routes: Array<{ slug: string; title: string }>;
+  learningPath: string[];
+}
+
+interface ShellRoute {
+  slug: string;
+  title: string;
+  estimatedMinutes?: number;
+  tags?: string[];
+}
 
 interface LearnShellProps {
-  academy: MockAcademy;
-  route: MockAcademyRoute;
+  academy: ShellAcademy;
+  route: ShellRoute;
   prevSlug: string | null;
   nextSlug: string | null;
+  toc: TocItem[];
+  children: ReactNode;
 }
 
 /* ── Content skeleton ──────────────────────────────────────────────────── */
@@ -138,6 +154,8 @@ export default function LearnShell({
   route,
   prevSlug,
   nextSlug,
+  toc,
+  children,
 }: LearnShellProps) {
   const router = useRouter();
   const [showToast, setShowToast] = useState(false);
@@ -197,15 +215,12 @@ export default function LearnShell({
       },
       { rootMargin: "-10% 0% -65% 0%", threshold: 0 }
     );
-    MOCK_TOC.forEach(({ id }) => {
+    toc.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, []);
-
-  /* Content component — plug in route.component here when available */
-  const ContentComponent = MockModuleContent;
+  }, [toc]);
 
   return (
     <>
@@ -258,7 +273,7 @@ export default function LearnShell({
           >
             <ErrorBoundary>
               <Suspense fallback={<ContentSkeleton />}>
-                <ContentComponent />
+                {children}
               </Suspense>
             </ErrorBoundary>
           </motion.div>
@@ -338,7 +353,7 @@ export default function LearnShell({
         {/* ── Right: Table of contents (desktop xl+) ───────────────────── */}
         <aside className="hidden xl:block w-52 shrink-0 pt-16 pr-6 pb-8">
           <div className="sticky top-8">
-            <TableOfContents items={MOCK_TOC} activeId={activeHeadingId} />
+            <TableOfContents items={toc} activeId={activeHeadingId} />
           </div>
         </aside>
       </div>

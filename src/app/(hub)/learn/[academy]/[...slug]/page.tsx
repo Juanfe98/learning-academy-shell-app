@@ -2,9 +2,11 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import LearnSidebar from "@/components/hub/learn/LearnSidebar";
 import LearnShell from "@/components/hub/learn/LearnShell";
+import MockModuleContent, { MOCK_TOC } from "@/components/hub/learn/MockModuleContent";
+import { findAcademy } from "@/lib/registry";
 import { MOCK_ACADEMIES } from "@/lib/mock-data";
 
-/* ─── Not found ─────────────────────────────────────────────────────────────── */
+/* ─── Not found ──────────────────────────────────────────────────────────── */
 
 function NotFound({ message }: { message: string }) {
   return (
@@ -32,42 +34,26 @@ function NotFound({ message }: { message: string }) {
   );
 }
 
-/* ─── Page ───────────────────────────────────────────────────────────────────── */
+/* ─── Shell layout wrapper ───────────────────────────────────────────────── */
 
-export default async function ContentViewerPage({
-  params,
+function ShellLayout({
+  academy,
+  routeSlug,
+  children,
 }: {
-  params: Promise<{ academy: string; slug: string[] }>;
+  academy: {
+    slug: string;
+    title: string;
+    icon: string;
+    accentColor: string;
+    routes: Array<{ slug: string; title: string }>;
+    learningPath: string[];
+  };
+  routeSlug: string;
+  children: React.ReactNode;
 }) {
-  const { academy: academySlug, slug } = await params;
-  const routeSlug = slug[0]; // catch-all; sub-paths not used yet
-
-  const academy = MOCK_ACADEMIES.find((a) => a.slug === academySlug);
-  if (!academy) {
-    return (
-      <NotFound message="We couldn't find an academy at this path. It may have moved or not been added yet." />
-    );
-  }
-
-  const route = academy.routes.find((r) => r.slug === routeSlug);
-  if (!route) {
-    return (
-      <NotFound
-        message={`Module "${routeSlug}" doesn't exist in ${academy.title}. Check the learning path for valid modules.`}
-      />
-    );
-  }
-
-  const pathIndex = academy.learningPath.indexOf(routeSlug);
-  const prevSlug = pathIndex > 0 ? academy.learningPath[pathIndex - 1] : null;
-  const nextSlug =
-    pathIndex < academy.learningPath.length - 1
-      ? academy.learningPath[pathIndex + 1]
-      : null;
-
   return (
     <div className="flex min-h-full">
-      {/* Left: module navigation sidebar */}
       <aside
         className="hidden lg:flex flex-col w-[260px] shrink-0 sticky top-0 self-start h-screen overflow-y-auto"
         style={{
@@ -77,14 +63,103 @@ export default async function ContentViewerPage({
       >
         <LearnSidebar academy={academy} currentSlug={routeSlug} />
       </aside>
+      {children}
+    </div>
+  );
+}
 
-      {/* Center + right: article and ToC */}
+/* ─── Page ───────────────────────────────────────────────────────────────── */
+
+export default async function ContentViewerPage({
+  params,
+}: {
+  params: Promise<{ academy: string; slug: string[] }>;
+}) {
+  const { academy: academySlug, slug } = await params;
+  const routeSlug = slug[0];
+
+  /* ── Registry path: real content ────────────────────────────────────── */
+  const registryAcademy = findAcademy(academySlug);
+
+  if (registryAcademy) {
+    const route = registryAcademy.routes.find((r) => r.slug === routeSlug);
+    if (!route) {
+      return (
+        <NotFound
+          message={`Module "${routeSlug}" doesn't exist in ${registryAcademy.title}.`}
+        />
+      );
+    }
+
+    const pathIndex = registryAcademy.learningPath.indexOf(routeSlug);
+    const prevSlug = pathIndex > 0 ? registryAcademy.learningPath[pathIndex - 1] : null;
+    const nextSlug =
+      pathIndex < registryAcademy.learningPath.length - 1
+        ? registryAcademy.learningPath[pathIndex + 1]
+        : null;
+
+    // Dynamic import — runs on the server, result is serializable JSX
+    const mod = await route.component();
+    const Content = mod.default;
+    const toc = mod.toc ?? [];
+
+    const { component: _fn, ...routeProps } = route;
+
+    const serializableAcademy = {
+      ...registryAcademy,
+      routes: registryAcademy.routes.map(({ component: _c, ...r }) => r),
+    };
+
+    return (
+      <ShellLayout academy={serializableAcademy} routeSlug={routeSlug}>
+        <LearnShell
+          academy={serializableAcademy}
+          route={routeProps}
+          prevSlug={prevSlug}
+          nextSlug={nextSlug}
+          toc={toc}
+        >
+          <Content />
+        </LearnShell>
+      </ShellLayout>
+    );
+  }
+
+  /* ── Mock-data fallback: shell with placeholder content ─────────────── */
+  const mockAcademy = MOCK_ACADEMIES.find((a) => a.slug === academySlug);
+  if (!mockAcademy) {
+    return (
+      <NotFound message="We couldn't find an academy at this path. It may have moved or not been added yet." />
+    );
+  }
+
+  const route = mockAcademy.routes.find((r) => r.slug === routeSlug);
+  if (!route) {
+    return (
+      <NotFound
+        message={`Module "${routeSlug}" doesn't exist in ${mockAcademy.title}. Check the learning path for valid modules.`}
+      />
+    );
+  }
+
+  const pathIndex = mockAcademy.learningPath.indexOf(routeSlug);
+  const prevSlug = pathIndex > 0 ? mockAcademy.learningPath[pathIndex - 1] : null;
+  const nextSlug =
+    pathIndex < mockAcademy.learningPath.length - 1
+      ? mockAcademy.learningPath[pathIndex + 1]
+      : null;
+
+  return (
+    <ShellLayout academy={mockAcademy} routeSlug={routeSlug}>
       <LearnShell
-        academy={academy}
+        academy={mockAcademy}
         route={route}
         prevSlug={prevSlug}
         nextSlug={nextSlug}
-      />
-    </div>
+        toc={MOCK_TOC}
+      >
+        <MockModuleContent />
+      </LearnShell>
+    </ShellLayout>
   );
 }

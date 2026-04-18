@@ -27,9 +27,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
     >
-      <body className="bg-base text-primary min-h-full flex flex-col">
+      <body className="bg-base text-primary">
         {children}
       </body>
     </html>

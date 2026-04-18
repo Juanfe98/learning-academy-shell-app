@@ -1,8 +1,5 @@
-export interface TocItem {
-  id: string;
-  title: string;
-  level: 2 | 3;
-}
+export type { TocItem } from "@/lib/types/academy";
+import type { TocItem } from "@/lib/types/academy";
 
 export const MOCK_TOC: TocItem[] = [
   { id: "what-is-graphql", title: "What is GraphQL?", level: 2 },
