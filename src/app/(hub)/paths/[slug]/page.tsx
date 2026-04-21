@@ -154,7 +154,7 @@ export default async function PathOverviewPage({
         </div>
 
         {/* ── Right: progress sidebar (desktop only, non-coming-soon) ──── */}
-        {!academy.comingSoon && (
+        {!academy.comingSoon && !academy.externalUrl && (
           <aside className="hidden xl:block w-64 shrink-0">
             <PathProgressPanel academy={academy} />
           </aside>

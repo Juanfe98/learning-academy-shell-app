@@ -2,6 +2,7 @@ import { DesktopSidebar, MobileDrawer } from "@/components/hub/Sidebar";
 import TopBar from "@/components/hub/TopBar";
 import PageTransition from "@/components/hub/PageTransition";
 import StoreHydrator from "@/components/hub/StoreHydrator";
+import ScrollToTop from "@/components/hub/ScrollToTop";
 
 export default function HubLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,7 +22,9 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
         <TopBar />
 
         {/* Scrollable content area */}
+        <ScrollToTop />
         <main
+          id="hub-main"
           className="flex-1 overflow-y-auto relative"
           style={{ background: "var(--bg-base)" }}
         >

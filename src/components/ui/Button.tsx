@@ -59,7 +59,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={[
           "inline-flex items-center justify-center font-medium",
           "transition-colors duration-150 outline-none",
-          "focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-base",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-base",
           "disabled:cursor-not-allowed",
           variantClasses[variant],
           sizeClasses[size],

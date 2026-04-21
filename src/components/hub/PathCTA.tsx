@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button, ProgressBar } from "@/components/ui";
 import { useProgressStore } from "@/lib/store";
 import type { MockAcademy } from "@/lib/mock-data";
@@ -34,6 +34,26 @@ export default function PathCTA({ academy }: PathCTAProps) {
 
   const hasStarted = mounted && completedCount > 0;
   const isFinished = mounted && completedCount >= academy.moduleCount && academy.moduleCount > 0;
+
+  if (academy.externalUrl) {
+    return (
+      <a href={academy.externalUrl} target="_blank" rel="noopener noreferrer">
+        <Button
+          size="lg"
+          variant="primary"
+          className="w-full sm:w-auto"
+          style={{
+            "--tw-ring-color": academy.accentColor,
+            background: academy.accentColor,
+            borderColor: academy.accentColor,
+          } as React.CSSProperties}
+        >
+          Open Academy
+          <ExternalLink size={16} />
+        </Button>
+      </a>
+    );
+  }
 
   const ctaLabel = isFinished ? "Review Path" : hasStarted ? "Continue Learning" : "Start Learning";
   const ctaHref = firstIncompleteSlug

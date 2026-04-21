@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Settings,
   Zap,
+  BrainCircuit,
 } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,7 @@ const navItems = [
   { href: "/", label: "Home", icon: House },
   { href: "/paths", label: "Learning Paths", icon: Map },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/interview", label: "Interview Prep", icon: BrainCircuit },
 ];
 
 function NavItem({
@@ -33,7 +35,7 @@ function NavItem({
   onClick?: () => void;
 }) {
   return (
-    <Link href={href} onClick={onClick} className="block">
+    <Link href={href} onClick={onClick} className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
       <motion.div
         whileHover={{ x: 2 }}
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -54,6 +56,7 @@ function NavItem({
         )}
         <Icon
           size={16}
+          aria-hidden={true}
           className={cn(
             "shrink-0 transition-colors",
             active ? "text-accent" : "text-muted group-hover:text-secondary"
@@ -73,7 +76,7 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
       {/* Logo */}
       <div className="px-4 py-5 flex items-center gap-2.5 border-b border-border-subtle">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent to-violet-400 flex items-center justify-center shrink-0">
-          <Zap size={14} className="text-white" fill="white" />
+          <Zap size={14} className="text-white" fill="white" aria-hidden={true} />
         </div>
         <span className="font-semibold text-primary tracking-tight text-[15px]">
           SE Hub
@@ -81,7 +84,7 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav aria-label="Main navigation" className="flex-1 px-3 py-4 space-y-0.5">
         {navItems.map(({ href, label, icon }) => (
           <NavItem
             key={href}

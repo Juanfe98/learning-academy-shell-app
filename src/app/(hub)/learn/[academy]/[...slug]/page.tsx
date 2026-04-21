@@ -1,10 +1,23 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import LearnSidebar from "@/components/hub/learn/LearnSidebar";
 import LearnShell from "@/components/hub/learn/LearnShell";
 import MockModuleContent, { MOCK_TOC } from "@/components/hub/learn/MockModuleContent";
+import WFLearnSidebar from "@/components/hub/learn/wf/WFLearnSidebar";
+import ModuleOverviewPage from "@/components/hub/learn/wf/ModuleOverviewPage";
+import LessonPage from "@/components/hub/learn/wf/LessonPage";
+import ChallengePage from "@/components/hub/learn/wf/ChallengePage";
+import PlaygroundLoader from "@/components/hub/learn/wf/PlaygroundLoader";
 import { findAcademy } from "@/lib/registry";
 import { MOCK_ACADEMIES } from "@/lib/mock-data";
+import {
+  getModule,
+  getLesson,
+  getChallenge,
+  getLessonExplanation,
+  getPrevNextLesson,
+} from "@/modules/web-fundamentals/data";
 
 /* ─── Not found ──────────────────────────────────────────────────────────── */
 
@@ -34,7 +47,7 @@ function NotFound({ message }: { message: string }) {
   );
 }
 
-/* ─── Shell layout wrapper ───────────────────────────────────────────────── */
+/* ─── Shell layout wrappers ──────────────────────────────────────────────── */
 
 function ShellLayout({
   academy,
@@ -68,6 +81,33 @@ function ShellLayout({
   );
 }
 
+function WFShellLayout({
+  moduleId,
+  itemId,
+  itemType,
+  children,
+}: {
+  moduleId: string;
+  itemId: string;
+  itemType: "overview" | "lesson" | "challenge";
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex min-h-full">
+      <aside
+        className="hidden lg:flex flex-col w-[280px] shrink-0 sticky top-0 self-start h-screen overflow-y-auto"
+        style={{
+          background: "var(--bg-surface)",
+          borderRight: "1px solid var(--border-subtle)",
+        }}
+      >
+        <WFLearnSidebar moduleId={moduleId} itemId={itemId} itemType={itemType} />
+      </aside>
+      {children}
+    </div>
+  );
+}
+
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 
 export default async function ContentViewerPage({
@@ -77,6 +117,56 @@ export default async function ContentViewerPage({
 }) {
   const { academy: academySlug, slug } = await params;
   const routeSlug = slug[0];
+
+  /* ── Web Fundamentals: structured dispatch ────────────────────────────── */
+  if (academySlug === "web-fundamentals") {
+    const [type, id] = slug;
+
+    if (type === "module" && id) {
+      const mod = getModule(id);
+      if (!mod) return <NotFound message={`Module "${id}" not found in Web Fundamentals.`} />;
+      return (
+        <WFShellLayout moduleId={id} itemId={id} itemType="overview">
+          <ModuleOverviewPage module={mod} />
+        </WFShellLayout>
+      );
+    }
+
+    if (type === "lesson" && id) {
+      const lesson = getLesson(id);
+      if (!lesson) return <NotFound message={`Lesson "${id}" not found in Web Fundamentals.`} />;
+      const explanationFn = getLessonExplanation(id);
+      const { prev, next } = getPrevNextLesson(id);
+      return (
+        <WFShellLayout moduleId={lesson.moduleId} itemId={id} itemType="lesson">
+          <LessonPage lesson={lesson} prevLesson={prev} nextLesson={next}>
+            {explanationFn ? explanationFn() : null}
+          </LessonPage>
+        </WFShellLayout>
+      );
+    }
+
+    if (type === "challenge" && id) {
+      const challenge = getChallenge(id);
+      if (!challenge) return <NotFound message={`Challenge "${id}" not found in Web Fundamentals.`} />;
+      return (
+        <WFShellLayout moduleId={challenge.moduleId} itemId={id} itemType="challenge">
+          <ChallengePage challenge={challenge} />
+        </WFShellLayout>
+      );
+    }
+
+    if (type === "playground") {
+      const challengeId = slug[1]; // optional pre-load
+      return (
+        <div className="flex-1 min-w-0">
+          <PlaygroundLoader challengeId={challengeId} />
+        </div>
+      );
+    }
+
+    return <NotFound message="This section is coming in the next update." />;
+  }
 
   /* ── Registry path: real content ────────────────────────────────────── */
   const registryAcademy = findAcademy(academySlug);
@@ -98,7 +188,6 @@ export default async function ContentViewerPage({
         ? registryAcademy.learningPath[pathIndex + 1]
         : null;
 
-    // Dynamic import — runs on the server, result is serializable JSX
     const mod = await route.component();
     const Content = mod.default;
     const toc = mod.toc ?? [];
@@ -127,6 +216,9 @@ export default async function ContentViewerPage({
 
   /* ── Mock-data fallback: shell with placeholder content ─────────────── */
   const mockAcademy = MOCK_ACADEMIES.find((a) => a.slug === academySlug);
+  if (mockAcademy?.externalUrl) {
+    redirect(mockAcademy.externalUrl);
+  }
   if (!mockAcademy) {
     return (
       <NotFound message="We couldn't find an academy at this path. It may have moved or not been added yet." />
