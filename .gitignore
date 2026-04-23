@@ -39,6 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# academy modules (populated by sync-modules.sh at build time)
-/src/modules/
