@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { useUIStore } from "@/lib/store";
 
 export default function TopBar() {
-  const { sidebarOpen, setSidebarOpen } = useUIStore();
-  const toggle = () => setSidebarOpen(!sidebarOpen);
+  const { mobileDrawerOpen, setMobileDrawerOpen } = useUIStore();
+  const toggle = () => setMobileDrawerOpen(!mobileDrawerOpen);
 
   return (
     <header
