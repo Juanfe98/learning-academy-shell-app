@@ -1,0 +1,90 @@
+import type { AcademyManifest } from "@/lib/types/academy";
+
+const manifest: AcademyManifest = {
+  slug: "typescript-mastery",
+  title: "TypeScript Mastery",
+  description:
+    "Go beyond the basics — structural typing, generics, utility types, mapped and conditional types, and the advanced patterns that separate TypeScript experts from beginners.",
+  version: "1.0.0",
+  icon: "🔷",
+  accentColor: "#3b82f6",
+  totalEstimatedMinutes: 220,
+  routes: [
+    {
+      slug: "the-type-system",
+      title: "The Type System",
+      order: 0,
+      estimatedMinutes: 20,
+      tags: ["typescript", "fundamentals"],
+      component: () => import("./modules/the-type-system"),
+    },
+    {
+      slug: "types-and-interfaces",
+      title: "Types & Interfaces",
+      order: 1,
+      estimatedMinutes: 25,
+      tags: ["typescript", "interfaces"],
+      component: () => import("./modules/types-and-interfaces"),
+    },
+    {
+      slug: "generics",
+      title: "Generics",
+      order: 2,
+      estimatedMinutes: 30,
+      tags: ["typescript", "generics"],
+      component: () => import("./modules/generics"),
+    },
+    {
+      slug: "utility-types",
+      title: "Utility Types",
+      order: 3,
+      estimatedMinutes: 30,
+      tags: ["typescript", "utility-types"],
+      component: () => import("./modules/utility-types"),
+    },
+    {
+      slug: "type-narrowing",
+      title: "Type Narrowing",
+      order: 4,
+      estimatedMinutes: 25,
+      tags: ["typescript", "narrowing"],
+      component: () => import("./modules/type-narrowing"),
+    },
+    {
+      slug: "mapped-types",
+      title: "Mapped Types",
+      order: 5,
+      estimatedMinutes: 30,
+      tags: ["typescript", "mapped-types"],
+      component: () => import("./modules/mapped-types"),
+    },
+    {
+      slug: "conditional-types",
+      title: "Conditional Types",
+      order: 6,
+      estimatedMinutes: 35,
+      tags: ["typescript", "conditional-types", "infer"],
+      component: () => import("./modules/conditional-types"),
+    },
+    {
+      slug: "advanced-patterns",
+      title: "Advanced Patterns",
+      order: 7,
+      estimatedMinutes: 25,
+      tags: ["typescript", "advanced", "satisfies"],
+      component: () => import("./modules/advanced-patterns"),
+    },
+  ],
+  learningPath: [
+    "the-type-system",
+    "types-and-interfaces",
+    "generics",
+    "utility-types",
+    "type-narrowing",
+    "mapped-types",
+    "conditional-types",
+    "advanced-patterns",
+  ],
+};
+
+export default manifest;
