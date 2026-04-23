@@ -51,7 +51,7 @@ export default function LessonPage({ lesson, prevLesson, nextLesson, children }:
   }
 
   return (
-    <div className="flex-1 min-w-0 overflow-y-auto">
+    <div className="flex-1 min-w-0">
       <div className="max-w-2xl mx-auto px-6 py-10">
         {/* Lesson header */}
         <motion.div

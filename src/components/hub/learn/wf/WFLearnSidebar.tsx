@@ -132,16 +132,15 @@ export default function WFLearnSidebar({ moduleId, itemId, itemType }: WFLearnSi
                     const isActive = itemType === "challenge" && itemId === challenge.id;
                     const done = isCompleted(`challenge/${challenge.id}`);
                     return (
-                      <div
+                      <Link
                         key={challenge.id}
-                        className="flex items-center gap-1.5 px-2 py-1.5 rounded-md"
+                        href={`/learn/web-fundamentals/challenge/${challenge.id}`}
+                        className="flex items-center gap-1.5 px-2 py-1.5 rounded-md transition-colors"
                         style={{
                           background: isActive ? `${ACCENT}12` : "transparent",
-                          color: "var(--text-muted)",
-                          cursor: "default",
-                          opacity: 0.7,
+                          color: isActive ? "var(--text-primary)" : done ? "var(--text-muted)" : "var(--text-secondary)",
+                          fontWeight: isActive ? 500 : 400,
                         }}
-                        title="Challenges coming in next update"
                       >
                         {done ? (
                           <CheckCircle2 size={11} className="shrink-0 text-success" />
@@ -149,7 +148,7 @@ export default function WFLearnSidebar({ moduleId, itemId, itemType }: WFLearnSi
                           <Zap size={11} className="shrink-0" style={{ color: "var(--text-muted)" }} />
                         )}
                         <span className="text-[11px] leading-snug truncate">{challenge.title}</span>
-                      </div>
+                      </Link>
                     );
                   })}
                 </div>

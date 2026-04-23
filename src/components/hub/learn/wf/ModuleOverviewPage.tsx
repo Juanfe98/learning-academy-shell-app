@@ -40,7 +40,7 @@ export default function ModuleOverviewPage({ module }: ModuleOverviewPageProps) 
   const completedCount = module.lessons.filter((l) => isLessonCompleted(l.id)).length;
 
   return (
-    <div className="flex-1 min-w-0 overflow-y-auto">
+    <div className="flex-1 min-w-0">
       <div className="max-w-3xl mx-auto px-6 py-10">
         {/* Header */}
         <motion.div

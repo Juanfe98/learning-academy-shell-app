@@ -66,9 +66,9 @@ function ShellLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-full">
+    <div className="flex min-h-screen lg:h-screen lg:overflow-hidden">
       <aside
-        className="hidden lg:flex flex-col w-[260px] shrink-0 sticky top-0 self-start h-screen overflow-y-auto"
+        className="hidden lg:flex flex-col w-[260px] shrink-0 h-full"
         style={{
           background: "var(--bg-surface)",
           borderRight: "1px solid var(--border-subtle)",
@@ -76,7 +76,9 @@ function ShellLayout({
       >
         <LearnSidebar academy={academy} currentSlug={routeSlug} />
       </aside>
-      {children}
+      <div className="flex-1 min-w-0 lg:overflow-y-auto">
+        {children}
+      </div>
     </div>
   );
 }
@@ -93,9 +95,9 @@ function WFShellLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-full">
+    <div className="flex min-h-screen lg:h-screen lg:overflow-hidden">
       <aside
-        className="hidden lg:flex flex-col w-[280px] shrink-0 sticky top-0 self-start h-screen overflow-y-auto"
+        className="hidden lg:flex flex-col w-[280px] shrink-0 h-full"
         style={{
           background: "var(--bg-surface)",
           borderRight: "1px solid var(--border-subtle)",
@@ -103,7 +105,9 @@ function WFShellLayout({
       >
         <WFLearnSidebar moduleId={moduleId} itemId={itemId} itemType={itemType} />
       </aside>
-      {children}
+      <div className="flex-1 min-w-0 lg:overflow-y-auto">
+        {children}
+      </div>
     </div>
   );
 }
@@ -116,6 +120,7 @@ export default async function ContentViewerPage({
   params: Promise<{ academy: string; slug: string[] }>;
 }) {
   const { academy: academySlug, slug } = await params;
+  console.log("🚀 ~ ContentViewerPage ~ academySlug:", academySlug);
   const routeSlug = slug[0];
 
   /* ── Web Fundamentals: structured dispatch ────────────────────────────── */
@@ -126,7 +131,7 @@ export default async function ContentViewerPage({
       const mod = getModule(id);
       if (!mod) return <NotFound message={`Module "${id}" not found in Web Fundamentals.`} />;
       return (
-        <WFShellLayout moduleId={id} itemId={id} itemType="overview">
+        <WFShellLayout moduleId={id} itemId={id} itemType="challenge">
           <ModuleOverviewPage module={mod} />
         </WFShellLayout>
       );

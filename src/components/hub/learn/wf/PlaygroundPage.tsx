@@ -298,6 +298,15 @@ export default function PlaygroundPage({ challengeId }: PlaygroundPageProps) {
               </div>
               {/* Description */}
               <p className="text-xs text-secondary leading-relaxed">{activeChallenge.description}</p>
+              {activeChallenge.targetImage && (
+                <div className="rounded-lg overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <img
+                    src={activeChallenge.targetImage.src}
+                    alt={activeChallenge.targetImage.alt}
+                    className="block w-full h-auto"
+                  />
+                </div>
+              )}
               {/* Requirements */}
               {activeChallenge.requirements.length > 0 && (
                 <ul className="flex flex-wrap gap-x-5 gap-y-1">

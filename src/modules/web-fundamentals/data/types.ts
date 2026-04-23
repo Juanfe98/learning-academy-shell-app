@@ -13,6 +13,12 @@ export interface PracticeTask {
   hint?: string;
 }
 
+export interface ChallengeTargetImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface Lesson {
   id: string;
   moduleId: string;
@@ -32,6 +38,7 @@ export interface Challenge {
   title: string;
   difficulty: Difficulty;
   description: string;
+  targetImage?: ChallengeTargetImage;
   requirements: string[];
   starterHtml?: string;
   starterCss?: string;

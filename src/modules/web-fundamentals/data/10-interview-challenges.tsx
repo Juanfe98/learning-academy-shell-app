@@ -4,10 +4,10 @@ export const interviewChallenges: LearningModule = {
   id: "interview-challenges",
   title: "Interview Layout Challenges",
   description:
-    "The 10 most common CSS layout problems asked in frontend interviews. Work through these and you'll be ready for any layout question.",
+    "A bank of realistic HTML and CSS interview exercises focused on layout, semantics, debugging, and reconstructing UIs from visual targets.",
   icon: "🎯",
   order: 9,
-  estimatedHours: 3.5,
+  estimatedHours: 5,
   lessons: [
     {
       id: "layout-debugging-workflow",
@@ -191,6 +191,12 @@ a { display: block; padding: 0.5rem 1rem; text-decoration: none; }`,
       difficulty: "hard",
       description:
         "The famous 'Holy Grail' layout: header, three equal-height columns (left sidebar, main content, right sidebar), and footer. The main column grows; sidebars are fixed.",
+      targetImage: {
+        src: "/wf-challenges/holy-grail-layout.svg",
+        alt: "Holy Grail layout mock with full-width header and footer, fixed left and right sidebars, and flexible main content in the center.",
+        caption:
+          "Treat this as a structural layout exercise first: identify the outer page shell, then the three-column middle band, then the responsive collapse strategy.",
+      },
       requirements: [
         "Header spans full width at the top",
         "Footer spans full width at the bottom",
@@ -621,6 +627,256 @@ body { font-family: system-ui, sans-serif; }
         "Add a full-bleed image with the text overlaid on top",
       ],
       conceptsCovered: ["positioning", "css-variables", "responsive-design"],
+    },
+    {
+      id: "rebuild-from-mock",
+      moduleId: "interview-challenges",
+      title: "Rebuild a Layout From a Mock",
+      difficulty: "hard",
+      description:
+        "This is the closest exercise to the classic interview pain point: you are shown a visual target and asked to recreate it. The skill being tested is not only CSS syntax, but layout breakdown, constraint analysis, and choosing the right HTML structure before styling.",
+      targetImage: {
+        src: "/wf-challenges/rebuild-from-mock.svg",
+        alt: "Dashboard mock with sidebar, header, hero card, stat cards, and lower content grid.",
+        caption:
+          "Treat this as the interview target: first identify the major regions, then decide which parts are Grid, which are Flexbox, and which content should stay semantic.",
+      },
+      requirements: [
+        "Create a dashboard-like layout with a left sidebar, top header, hero card, stats row, and content grid",
+        "You are only allowed one pass on the HTML structure before styling — plan the regions first",
+        "Use semantic landmarks where appropriate: header, nav, main, aside, section",
+        "Use a combination of Grid and Flexbox intentionally rather than forcing one tool everywhere",
+        "Maintain consistent spacing, alignment, and vertical rhythm across all sections",
+        "At tablet/mobile widths, the layout must collapse cleanly without overlapping or clipping content",
+        "Write a short notes block above your CSS explaining your layout breakdown in plain language",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rebuild From Mock</title>
+</head>
+<body>
+  <!-- Imagine the interviewer gave you a screenshot of a dashboard.
+       Recreate it with semantic HTML first, then style it. -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }`,
+      expectedResult:
+        "A polished dashboard-style layout that feels intentionally structured rather than guessed. The final result should show strong region planning, consistent spacing, and clean responsive collapse.",
+      hints: [
+        "Before writing CSS, identify the major regions: app shell, sidebar, top bar, main content, sub-sections, repeated cards.",
+        "Use Grid for the page shell and larger content regions; use Flexbox inside components for alignment.",
+        "If the layout feels hard, you probably skipped the breakdown step and started styling too early.",
+      ],
+      bonusTasks: [
+        "Add a notes comment explaining why each region is Grid or Flexbox",
+        "Create an icon-only collapsed sidebar state at medium widths",
+        "Add a loading skeleton version of the layout that preserves the same geometry",
+      ],
+      conceptsCovered: ["css-grid", "flexbox", "responsive-design", "layout-debugging-workflow", "semantic-html"],
+    },
+    {
+      id: "comparison-table-rebuild",
+      moduleId: "interview-challenges",
+      title: "Responsive Comparison Table",
+      difficulty: "hard",
+      description:
+        "Build a dense feature-comparison table that remains semantic, readable, and responsive. This challenge targets the exact kind of HTML/CSS problem that exposes whether someone understands structured content or only visual boxes.",
+      targetImage: {
+        src: "/wf-challenges/comparison-table-rebuild.svg",
+        alt: "Feature comparison table mock with plan columns, sticky-looking header row, and highlighted recommended column.",
+        caption:
+          "The target is a semantic comparison interface, not a fake div grid. Focus on headers, scanning rhythm, and responsive containment.",
+      },
+      requirements: [
+        "Use a real semantic table with caption, thead, tbody, column headers, and row headers",
+        "Include at least four plans across the top and eight feature rows",
+        "Recommended plan is visually highlighted without breaking table semantics",
+        "Table must remain readable on narrow screens by wrapping in a horizontal scroll region rather than destroying the table structure",
+        "Sticky first column or sticky header is a bonus, but the base version must still be clean and usable",
+        "Status indicators like yes/no must have a text alternative, not color alone",
+        "Spacing and alignment must make row/column comparison easy at a glance",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparison Table</title>
+</head>
+<body>
+  <section class="comparison">
+    <!-- Build a semantic feature comparison table here -->
+  </section>
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; color: #0f172a; }`,
+      expectedResult:
+        "A professional comparison table that preserves semantic table markup, supports scanning across rows and columns, and remains usable on smaller viewports.",
+      hints: [
+        "This is a table problem, not a div grid problem.",
+        "Wrap the table in an overflow-x container on small screens instead of replacing it with cards immediately.",
+        "Use row headers for feature names so screen readers announce comparisons correctly.",
+      ],
+      bonusTasks: [
+        "Make the header row sticky during vertical scroll",
+        "Make the first column sticky during horizontal scroll",
+        "Add visually-hidden helper text for icon-only status cells",
+      ],
+      conceptsCovered: ["lists-and-tables", "responsive-design", "accessibility-fundamentals", "visual-ui"],
+    },
+    {
+      id: "editorial-article-layout",
+      moduleId: "interview-challenges",
+      title: "Editorial Article Layout",
+      difficulty: "hard",
+      description:
+        "Build a long-form article page with strong semantics, typography, media handling, and supporting content. This challenge forces you to think about reading rhythm, hierarchy, and structural HTML — not just boxes on a screen.",
+      targetImage: {
+        src: "/wf-challenges/editorial-article-layout.svg",
+        alt: "Editorial article mock with full-width hero image, narrow reading column, sticky aside, and supporting quote and figure blocks.",
+        caption:
+          "Notice the narrow reading measure, the supporting aside, and the change in rhythm between hero media, body copy, and side content.",
+      },
+      requirements: [
+        "Use semantic article markup with header, article, sections, figure, figcaption, aside, and footer where appropriate",
+        "Include a reading-width content column, a sticky table of contents or aside on desktop, and a full-width hero media block",
+        "Images must preserve aspect ratio and avoid layout shift",
+        "Heading hierarchy must be clean and navigable",
+        "Lists, quotes, and metadata should use the right semantic elements rather than generic divs",
+        "Layout must adapt cleanly to mobile without making line lengths unreadable",
+        "Typography and spacing should feel editorial, not like default browser styles",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editorial Article</title>
+</head>
+<body>
+  <!-- Build a rich editorial layout here -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Georgia, serif; color: #111827; background: #fff; }`,
+      expectedResult:
+        "A reading-focused article experience with strong semantic structure, thoughtful typography, and a desktop/mobile layout that still feels intentional.",
+      hints: [
+        "Think in content regions first: article header, main reading column, supporting aside, figures, pull quotes, footer.",
+        "Use a constrained measure for body copy. Wide text columns make good content feel bad.",
+        "A visually strong article layout is mostly spacing, type scale, and media treatment.",
+      ],
+      bonusTasks: [
+        "Add a sticky progress indicator or table of contents on desktop",
+        "Use picture or responsive media for the hero image",
+        "Add footnotes or source links using ordered lists and proper anchors",
+      ],
+      conceptsCovered: ["semantic-html", "lists-and-tables", "responsive-media", "typography-spacing", "interactive-semantics"],
+    },
+    {
+      id: "complex-form-wizard",
+      moduleId: "interview-challenges",
+      title: "Multi-Step Form Wizard",
+      difficulty: "hard",
+      description:
+        "Build a multi-step form that tests layout, grouping, validation, and accessible interaction all at once. This is a common interview shape because it reveals whether someone can combine semantics with UI state cleanly.",
+      targetImage: {
+        src: "/wf-challenges/complex-form-wizard.svg",
+        alt: "Multi-step form wizard mock with progress tracker, grouped fields, side summary panel, and sticky action footer.",
+        caption:
+          "Read this as both a semantics challenge and a layout challenge: there is grouped form content, progress state, and a structured summary area.",
+      },
+      requirements: [
+        "Three steps minimum: personal info, preferences, confirmation",
+        "Each step uses correct labels, grouping, help text, and error associations",
+        "Progress indicator is visible and understandable",
+        "Buttons and links must use the correct semantics throughout the flow",
+        "Form layout must adapt between single-column mobile and denser desktop arrangement",
+        "Validation errors should be connected to inputs and clearly visible",
+        "Final confirmation screen summarizes the entered information in a structured way",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Wizard</title>
+</head>
+<body>
+  <!-- Build a multi-step form flow here -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; color: #0f172a; }`,
+      expectedResult:
+        "A clear, accessible wizard flow that feels like a real product form rather than a pile of inputs. Layout, grouping, and messaging should make each step easy to understand.",
+      hints: [
+        "Use fieldset and legend for grouped choices, not just visual headings.",
+        "The review step is a great place to use lists or description lists for structured summary content.",
+        "This challenge is about both semantics and layout rhythm, not only validation logic.",
+      ],
+      bonusTasks: [
+        "Persist progress between refreshes with localStorage",
+        "Add a mobile stepper that collapses to a simpler progress indicator",
+        "Add inline validation with aria-live announcements",
+      ],
+      conceptsCovered: ["form-basics", "interactive-semantics", "accessibility-fundamentals", "responsive-design", "lists-and-tables"],
+    },
+    {
+      id: "layout-breakdown-notes",
+      moduleId: "interview-challenges",
+      title: "Layout Breakdown From an Image",
+      difficulty: "hard",
+      description:
+        "This challenge is specifically for the interview scenario where someone shows you an image and says: 'we need to get to this.' Your job is to analyze the visual, name the regions, choose the layout tools, and then implement the shell with confidence.",
+      targetImage: {
+        src: "/wf-challenges/layout-breakdown-notes.svg",
+        alt: "Complex application mock with left rail, filters, board-like content columns, floating summary card, and layered visual sections.",
+        caption:
+          "Do not code immediately. Use the image to practice layout decomposition: large rectangles first, internal alignment second, polish last.",
+      },
+      requirements: [
+        "Start by writing a plain-language breakdown of the image before coding: regions, axes, repeated patterns, alignment rules, and spacing rhythm",
+        "Identify which parts are page-level Grid problems and which are component-level Flexbox problems",
+        "Build the layout shell first in grayscale blocks before adding detail styling",
+        "Use semantic HTML where the content suggests landmarks, lists, cards, or tables",
+        "Avoid jumping straight to pixel-perfect polish before the geometry is correct",
+        "The finished solution must preserve the major proportions and alignments of the target",
+        "Include a short postmortem: what visual clues helped you choose the final layout strategy",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layout Breakdown</title>
+</head>
+<body>
+  <!-- 1. Write your region breakdown here.
+       2. Build a grayscale shell version of the layout.
+       3. Refine the final UI after the geometry is correct. -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #0f172a; color: #e5e7eb; }`,
+      expectedResult:
+        "A disciplined reconstruction process that proves you can read a visual target, break it into layout primitives, and implement a stable shell before getting lost in details.",
+      hints: [
+        "Ask: what are the big rectangles? Which ones repeat? Which ones align to a column system? Which areas are just internal component alignment?",
+        "Build ugly blocks first. Pretty comes later.",
+        "If you cannot explain the layout in words, you do not understand it well enough to code it yet.",
+      ],
+      bonusTasks: [
+        "Time-box yourself to 10 minutes for the shell before any polish",
+        "Repeat the challenge with two different mockups and compare your breakdown notes",
+        "Add a checklist you can reuse in future real interviews",
+      ],
+      conceptsCovered: ["layout-debugging-workflow", "css-grid", "flexbox", "semantic-html", "responsive-design"],
     },
   ],
 };

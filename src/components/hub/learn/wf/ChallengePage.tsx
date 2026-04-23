@@ -84,7 +84,7 @@ export default function ChallengePage({ challenge }: ChallengePageProps) {
   }
 
   return (
-    <div className="flex-1 min-w-0 overflow-y-auto">
+    <div className="flex-1 min-w-0">
       <div className="max-w-2xl mx-auto px-6 py-10">
 
         {/* Back link */}
@@ -125,6 +125,28 @@ export default function ChallengePage({ challenge }: ChallengePageProps) {
           <h1 className="text-2xl font-bold text-primary tracking-tight mb-3">{challenge.title}</h1>
           <p className="text-secondary text-sm leading-relaxed">{challenge.description}</p>
         </motion.div>
+
+        {challenge.targetImage && (
+          <section
+            className="mb-8 p-4 rounded-xl"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-2 text-primary">
+              <Star size={13} style={{ color: ACCENT }} />
+              Target Layout
+            </h2>
+            <div className="overflow-hidden rounded-xl" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+              <img
+                src={challenge.targetImage.src}
+                alt={challenge.targetImage.alt}
+                className="block w-full h-auto"
+              />
+            </div>
+            {challenge.targetImage.caption && (
+              <p className="mt-3 text-xs text-muted leading-relaxed">{challenge.targetImage.caption}</p>
+            )}
+          </section>
+        )}
 
         {/* Requirements */}
         <section

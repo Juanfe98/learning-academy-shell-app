@@ -28,7 +28,7 @@ export default function LearnSidebar({ academy, currentSlug }: LearnSidebarProps
   const isCompleted = (slug: string) => routeProgress[slug]?.completed === true;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0">
       {/* Academy header */}
       <div
         className="px-4 py-4 flex items-center gap-3 border-b shrink-0"
@@ -50,7 +50,7 @@ export default function LearnSidebar({ academy, currentSlug }: LearnSidebarProps
       </div>
 
       {/* Module list */}
-      <nav className="flex-1 overflow-y-auto py-2 px-2" aria-label="Module navigation">
+      <nav className="flex-1 min-h-0 overflow-y-auto py-2 px-2" aria-label="Module navigation">
         {academy.learningPath.map((routeSlug, index) => {
           const route = academy.routes.find((r) => r.slug === routeSlug);
           if (!route) return null;
