@@ -139,6 +139,12 @@ export const interviewChallenges: LearningModule = {
       difficulty: "easy",
       description:
         "Build a fixed-width sidebar + flexible main content layout. A staple of dashboards and documentation sites.",
+      targetImage: {
+        src: "/wf-challenges/two-column-sidebar.svg",
+        alt: "Application layout mock with a fixed-width dark sidebar on the left and a flexible light main content area on the right.",
+        caption:
+          "Read this as a page-shell problem first: one fixed navigation column, one flexible content column, and independent scrolling behavior in the sidebar.",
+      },
       requirements: [
         "Sidebar: 260px fixed width",
         "Main: fills remaining space",
@@ -298,6 +304,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; }`,
       difficulty: "medium",
       description:
         "Build a three-tier pricing section. The middle (recommended) plan is visually elevated and stands out from the others.",
+      targetImage: {
+        src: "/wf-challenges/pricing-section.svg",
+        alt: "Three-column pricing section mock with a visually elevated middle plan, popular badge, stacked features, and bottom-aligned call-to-action buttons.",
+        caption:
+          "Focus on the shared card structure first, then on how the recommended middle card breaks the pattern slightly without feeling like a different component.",
+      },
       requirements: [
         "Three pricing cards in a row on desktop",
         "Middle card is visually elevated: different background, border, and shadow",

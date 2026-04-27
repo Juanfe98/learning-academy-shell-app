@@ -318,6 +318,12 @@ section {
       difficulty: "medium",
       description:
         "Build a hero section that looks intentional at 375px (mobile) and 1280px (desktop). No framework, no JavaScript — pure HTML and CSS.",
+      targetImage: {
+        src: "/wf-challenges/mobile-first-hero.svg",
+        alt: "Marketing hero mock with large heading, supporting copy, two call-to-action buttons, and a product image beside the content at desktop size.",
+        caption:
+          "Treat this as the same component across two breakpoints, not two different pages. Your structure should survive the shift from stacked mobile to side-by-side desktop.",
+      },
       requirements: [
         "Mobile layout: content stacked vertically, centered",
         "Desktop layout (min-width: 1024px): content side-by-side with image",
@@ -364,7 +370,12 @@ img { max-width: 100%; display: block; }`,
         "Make the image use object-fit: cover inside a fixed-aspect-ratio container",
         "Add a CSS-only dark mode using prefers-color-scheme",
       ],
-      conceptsCovered: ["media-queries", "responsive-units", "flexbox", "css-variables"],
+      conceptsCovered: [
+        "media-queries",
+        "responsive-units",
+        "flexbox",
+        "css-variables",
+      ],
     },
   ],
 };
@@ -373,44 +384,49 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "media-queries": () => (
     <>
       <p>
-        Media queries are conditional CSS — styles that only apply when certain conditions
-        are met. The most common condition is viewport width, but media queries can also
-        target user preferences (<code>prefers-color-scheme</code>,{" "}
-        <code>prefers-reduced-motion</code>), device capabilities (<code>hover</code>,{" "}
-        <code>pointer</code>), and output media (<code>print</code>). They&apos;re the
-        mechanism that makes a single HTML document look appropriate at any size.
+        Media queries are conditional CSS — styles that only apply when certain
+        conditions are met. The most common condition is viewport width, but
+        media queries can also target user preferences (
+        <code>prefers-color-scheme</code>, <code>prefers-reduced-motion</code>),
+        device capabilities (<code>hover</code>, <code>pointer</code>), and
+        output media (<code>print</code>). They&apos;re the mechanism that makes
+        a single HTML document look appropriate at any size.
       </p>
       <p>
-        <strong>Mobile-first</strong> means writing base styles for the narrowest viewport
-        first, then adding complexity in <code>min-width</code> queries as the viewport
-        gets wider. This approach is superior to desktop-first because: the simpler, more
-        constrained mobile layout is the natural starting point; you&apos;re adding styles
-        rather than overriding them; and mobile devices only download the base styles for
-        layout (though all CSS is downloaded, the cascade ensures efficient application).
-        Rule of thumb: if you find yourself writing <code>display: none</code> to hide
-        mobile elements at desktop, you might be working desktop-first accidentally.
+        <strong>Mobile-first</strong> means writing base styles for the
+        narrowest viewport first, then adding complexity in{" "}
+        <code>min-width</code> queries as the viewport gets wider. This approach
+        is superior to desktop-first because: the simpler, more constrained
+        mobile layout is the natural starting point; you&apos;re adding styles
+        rather than overriding them; and mobile devices only download the base
+        styles for layout (though all CSS is downloaded, the cascade ensures
+        efficient application). Rule of thumb: if you find yourself writing{" "}
+        <code>display: none</code> to hide mobile elements at desktop, you might
+        be working desktop-first accidentally.
       </p>
       <p>
-        Choose breakpoints based on your <em>content</em>, not device sizes. The right
-        question isn&apos;t &quot;what&apos;s the iPad width?&quot; but &quot;at what
-        width does this layout start to look cramped?&quot;. Common content-based
-        breakpoints are roughly 640px, 768px, 1024px, and 1280px — but you should add
-        breakpoints wherever your content needs them, not on a fixed schedule. Using{" "}
-        <code>rem</code> units in breakpoints (<code>48rem</code> instead of{" "}
-        <code>768px</code>) respects user font size settings.
+        Choose breakpoints based on your <em>content</em>, not device sizes. The
+        right question isn&apos;t &quot;what&apos;s the iPad width?&quot; but
+        &quot;at what width does this layout start to look cramped?&quot;.
+        Common content-based breakpoints are roughly 640px, 768px, 1024px, and
+        1280px — but you should add breakpoints wherever your content needs
+        them, not on a fixed schedule. Using <code>rem</code> units in
+        breakpoints (<code>48rem</code> instead of <code>768px</code>) respects
+        user font size settings.
       </p>
       <p>
-        Responsive design is really a strategy for handling constraints, not just screen
-        widths. The constraints might be a narrow viewport, a coarse pointer, reduced
-        motion, large text settings, or a component embedded in a tighter container than it
-        had during development. The more your mental model includes those realities, the more
-        robust your UI becomes.
+        Responsive design is really a strategy for handling constraints, not
+        just screen widths. The constraints might be a narrow viewport, a coarse
+        pointer, reduced motion, large text settings, or a component embedded in
+        a tighter container than it had during development. The more your mental
+        model includes those realities, the more robust your UI becomes.
       </p>
       <p>
-        In interviews, it helps to talk about responsiveness as a progression: start with a
-        layout that works in the smallest reasonable context, then add room, density, and
-        enhancement as space increases. That framing makes you sound like someone designing
-        systems, not just sprinkling breakpoints into a stylesheet.
+        In interviews, it helps to talk about responsiveness as a progression:
+        start with a layout that works in the smallest reasonable context, then
+        add room, density, and enhancement as space increases. That framing
+        makes you sound like someone designing systems, not just sprinkling
+        breakpoints into a stylesheet.
       </p>
     </>
   ),
@@ -418,47 +434,54 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "responsive-units": () => (
     <>
       <p>
-        CSS has many units, and choosing the right one matters for both accessibility and
-        behaviour. <code>px</code> is fixed — predictable, but it doesn&apos;t adapt to
-        user preferences or viewport changes. <code>rem</code> is relative to the root
-        font size (typically 16px), making it ideal for font sizes and spacing: if a user
-        sets their browser base font to 20px, rem-based layouts scale up proportionally.
-        <code>em</code> is relative to the element&apos;s own font size, useful for
-        component-internal spacing that should scale with the component&apos;s text.
+        CSS has many units, and choosing the right one matters for both
+        accessibility and behaviour. <code>px</code> is fixed — predictable, but
+        it doesn&apos;t adapt to user preferences or viewport changes.{" "}
+        <code>rem</code> is relative to the root font size (typically 16px),
+        making it ideal for font sizes and spacing: if a user sets their browser
+        base font to 20px, rem-based layouts scale up proportionally.
+        <code>em</code> is relative to the element&apos;s own font size, useful
+        for component-internal spacing that should scale with the
+        component&apos;s text.
       </p>
       <p>
-        Viewport units — <code>vw</code> and <code>vh</code> — are relative to the
-        viewport width and height respectively. They&apos;re useful for full-viewport
-        sections and large fluid values, but mobile browsers complicate <code>vh</code>:
-        the address bar&apos;s visibility changes the viewport height, causing sections
-        set to <code>100vh</code> to jump in size. The solution is{" "}
-        <code>svh</code> (small viewport height — always the smallest possible viewport,
-        address bar visible) and <code>dvh</code> (dynamic — tracks the current actual
-        height as the address bar appears/disappears). Use <code>100svh</code> for
-        hero sections on mobile.
+        Viewport units — <code>vw</code> and <code>vh</code> — are relative to
+        the viewport width and height respectively. They&apos;re useful for
+        full-viewport sections and large fluid values, but mobile browsers
+        complicate <code>vh</code>: the address bar&apos;s visibility changes
+        the viewport height, causing sections set to <code>100vh</code> to jump
+        in size. The solution is <code>svh</code> (small viewport height —
+        always the smallest possible viewport, address bar visible) and{" "}
+        <code>dvh</code> (dynamic — tracks the current actual height as the
+        address bar appears/disappears). Use <code>100svh</code> for hero
+        sections on mobile.
       </p>
       <p>
-        <code>clamp(min, preferred, max)</code> is the modern approach to fluid scaling.
-        It returns the preferred value (usually a viewport-relative expression like{" "}
-        <code>4vw + 1rem</code>) clamped between the minimum and maximum.{" "}
-        <code>font-size: clamp(1.5rem, 4vw + 0.5rem, 3rem)</code> scales from 24px at
-        narrow viewports to 48px at wide viewports — no media queries needed. The companion
-        functions <code>min()</code> and <code>max()</code> are useful for constraints:{" "}
-        <code>width: min(90%, 1200px)</code> creates a container that&apos;s 90% wide on
-        small screens but never exceeds 1200px.
+        <code>clamp(min, preferred, max)</code> is the modern approach to fluid
+        scaling. It returns the preferred value (usually a viewport-relative
+        expression like <code>4vw + 1rem</code>) clamped between the minimum and
+        maximum. <code>font-size: clamp(1.5rem, 4vw + 0.5rem, 3rem)</code>{" "}
+        scales from 24px at narrow viewports to 48px at wide viewports — no
+        media queries needed. The companion functions <code>min()</code> and{" "}
+        <code>max()</code> are useful for constraints:{" "}
+        <code>width: min(90%, 1200px)</code> creates a container that&apos;s 90%
+        wide on small screens but never exceeds 1200px.
       </p>
       <p>
-        The key to unit choice is asking what should remain fixed, what should scale with
-        typography, and what should react to the viewport. Font sizes and spacing often want
-        <code>rem</code>. Component-internal offsets may want <code>em</code>. Full-screen
-        regions may want viewport units. Containers often want <code>min()</code> or{" "}
-        <code>clamp()</code> so they can be fluid without becoming absurd.
+        The key to unit choice is asking what should remain fixed, what should
+        scale with typography, and what should react to the viewport. Font sizes
+        and spacing often want
+        <code>rem</code>. Component-internal offsets may want <code>em</code>.
+        Full-screen regions may want viewport units. Containers often want{" "}
+        <code>min()</code> or <code>clamp()</code> so they can be fluid without
+        becoming absurd.
       </p>
       <p>
-        A mature responsive system usually mixes units on purpose. Using only pixels is too
-        rigid. Using only viewport units makes typography unstable. Using only rem can make
-        large-scale layouts feel disconnected from screen size. Strong CSS authors choose the
-        unit based on what should drive the relationship.
+        A mature responsive system usually mixes units on purpose. Using only
+        pixels is too rigid. Using only viewport units makes typography
+        unstable. Using only rem can make large-scale layouts feel disconnected
+        from screen size. Strong CSS authors choose the unit based on what
+        should drive the relationship.
       </p>
     </>
   ),
@@ -466,31 +489,35 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "responsive-media": () => (
     <>
       <p>
-        Responsive media has two jobs: choosing the right asset and displaying it in the
-        right box. HTML handles source selection with <code>srcset</code>,{" "}
-        <code>sizes</code>, and <code>picture</code>. CSS handles presentation with width,
-        height, <code>aspect-ratio</code>, and <code>object-fit</code>. Many teams blur
-        those concerns together and end up either shipping files that are too heavy or
-        cropping media in unpredictable ways.
+        Responsive media has two jobs: choosing the right asset and displaying
+        it in the right box. HTML handles source selection with{" "}
+        <code>srcset</code>, <code>sizes</code>, and <code>picture</code>. CSS
+        handles presentation with width, height, <code>aspect-ratio</code>, and{" "}
+        <code>object-fit</code>. Many teams blur those concerns together and end
+        up either shipping files that are too heavy or cropping media in
+        unpredictable ways.
       </p>
       <p>
-        <code>srcset</code> and <code>sizes</code> are for the same subject at different
-        resolutions. <code>picture</code> is for art direction or format switching, such as a
-        wider desktop crop and a tighter mobile crop, or WebP with JPEG fallback. That
-        distinction matters because it keeps your markup intentional instead of cargo-culted.
+        <code>srcset</code> and <code>sizes</code> are for the same subject at
+        different resolutions. <code>picture</code> is for art direction or
+        format switching, such as a wider desktop crop and a tighter mobile
+        crop, or WebP with JPEG fallback. That distinction matters because it
+        keeps your markup intentional instead of cargo-culted.
       </p>
       <p>
-        <code>aspect-ratio</code> is one of the nicest modern layout primitives because it
-        lets the browser reserve space before the asset arrives. Then <code>object-fit</code>{" "}
-        controls how that asset behaves inside the frame. <code>cover</code> prioritizes a
-        clean filled box, while <code>contain</code> prioritizes preserving the full image.
-        Good responsive media work is often about choosing which compromise matches the
-        product.
+        <code>aspect-ratio</code> is one of the nicest modern layout primitives
+        because it lets the browser reserve space before the asset arrives. Then{" "}
+        <code>object-fit</code> controls how that asset behaves inside the
+        frame. <code>cover</code> prioritizes a clean filled box, while{" "}
+        <code>contain</code> prioritizes preserving the full image. Good
+        responsive media work is often about choosing which compromise matches
+        the product.
       </p>
       <p>
-        In interviews, this topic is a chance to sound production-minded: you are not just
-        making the image smaller with CSS, you are helping the browser pick the right file,
-        preventing layout shift, and preserving the intended crop across devices.
+        In interviews, this topic is a chance to sound production-minded: you
+        are not just making the image smaller with CSS, you are helping the
+        browser pick the right file, preventing layout shift, and preserving the
+        intended crop across devices.
       </p>
     </>
   ),

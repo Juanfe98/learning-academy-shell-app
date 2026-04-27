@@ -274,6 +274,12 @@ export const flexbox: LearningModule = {
       difficulty: "easy",
       description:
         "Build a navigation bar that demonstrates mastery of flexbox alignment. No grid, no floats — flexbox only.",
+      targetImage: {
+        src: "/wf-challenges/flex-navbar.svg",
+        alt: "Navbar mock with brand at left, centered link group, and avatar plus call-to-action button at right.",
+        caption:
+          "This is a pure flex alignment problem. Focus on the three logical groups first, then on the spacing and centering inside each group.",
+      },
       requirements: [
         "Logo/brand on the far left",
         "Navigation links in the center",
@@ -319,7 +325,94 @@ a { text-decoration: none; color: inherit; }`,
         "Make the navbar responsive: at < 768px, hide the nav links and show a hamburger menu button",
         "Add a background blur (backdrop-filter: blur) and semi-transparent background to create a glassmorphism effect",
       ],
-      conceptsCovered: ["flex-basics", "flex-alignment", "gap", "justify-content", "align-items"],
+      conceptsCovered: [
+        "flex-basics",
+        "flex-alignment",
+        "gap",
+        "justify-content",
+        "align-items",
+      ],
+    },
+    {
+      id: "media-row-overflow",
+      moduleId: "flexbox",
+      title: "Flex Row Overflow & Truncation",
+      difficulty: "medium",
+      description:
+        "Build a horizontally compact list row with an avatar, long text content, metadata, and trailing actions. The real lesson is preventing the content column from blowing up the layout when text gets long.",
+      targetImage: {
+        src: "/wf-challenges/truncating-media-row.svg",
+        alt: "Compact list row mock with avatar, long title and subtitle content, status chip, timestamp, and trailing action button aligned in one line.",
+        caption:
+          "This challenge exists because `min-width: 0` is a real flexbox survival skill. The layout should stay stable even when the title is much longer than the available space.",
+      },
+      requirements: [
+        "Row uses flexbox only",
+        "Avatar stays fixed size and never shrinks",
+        "Main content column can grow and shrink with the available width",
+        "Long title text truncates with an ellipsis instead of forcing overflow",
+        "Supporting metadata stays aligned without wrapping awkwardly",
+        "Trailing action button remains visible at all widths above 320px",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flex Overflow Row</title>
+</head>
+<body>
+  <article class="message-row">
+    <img
+      class="message-row__avatar"
+      src="https://i.pravatar.cc/64?img=12"
+      alt="Profile photo for Maya Chen"
+      width="56"
+      height="56"
+    />
+
+    <div class="message-row__content">
+      <div class="message-row__top">
+        <h2 class="message-row__title">
+          Launch planning notes for the enterprise migration workstream with an unexpectedly long title
+        </h2>
+        <span class="message-row__badge">Blocked</span>
+      </div>
+      <p class="message-row__meta">Maya Chen · Updated 12 minutes ago · 4 unread replies</p>
+    </div>
+
+    <button class="message-row__action" type="button">Review</button>
+  </article>
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, sans-serif;
+  padding: 2rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+button { font: inherit; }
+img { display: block; max-width: 100%; }`,
+      expectedResult:
+        "A clean single-row layout that keeps the avatar and action button visible while the content column flexes between them. Long titles truncate gracefully instead of pushing the action button off-screen.",
+      hints: [
+        "This is the classic place where `min-width: 0` belongs: on the flex child that contains the truncating text.",
+        "Give the avatar and action fixed behavior, and let the middle column use `flex: 1`.",
+        "Ellipsis requires the right trio together: `overflow: hidden`, `text-overflow: ellipsis`, and `white-space: nowrap`.",
+      ],
+      bonusTasks: [
+        "Let the title wrap to two lines using line clamping instead of one-line truncation",
+        "Add a mobile variation where the metadata and action move onto a second row",
+        "Add a hover and focus-visible treatment that still keeps the row accessible",
+      ],
+      conceptsCovered: [
+        "flex-sizing",
+        "flex-alignment",
+        "overflow",
+        "text-overflow",
+        "min-width-0",
+      ],
     },
   ],
 };
@@ -328,43 +421,46 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "flex-basics": () => (
     <>
       <p>
-        Flexbox is a <em>one-dimensional</em> layout model — it lays items out along a
-        single axis at a time, either a row or a column. When you add{" "}
+        Flexbox is a <em>one-dimensional</em> layout model — it lays items out
+        along a single axis at a time, either a row or a column. When you add{" "}
         <code>display: flex</code> to an element, that element becomes the{" "}
-        <em>flex container</em> and its direct children become <em>flex items</em>. The
-        container controls the overall layout; the items control their individual sizing
-        and positioning within that layout.
+        <em>flex container</em> and its direct children become{" "}
+        <em>flex items</em>. The container controls the overall layout; the
+        items control their individual sizing and positioning within that
+        layout.
       </p>
       <p>
         The key mental model is the <strong>main axis</strong> and{" "}
-        <strong>cross axis</strong>. <code>flex-direction</code> sets the main axis:{" "}
-        <code>row</code> (default, horizontal) or <code>column</code> (vertical). The cross
-        axis is always perpendicular to the main axis.{" "}
+        <strong>cross axis</strong>. <code>flex-direction</code> sets the main
+        axis: <code>row</code> (default, horizontal) or <code>column</code>{" "}
+        (vertical). The cross axis is always perpendicular to the main axis.{" "}
         <code>justify-content</code> aligns items along the main axis.{" "}
-        <code>align-items</code> aligns items along the cross axis. When you change{" "}
-        <code>flex-direction: column</code>, these two swap their visual direction — a
-        frequent source of confusion until the main/cross axis model clicks.
+        <code>align-items</code> aligns items along the cross axis. When you
+        change <code>flex-direction: column</code>, these two swap their visual
+        direction — a frequent source of confusion until the main/cross axis
+        model clicks.
       </p>
       <p>
-        Flexbox replaced a messy era of float layouts and inline-block tricks for most
-        UI patterns. Centering both horizontally and vertically — notoriously awkward in
-        CSS for years — is now two lines:{" "}
-        <code>justify-content: center; align-items: center</code>. Navigation bars,
-        card rows, media objects, and toolbars are all natural fits for flexbox. For
-        two-dimensional layouts (rows <em>and</em> columns simultaneously), CSS Grid is
-        the right tool instead.
+        Flexbox replaced a messy era of float layouts and inline-block tricks
+        for most UI patterns. Centering both horizontally and vertically —
+        notoriously awkward in CSS for years — is now two lines:{" "}
+        <code>justify-content: center; align-items: center</code>. Navigation
+        bars, card rows, media objects, and toolbars are all natural fits for
+        flexbox. For two-dimensional layouts (rows <em>and</em> columns
+        simultaneously), CSS Grid is the right tool instead.
       </p>
       <p>
-        The most common Flexbox mistake is forgetting that only direct children become flex
-        items. If the child you want to align is wrapped in another div, the container is
-        aligning the wrapper, not the content inside it. That single fact explains a huge
-        percentage of &quot;why isn&apos;t flexbox working?&quot; debugging sessions.
+        The most common Flexbox mistake is forgetting that only direct children
+        become flex items. If the child you want to align is wrapped in another
+        div, the container is aligning the wrapper, not the content inside it.
+        That single fact explains a huge percentage of &quot;why isn&apos;t
+        flexbox working?&quot; debugging sessions.
       </p>
       <p>
-        As an interview topic, Flexbox is less about memorizing property names and more about
-        whether your mental model is stable under change. If I switch from row to column, do
-        you still know what the main axis is? If yes, you understand Flexbox. If not, you
-        only memorized the happy path.
+        As an interview topic, Flexbox is less about memorizing property names
+        and more about whether your mental model is stable under change. If I
+        switch from row to column, do you still know what the main axis is? If
+        yes, you understand Flexbox. If not, you only memorized the happy path.
       </p>
     </>
   ),
@@ -372,44 +468,50 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "flex-alignment": () => (
     <>
       <p>
-        Flexbox provides a rich set of alignment primitives that cover nearly every
-        one-dimensional alignment scenario. On the main axis, <code>justify-content</code>{" "}
-        has six useful values. <code>flex-start</code> and <code>flex-end</code> pack
-        items to either end. <code>center</code> groups them in the middle.{" "}
-        <code>space-between</code> puts the first and last items at the edges and
-        distributes equal gaps between them (no outer spacing). <code>space-around</code>{" "}
-        gives each item equal margin on both sides (so outer gaps are half the inner
-        gaps). <code>space-evenly</code> makes all gaps — including outer — equal.
+        Flexbox provides a rich set of alignment primitives that cover nearly
+        every one-dimensional alignment scenario. On the main axis,{" "}
+        <code>justify-content</code> has six useful values.{" "}
+        <code>flex-start</code> and <code>flex-end</code> pack items to either
+        end. <code>center</code> groups them in the middle.{" "}
+        <code>space-between</code> puts the first and last items at the edges
+        and distributes equal gaps between them (no outer spacing).{" "}
+        <code>space-around</code> gives each item equal margin on both sides (so
+        outer gaps are half the inner gaps). <code>space-evenly</code> makes all
+        gaps — including outer — equal.
       </p>
       <p>
-        On the cross axis, <code>align-items: stretch</code> (the default) makes all
-        items as tall as the tallest item — this is the mechanism behind equal-height
-        flex card rows. <code>align-items: center</code> vertically centers items.{" "}
-        <code>align-items: baseline</code> aligns items to their text baseline — useful
-        when items have different font sizes. An individual item can override the
-        container&apos;s <code>align-items</code> with its own{" "}
-        <code>align-self</code> property.
+        On the cross axis, <code>align-items: stretch</code> (the default) makes
+        all items as tall as the tallest item — this is the mechanism behind
+        equal-height flex card rows. <code>align-items: center</code> vertically
+        centers items. <code>align-items: baseline</code> aligns items to their
+        text baseline — useful when items have different font sizes. An
+        individual item can override the container&apos;s{" "}
+        <code>align-items</code> with its own <code>align-self</code> property.
       </p>
       <p>
-        A useful trick: <code>margin: auto</code> in a flex container absorbs all
-        remaining free space in the direction it&apos;s applied. A flex item with{" "}
-        <code>margin-left: auto</code> will push itself — and everything after it — to
-        the far right of the container. This is how you build a navbar with a logo on
-        the left and actions on the right using a single flat flex container.
+        A useful trick: <code>margin: auto</code> in a flex container absorbs
+        all remaining free space in the direction it&apos;s applied. A flex item
+        with <code>margin-left: auto</code> will push itself — and everything
+        after it — to the far right of the container. This is how you build a
+        navbar with a logo on the left and actions on the right using a single
+        flat flex container.
       </p>
       <p>
-        It also helps to separate <code>gap</code> from distributed spacing values like
-        <code>space-between</code>. <code>gap</code> creates fixed spacing between items
-        without changing alignment strategy. <code>space-between</code> uses all available
-        free space as distribution. Many layouts become more predictable when you choose one
-        job for each: <code>justify-content</code> for alignment, <code>gap</code> for
-        spacing.
+        It also helps to separate <code>gap</code> from distributed spacing
+        values like
+        <code>space-between</code>. <code>gap</code> creates fixed spacing
+        between items without changing alignment strategy.{" "}
+        <code>space-between</code> uses all available free space as
+        distribution. Many layouts become more predictable when you choose one
+        job for each: <code>justify-content</code> for alignment,{" "}
+        <code>gap</code> for spacing.
       </p>
       <p>
-        When people say Flexbox feels magical, this is usually the part they mean. But it
-        stops feeling magical when you remember that free space is a real quantity the layout
-        engine is distributing. Flexbox alignment becomes much easier when you keep asking:
-        &quot;along which axis is the free space being handed out?&quot;
+        When people say Flexbox feels magical, this is usually the part they
+        mean. But it stops feeling magical when you remember that free space is
+        a real quantity the layout engine is distributing. Flexbox alignment
+        becomes much easier when you keep asking: &quot;along which axis is the
+        free space being handed out?&quot;
       </p>
     </>
   ),
@@ -417,43 +519,48 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "flex-sizing": () => (
     <>
       <p>
-        Flex item sizing is controlled by three properties: <code>flex-grow</code>{" "}
-        (how much of available free space the item claims), <code>flex-shrink</code>{" "}
-        (how much it gives up when there&apos;s not enough space), and{" "}
-        <code>flex-basis</code> (the item&apos;s starting size before growth or
-        shrinkage is applied). The <code>flex</code> shorthand sets all three:{" "}
-        <code>flex: 1</code> means grow:1, shrink:1, basis:0.
+        Flex item sizing is controlled by three properties:{" "}
+        <code>flex-grow</code> (how much of available free space the item
+        claims), <code>flex-shrink</code> (how much it gives up when
+        there&apos;s not enough space), and <code>flex-basis</code> (the
+        item&apos;s starting size before growth or shrinkage is applied). The{" "}
+        <code>flex</code> shorthand sets all three: <code>flex: 1</code> means
+        grow:1, shrink:1, basis:0.
       </p>
       <p>
         The distinction between <code>flex: 1</code> (<code>basis: 0</code>) and{" "}
-        <code>flex: auto</code> (<code>basis: auto</code>) is subtle but important.
-        With <code>basis: 0</code>, items start from zero width and all available space
-        is distributed proportionally — so <code>flex: 1</code> items are truly equal
-        width regardless of content. With <code>basis: auto</code>, items start from
-        their natural content width and then grow proportionally — so items with more
-        content end up wider. For equal-width columns, use <code>flex: 1</code>.
+        <code>flex: auto</code> (<code>basis: auto</code>) is subtle but
+        important. With <code>basis: 0</code>, items start from zero width and
+        all available space is distributed proportionally — so{" "}
+        <code>flex: 1</code> items are truly equal width regardless of content.
+        With <code>basis: auto</code>, items start from their natural content
+        width and then grow proportionally — so items with more content end up
+        wider. For equal-width columns, use <code>flex: 1</code>.
       </p>
       <p>
-        Flex items have an implicit minimum size of <code>auto</code>, which means they
-        won&apos;t shrink below their content size. This prevents overflow in most
-        cases, but can cause issues when you want text to truncate: the item refuses to
-        shrink below the text&apos;s natural width. The fix is{" "}
-        <code>min-width: 0</code> on the flex item — this overrides the implicit
-        minimum and allows it to shrink as needed, letting <code>overflow: hidden</code>{" "}
-        and <code>text-overflow: ellipsis</code> work correctly.
+        Flex items have an implicit minimum size of <code>auto</code>, which
+        means they won&apos;t shrink below their content size. This prevents
+        overflow in most cases, but can cause issues when you want text to
+        truncate: the item refuses to shrink below the text&apos;s natural
+        width. The fix is <code>min-width: 0</code> on the flex item — this
+        overrides the implicit minimum and allows it to shrink as needed,
+        letting <code>overflow: hidden</code> and{" "}
+        <code>text-overflow: ellipsis</code> work correctly.
       </p>
       <p>
-        This sizing model is why Flexbox is so effective for application UI. Toolbars,
-        search rows, cards, split panes, and settings forms all need a negotiation between
-        natural content size and available free space. Flex sizing lets you describe that
-        negotiation directly instead of hardcoding widths for every breakpoint.
+        This sizing model is why Flexbox is so effective for application UI.
+        Toolbars, search rows, cards, split panes, and settings forms all need a
+        negotiation between natural content size and available free space. Flex
+        sizing lets you describe that negotiation directly instead of hardcoding
+        widths for every breakpoint.
       </p>
       <p>
-        One of the most interview-relevant details is knowing that overflow bugs in flex
-        layouts often come from minimum sizing, not from <code>overflow</code> itself. If a
-        flex child refuses to truncate, <code>min-width: 0</code> is frequently the real
-        fix. That&rsquo;s the kind of practical knowledge that separates memorization from
-        real debugging skill.
+        One of the most interview-relevant details is knowing that overflow bugs
+        in flex layouts often come from minimum sizing, not from{" "}
+        <code>overflow</code> itself. If a flex child refuses to truncate,{" "}
+        <code>min-width: 0</code> is frequently the real fix. That&rsquo;s the
+        kind of practical knowledge that separates memorization from real
+        debugging skill.
       </p>
     </>
   ),

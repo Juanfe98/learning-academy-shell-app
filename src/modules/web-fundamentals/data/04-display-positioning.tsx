@@ -65,12 +65,12 @@ export const displayPositioning: LearningModule = {
       ],
       commonMistakes: [
         "Setting width/height on inline elements and wondering why they don't apply — inline elements ignore those properties",
-        "Using display: none on decorative elements vs screen-reader-hidden elements — adds aria-hidden=\"true\" when you want to hide from AT too",
+        'Using display: none on decorative elements vs screen-reader-hidden elements — adds aria-hidden="true" when you want to hide from AT too',
         "Assuming opacity: 0 elements are non-interactive — they still receive mouse/touch/keyboard events",
         "Overusing inline-block when flexbox or grid is more appropriate",
       ],
       interviewTips: [
-        "display: none removes the element from the accessibility tree. visibility: hidden keeps it in the tree (it's still announced if focused). aria-hidden=\"true\" removes it from the AT tree but keeps it visible.",
+        'display: none removes the element from the accessibility tree. visibility: hidden keeps it in the tree (it\'s still announced if focused). aria-hidden="true" removes it from the AT tree but keeps it visible.',
         "The display property doesn't just affect the element itself — it creates a new formatting context. display: flex/grid establishes a new formatting context for children.",
         "Replaced elements (img, input, textarea, select, video) are inline by default but behave like inline-block — they respect width and height.",
       ],
@@ -269,6 +269,12 @@ export const displayPositioning: LearningModule = {
       difficulty: "medium",
       description:
         "Build a page with a sticky navigation header and a tooltip component. Both require correct use of positioning and z-index.",
+      targetImage: {
+        src: "/wf-challenges/sticky-header-tooltip.svg",
+        alt: "Page mock with a sticky top navigation bar, hovered tooltip over one nav item, and long scrolling content cards below.",
+        caption:
+          "Read the mock as two positioning problems layered together: a sticky shell at the top and an absolutely positioned tooltip inside it.",
+      },
       requirements: [
         "Navigation header uses position: sticky (not fixed)",
         "Header remains visible while scrolling through long content",
@@ -307,7 +313,12 @@ body { font-family: system-ui, sans-serif; }`,
         "Make the header shrink (smaller padding, smaller logo) after the user scrolls down 50px using a JavaScript scroll listener + CSS class toggle",
         "Add a 'back to top' button that's fixed in the bottom-right corner",
       ],
-      conceptsCovered: ["positioning", "z-index", "stacking-context", "display-types"],
+      conceptsCovered: [
+        "positioning",
+        "z-index",
+        "stacking-context",
+        "display-types",
+      ],
     },
   ],
 };
@@ -316,93 +327,105 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "display-types": () => (
     <>
       <p>
-        The <code>display</code> property controls two things: how an element participates
-        in the <em>outer</em> layout (how it interacts with siblings and parent), and how it
-        creates an <em>inner</em> formatting context for its children. Block elements
-        always start on a new line and stretch to fill their container&apos;s width. Inline
-        elements flow within text — they can&apos;t have explicit widths or heights, and
-        vertical margin/padding is ignored for layout purposes (it doesn&apos;t push other
-        elements away).
+        The <code>display</code> property controls two things: how an element
+        participates in the <em>outer</em> layout (how it interacts with
+        siblings and parent), and how it creates an <em>inner</em> formatting
+        context for its children. Block elements always start on a new line and
+        stretch to fill their container&apos;s width. Inline elements flow
+        within text — they can&apos;t have explicit widths or heights, and
+        vertical margin/padding is ignored for layout purposes (it doesn&apos;t
+        push other elements away).
       </p>
       <p>
-        <code>inline-block</code> is a hybrid: it flows like an inline element (sits in a
-        line with siblings) but respects <code>width</code>, <code>height</code>, and
-        vertical margin/padding like a block element. It was commonly used for horizontal
-        navigation items before flexbox existed. Today, flexbox and grid handle most cases
-        more cleanly, but <code>inline-block</code> still has uses — particularly when
-        elements need to flow with text.
+        <code>inline-block</code> is a hybrid: it flows like an inline element
+        (sits in a line with siblings) but respects <code>width</code>,{" "}
+        <code>height</code>, and vertical margin/padding like a block element.
+        It was commonly used for horizontal navigation items before flexbox
+        existed. Today, flexbox and grid handle most cases more cleanly, but{" "}
+        <code>inline-block</code> still has uses — particularly when elements
+        need to flow with text.
       </p>
       <p>
-        The three &quot;hiding&quot; approaches have meaningfully different behaviour.{" "}
-        <code>display: none</code> removes the element from the layout entirely — it takes
-        no space and is removed from the accessibility tree. <code>visibility: hidden</code>{" "}
-        makes the element invisible but preserves its space — the element is still in the
-        DOM and accessibility tree (it can be focused by keyboard). <code>opacity: 0</code>{" "}
-        makes the element fully transparent while preserving both space and interactivity
-        — pointer events still fire. Use <code>pointer-events: none</code> alongside it if
-        you don&apos;t want that.
+        The three &quot;hiding&quot; approaches have meaningfully different
+        behaviour. <code>display: none</code> removes the element from the
+        layout entirely — it takes no space and is removed from the
+        accessibility tree. <code>visibility: hidden</code> makes the element
+        invisible but preserves its space — the element is still in the DOM and
+        accessibility tree (it can be focused by keyboard).{" "}
+        <code>opacity: 0</code> makes the element fully transparent while
+        preserving both space and interactivity — pointer events still fire. Use{" "}
+        <code>pointer-events: none</code> alongside it if you don&apos;t want
+        that.
       </p>
       <p>
-        A useful mental model is that <code>display</code> controls layout participation
-        before you worry about visual styling. If an element should behave like a paragraph,
-        a row, a grid, or not exist in layout at all, <code>display</code> is the first
-        lever. Many layout bugs come from trying to solve a display problem with margin,
-        width, or positioning instead.
+        A useful mental model is that <code>display</code> controls layout
+        participation before you worry about visual styling. If an element
+        should behave like a paragraph, a row, a grid, or not exist in layout at
+        all, <code>display</code> is the first lever. Many layout bugs come from
+        trying to solve a display problem with margin, width, or positioning
+        instead.
       </p>
       <p>
-        Interviews often use display questions to test whether you understand historical CSS
-        tradeoffs. Being able to explain why <code>inline-block</code> used to matter, and
-        why flexbox largely replaced it for UI layout, is a strong sign that you understand
-        both modern CSS and where its abstractions came from.
+        Interviews often use display questions to test whether you understand
+        historical CSS tradeoffs. Being able to explain why{" "}
+        <code>inline-block</code> used to matter, and why flexbox largely
+        replaced it for UI layout, is a strong sign that you understand both
+        modern CSS and where its abstractions came from.
       </p>
     </>
   ),
 
-  "positioning": () => (
+  positioning: () => (
     <>
       <p>
-        Normal flow is the default — block elements stack vertically, inline elements flow
-        horizontally within their line. Positioning allows elements to step outside this
-        flow. <code>position: relative</code> keeps the element in normal flow but lets you
-        shift it visually using <code>top</code>/<code>right</code>/<code>bottom</code>/
-        <code>left</code> offsets — the space the element would have occupied is still
-        reserved. More importantly, it establishes a <em>containing block</em> for any
-        absolutely positioned descendants.
+        Normal flow is the default — block elements stack vertically, inline
+        elements flow horizontally within their line. Positioning allows
+        elements to step outside this flow. <code>position: relative</code>{" "}
+        keeps the element in normal flow but lets you shift it visually using{" "}
+        <code>top</code>/<code>right</code>/<code>bottom</code>/
+        <code>left</code> offsets — the space the element would have occupied is
+        still reserved. More importantly, it establishes a{" "}
+        <em>containing block</em> for any absolutely positioned descendants.
       </p>
       <p>
-        <code>position: absolute</code> removes the element from normal flow entirely — it
-        no longer occupies space, and sibling elements behave as if it doesn&apos;t exist.
-        The element is positioned relative to its nearest ancestor with a position value
-        other than <code>static</code>. If none exists, it positions relative to the
-        initial containing block (the viewport). <code>position: fixed</code> behaves
-        similarly but is always relative to the viewport and stays in place during scroll.
-        <code>position: sticky</code> is a hybrid: the element stays in normal flow until
-        it reaches a defined scroll threshold, then &quot;sticks&quot; — it effectively
-        becomes fixed within its scrolling container.
+        <code>position: absolute</code> removes the element from normal flow
+        entirely — it no longer occupies space, and sibling elements behave as
+        if it doesn&apos;t exist. The element is positioned relative to its
+        nearest ancestor with a position value other than <code>static</code>.
+        If none exists, it positions relative to the initial containing block
+        (the viewport). <code>position: fixed</code> behaves similarly but is
+        always relative to the viewport and stays in place during scroll.
+        <code>position: sticky</code> is a hybrid: the element stays in normal
+        flow until it reaches a defined scroll threshold, then
+        &quot;sticks&quot; — it effectively becomes fixed within its scrolling
+        container.
       </p>
       <p>
-        <code>z-index</code> controls stacking order, but only on <em>positioned</em>{" "}
-        elements (anything other than <code>static</code>). Understanding stacking
-        contexts is essential: certain CSS properties (transform, opacity less than 1,
-        filter, will-change, isolation: isolate) create a new stacking context, and{" "}
-        <code>z-index</code> values only compete within the same stacking context. A
-        <code>z-index: 9999</code> inside a low-priority stacking context will still render
-        behind a <code>z-index: 1</code> element outside it.
+        <code>z-index</code> controls stacking order, but only on{" "}
+        <em>positioned</em> elements (anything other than <code>static</code>).
+        Understanding stacking contexts is essential: certain CSS properties
+        (transform, opacity less than 1, filter, will-change, isolation:
+        isolate) create a new stacking context, and <code>z-index</code> values
+        only compete within the same stacking context. A
+        <code>z-index: 9999</code> inside a low-priority stacking context will
+        still render behind a <code>z-index: 1</code> element outside it.
       </p>
       <p>
-        Sticky positioning deserves special respect because it depends on both the scroll
-        container and the element&apos;s containing block. It only works when you provide an
-        offset like <code>top: 0</code>, and it often appears &quot;broken&quot; when an
-        ancestor has overflow clipping or when the sticky element has no room to move inside
-        its parent. That&apos;s why sticky bugs are usually layout-chain bugs, not just
+        Sticky positioning deserves special respect because it depends on both
+        the scroll container and the element&apos;s containing block. It only
+        works when you provide an offset like <code>top: 0</code>, and it often
+        appears &quot;broken&quot; when an ancestor has overflow clipping or
+        when the sticky element has no room to move inside its parent.
+        That&apos;s why sticky bugs are usually layout-chain bugs, not just
         missing classes.
       </p>
       <p>
-        In interviews, a very strong explanation distinguishes three things clearly:
-        relative creates a containing block, absolute exits normal flow and positions against
-        that containing block, and sticky behaves like normal flow until the scroll threshold
-        is reached. If you can explain that without hand-waving, you usually understand
-        positioning well enough to debug real UIs.
+        In interviews, a very strong explanation distinguishes three things
+        clearly: relative creates a containing block, absolute exits normal flow
+        and positions against that containing block, and sticky behaves like
+        normal flow until the scroll threshold is reached. If you can explain
+        that without hand-waving, you usually understand positioning well enough
+        to debug real UIs.
       </p>
     </>
   ),
@@ -410,29 +433,32 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "stacking-context-debugging": () => (
     <>
       <p>
-        A stacking context is a self-contained layering universe. Children can compete with
-        one another inside it using <code>z-index</code>, but they cannot leap out and
-        compete directly with elements in other contexts. That is why{" "}
-        <code>z-index: 9999</code> sometimes appears broken: the number is large, but it is
-        still trapped in the wrong context.
+        A stacking context is a self-contained layering universe. Children can
+        compete with one another inside it using <code>z-index</code>, but they
+        cannot leap out and compete directly with elements in other contexts.
+        That is why <code>z-index: 9999</code> sometimes appears broken: the
+        number is large, but it is still trapped in the wrong context.
       </p>
       <p>
-        The trap is that stacking contexts are created by more than positioned elements with
-        z-index. <code>transform</code>, <code>opacity &lt; 1</code>, <code>filter</code>,{" "}
-        <code>will-change</code>, and <code>isolation: isolate</code> can all create them.
-        Teams often add one of those properties for performance or visual polish and
-        accidentally change layering behavior at the same time.
+        The trap is that stacking contexts are created by more than positioned
+        elements with z-index. <code>transform</code>,{" "}
+        <code>opacity &lt; 1</code>, <code>filter</code>,{" "}
+        <code>will-change</code>, and <code>isolation: isolate</code> can all
+        create them. Teams often add one of those properties for performance or
+        visual polish and accidentally change layering behavior at the same
+        time.
       </p>
       <p>
-        Layering bugs usually become obvious when you ask three questions in order: what is
-        the containing block, what stacking context is this element in, and is any ancestor
-        clipping it with overflow? Those questions map to different categories of bugs, which
-        is why they are more reliable than trial-and-error z-index changes.
+        Layering bugs usually become obvious when you ask three questions in
+        order: what is the containing block, what stacking context is this
+        element in, and is any ancestor clipping it with overflow? Those
+        questions map to different categories of bugs, which is why they are
+        more reliable than trial-and-error z-index changes.
       </p>
       <p>
-        In interviews, narrating that process is often more impressive than jumping straight
-        to a fix. It shows that you can debug unfamiliar UI methodically instead of relying on
-        luck or memorized snippets.
+        In interviews, narrating that process is often more impressive than
+        jumping straight to a fix. It shows that you can debug unfamiliar UI
+        methodically instead of relying on luck or memorized snippets.
       </p>
     </>
   ),

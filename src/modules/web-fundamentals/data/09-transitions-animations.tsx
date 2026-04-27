@@ -144,6 +144,12 @@ export const transitionsAnimations: LearningModule = {
       difficulty: "medium",
       description:
         "Build a modal dialog that fades in and slides up on open, reverses on close. The animation must respect prefers-reduced-motion.",
+      targetImage: {
+        src: "/wf-challenges/animated-modal.svg",
+        alt: "Modal mock with dimmed backdrop, centered dialog card, supporting text, and confirm and cancel actions.",
+        caption:
+          "The key thing to preserve is the layering and motion relationship: backdrop first, panel second, and a clear action row inside the dialog.",
+      },
       requirements: [
         "Modal backdrop fades in (opacity: 0 → 1) on open",
         "Modal panel slides up (translateY(24px) → translateY(0)) and fades in",
@@ -151,7 +157,7 @@ export const transitionsAnimations: LearningModule = {
         "Focus is moved to the modal on open and returned to the trigger on close",
         "Pressing Escape closes the modal",
         "prefers-reduced-motion: animations are disabled (instant show/hide)",
-        "The modal uses role=\"dialog\" and aria-modal=\"true\"",
+        'The modal uses role="dialog" and aria-modal="true"',
       ],
       starterHtml: `<!DOCTYPE html>
 <html lang="en">
@@ -189,7 +195,11 @@ body { font-family: system-ui, sans-serif; padding: 2rem; }`,
         "Add a stagger: backdrop fades in first, then the modal panel",
         "Implement a slide-out animation on the modal for closing (using animation-direction: reverse or a separate @keyframes)",
       ],
-      conceptsCovered: ["transitions-transforms", "accessibility-fundamentals", "positioning"],
+      conceptsCovered: [
+        "transitions-transforms",
+        "accessibility-fundamentals",
+        "positioning",
+      ],
     },
   ],
 };
@@ -198,46 +208,56 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "transitions-transforms": () => (
     <>
       <p>
-        The <code>transition</code> property enables smooth value changes when a CSS
-        property changes. Its shorthand syntax is{" "}
-        <code>transition: property duration timing-function delay</code>. The property
-        must be specified explicitly (avoid <code>transition: all</code> — it catches
-        unexpected properties and creates performance issues). The timing function controls
-        the speed curve: <code>ease</code> is a gentle ease-in-out, <code>linear</code>{" "}
+        The <code>transition</code> property enables smooth value changes when a
+        CSS property changes. Its shorthand syntax is{" "}
+        <code>transition: property duration timing-function delay</code>. The
+        property must be specified explicitly (avoid{" "}
+        <code>transition: all</code> — it catches unexpected properties and
+        creates performance issues). The timing function controls the speed
+        curve: <code>ease</code> is a gentle ease-in-out, <code>linear</code>{" "}
         maintains constant speed, and cubic bezier values like{" "}
         <code>cubic-bezier(0.25, 0.46, 0.45, 0.94)</code> allow custom curves.
       </p>
       <p>
-        The <code>transform</code> property is the correct tool for movement and scale in
-        animations. <code>transform: translateX()</code> moves an element horizontally;{" "}
-        <code>translateY()</code> moves vertically; <code>scale()</code> resizes;{" "}
-        <code>rotate()</code> spins. The critical advantage of transform over geometric
-        properties like <code>left</code>, <code>top</code>, or <code>width</code> is
-        that it runs entirely on the GPU compositor thread — it doesn&apos;t trigger
-        layout (reflow) or paint, only composite. This means smooth 60fps animations even
-        on complex pages. <code>opacity</code> shares this GPU-accelerated property.
+        The <code>transform</code> property is the correct tool for movement and
+        scale in animations. <code>transform: translateX()</code> moves an
+        element horizontally; <code>translateY()</code> moves vertically;{" "}
+        <code>scale()</code> resizes; <code>rotate()</code> spins. The critical
+        advantage of transform over geometric properties like <code>left</code>,{" "}
+        <code>top</code>, or <code>width</code> is that it runs entirely on the
+        GPU compositor thread — it doesn&apos;t trigger layout (reflow) or
+        paint, only composite. This means smooth 60fps animations even on
+        complex pages. <code>opacity</code> shares this GPU-accelerated
+        property.
       </p>
       <p>
-        Always implement <code>prefers-reduced-motion: reduce</code> support. Around 35%
-        of people have some form of vestibular disorder that makes fast motion on screen
-        cause physical discomfort or nausea. The standard approach is a global override:{" "}
-        <code>@media (prefers-reduced-motion: reduce) {"{"} *, *::before, *::after {"{"}{" "}
-        animation-duration: 0.01ms; transition-duration: 0.01ms; {"}"} {"}"}</code>. This
-        reduces all animations to imperceptibly fast — effectively instant — without fully
-        disabling them, which preserves state changes while eliminating the motion itself.
+        Always implement <code>prefers-reduced-motion: reduce</code> support.
+        Around 35% of people have some form of vestibular disorder that makes
+        fast motion on screen cause physical discomfort or nausea. The standard
+        approach is a global override:{" "}
+        <code>
+          @media (prefers-reduced-motion: reduce) {"{"} *, *::before, *::after{" "}
+          {"{"} animation-duration: 0.01ms; transition-duration: 0.01ms; {"}"}{" "}
+          {"}"}
+        </code>
+        . This reduces all animations to imperceptibly fast — effectively
+        instant — without fully disabling them, which preserves state changes
+        while eliminating the motion itself.
       </p>
       <p>
-        The best UI motion has a job. It can communicate cause and effect, reinforce spatial
-        relationships, or make state changes feel easier to follow. The worst motion is pure
-        decoration that delays the interface, distracts from content, or makes the UI feel
-        unstable. That&apos;s why subtle hover transitions, accordion expansion, and focus
-        feedback usually add value, while large gratuitous motion often does not.
+        The best UI motion has a job. It can communicate cause and effect,
+        reinforce spatial relationships, or make state changes feel easier to
+        follow. The worst motion is pure decoration that delays the interface,
+        distracts from content, or makes the UI feel unstable. That&apos;s why
+        subtle hover transitions, accordion expansion, and focus feedback
+        usually add value, while large gratuitous motion often does not.
       </p>
       <p>
-        Interviewers often care less about whether you know <code>@keyframes</code> syntax
-        from memory and more about whether you choose performant properties intentionally.
-        If you say &quot;I animate transform and opacity first because they avoid layout and
-        paint work&quot;, that sounds like someone who has actually debugged animation
+        Interviewers often care less about whether you know{" "}
+        <code>@keyframes</code> syntax from memory and more about whether you
+        choose performant properties intentionally. If you say &quot;I animate
+        transform and opacity first because they avoid layout and paint
+        work&quot;, that sounds like someone who has actually debugged animation
         performance in real products.
       </p>
     </>

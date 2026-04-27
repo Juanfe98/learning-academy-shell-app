@@ -186,6 +186,12 @@ export const cssGrid: LearningModule = {
       difficulty: "hard",
       description:
         "Build a responsive dashboard layout using CSS Grid. The layout must work on both desktop (3-column grid) and mobile (single column) using a single grid definition and media queries.",
+      targetImage: {
+        src: "/wf-challenges/dashboard-grid-layout.svg",
+        alt: "Dashboard application mock with spanning header, left sidebar, central analytics cards, and right utility panel.",
+        caption:
+          "Think in named regions first: header, sidebar, main, panel. Then handle the card grid inside main as a second grid problem, not part of the outer shell.",
+      },
       requirements: [
         "Full-page grid: sidebar (240px), main content area, right panel (300px)",
         "Header spans all columns",
@@ -231,7 +237,12 @@ body { font-family: system-ui, sans-serif; min-height: 100vh; }`,
         "Animate the sidebar slide in/out on mobile using transform and transition",
         "Add a CSS Grid-based footer that spans full width below all columns",
       ],
-      conceptsCovered: ["grid-basics", "grid-advanced", "grid-template-areas", "responsive-design"],
+      conceptsCovered: [
+        "grid-basics",
+        "grid-advanced",
+        "grid-template-areas",
+        "responsive-design",
+      ],
     },
   ],
 };
@@ -240,41 +251,46 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "grid-basics": () => (
     <>
       <p>
-        CSS Grid is the first layout system in CSS built explicitly for two-dimensional
-        layouts. Unlike flexbox (which works along a single axis at a time), Grid lets you
-        define both rows and columns simultaneously and place items into specific cells or
-        regions. When you add <code>display: grid</code> to an element, it becomes a grid
-        container and its direct children become grid items that are placed into the grid
+        CSS Grid is the first layout system in CSS built explicitly for
+        two-dimensional layouts. Unlike flexbox (which works along a single axis
+        at a time), Grid lets you define both rows and columns simultaneously
+        and place items into specific cells or regions. When you add{" "}
+        <code>display: grid</code> to an element, it becomes a grid container
+        and its direct children become grid items that are placed into the grid
         automatically or explicitly.
       </p>
       <p>
-        The <strong>fr unit</strong> (fractional unit) is unique to Grid and distributes
-        the remaining free space after fixed sizes and gaps are subtracted.{" "}
-        <code>grid-template-columns: 1fr 2fr 1fr</code> creates three columns where the
-        middle is twice as wide as the others. <code>repeat(3, 1fr)</code> is the shorthand
-        for <code>1fr 1fr 1fr</code>. For mixed layouts, you can combine fixed and flexible
-        values: <code>280px 1fr</code> creates a 280px sidebar and a flexible main area that
-        takes the rest.
+        The <strong>fr unit</strong> (fractional unit) is unique to Grid and
+        distributes the remaining free space after fixed sizes and gaps are
+        subtracted. <code>grid-template-columns: 1fr 2fr 1fr</code> creates
+        three columns where the middle is twice as wide as the others.{" "}
+        <code>repeat(3, 1fr)</code> is the shorthand for{" "}
+        <code>1fr 1fr 1fr</code>. For mixed layouts, you can combine fixed and
+        flexible values: <code>280px 1fr</code> creates a 280px sidebar and a
+        flexible main area that takes the rest.
       </p>
       <p>
-        Named grid areas (<code>grid-template-areas</code>) are the most readable way to
-        define page-level layouts. You write the layout as an ASCII-art map in the CSS, then
-        assign each element to its area with <code>grid-area</code>. A period{" "}
-        (<code>.</code>) represents an empty cell. Every row must have the same number of
-        cells, and named areas must be rectangular — you can&apos;t create L-shaped areas.
+        Named grid areas (<code>grid-template-areas</code>) are the most
+        readable way to define page-level layouts. You write the layout as an
+        ASCII-art map in the CSS, then assign each element to its area with{" "}
+        <code>grid-area</code>. A period (<code>.</code>) represents an empty
+        cell. Every row must have the same number of cells, and named areas must
+        be rectangular — you can&apos;t create L-shaped areas.
       </p>
       <p>
-        Grid shines when the layout itself is the problem you are solving. If you know there
-        are explicit regions — sidebar, header, content, filters, footer — Grid gives you a
-        direct way to express that structure. Flexbox can fake some of these layouts, but it
-        often becomes awkward because it is fundamentally solving a one-dimensional problem.
+        Grid shines when the layout itself is the problem you are solving. If
+        you know there are explicit regions — sidebar, header, content, filters,
+        footer — Grid gives you a direct way to express that structure. Flexbox
+        can fake some of these layouts, but it often becomes awkward because it
+        is fundamentally solving a one-dimensional problem.
       </p>
       <p>
-        A good interview answer usually contrasts Grid and Flexbox clearly: Grid for page and
-        dashboard layouts where rows and columns both matter, Flexbox for rows, columns,
-        navbars, and small component-level alignment. Saying &quot;Grid is two-dimensional,
-        Flexbox is one-dimensional&quot; is the right starting point, but adding concrete UI
-        examples makes the answer much stronger.
+        A good interview answer usually contrasts Grid and Flexbox clearly: Grid
+        for page and dashboard layouts where rows and columns both matter,
+        Flexbox for rows, columns, navbars, and small component-level alignment.
+        Saying &quot;Grid is two-dimensional, Flexbox is one-dimensional&quot;
+        is the right starting point, but adding concrete UI examples makes the
+        answer much stronger.
       </p>
     </>
   ),
@@ -282,41 +298,46 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "grid-advanced": () => (
     <>
       <p>
-        The most powerful responsive layout primitive in CSS is the combination of{" "}
-        <code>repeat(auto-fit, minmax(280px, 1fr))</code>. This single declaration creates
-        a grid that automatically determines how many columns to create based on the
-        available width. Each column is at least 280px wide (the minimum) and grows to
-        share available space equally (the maximum of 1fr). No media queries required —
-        the layout adapts continuously as the viewport changes.
+        The most powerful responsive layout primitive in CSS is the combination
+        of <code>repeat(auto-fit, minmax(280px, 1fr))</code>. This single
+        declaration creates a grid that automatically determines how many
+        columns to create based on the available width. Each column is at least
+        280px wide (the minimum) and grows to share available space equally (the
+        maximum of 1fr). No media queries required — the layout adapts
+        continuously as the viewport changes.
       </p>
       <p>
-        The difference between <code>auto-fill</code> and <code>auto-fit</code> matters
-        when there are fewer items than columns fit. <code>auto-fill</code> creates tracks
-        for all the columns that would fit, even if they&apos;re empty — items don&apos;t
-        stretch to fill. <code>auto-fit</code> collapses empty tracks after the last item,
-        letting the remaining items stretch. For most card grids, <code>auto-fit</code> is
-        what you want.
+        The difference between <code>auto-fill</code> and <code>auto-fit</code>{" "}
+        matters when there are fewer items than columns fit.{" "}
+        <code>auto-fill</code> creates tracks for all the columns that would
+        fit, even if they&apos;re empty — items don&apos;t stretch to fill.{" "}
+        <code>auto-fit</code> collapses empty tracks after the last item,
+        letting the remaining items stretch. For most card grids,{" "}
+        <code>auto-fit</code> is what you want.
       </p>
       <p>
         Grid distinguishes between <em>explicit</em> tracks (defined in{" "}
-        <code>grid-template-columns/rows</code>) and <em>implicit</em> tracks (created
-        automatically when items overflow the explicit grid). You control the size of
-        implicit tracks with <code>grid-auto-rows</code> and{" "}
-        <code>grid-auto-columns</code>. The <code>grid-auto-flow: dense</code> property
-        enables backfilling — if a large item leaves a gap, the algorithm tries to fill
-        it with smaller items, creating a denser, Pinterest-style layout.
+        <code>grid-template-columns/rows</code>) and <em>implicit</em> tracks
+        (created automatically when items overflow the explicit grid). You
+        control the size of implicit tracks with <code>grid-auto-rows</code> and{" "}
+        <code>grid-auto-columns</code>. The <code>grid-auto-flow: dense</code>{" "}
+        property enables backfilling — if a large item leaves a gap, the
+        algorithm tries to fill it with smaller items, creating a denser,
+        Pinterest-style layout.
       </p>
       <p>
-        This is one of the few places in CSS where you can write a highly responsive layout
-        with almost no media queries. Instead of asking &quot;at which breakpoint do I want
-        three columns?&quot; you can ask &quot;what is the minimum useful width of a card?&quot;
-        and let Grid derive the column count from the available space.
+        This is one of the few places in CSS where you can write a highly
+        responsive layout with almost no media queries. Instead of asking
+        &quot;at which breakpoint do I want three columns?&quot; you can ask
+        &quot;what is the minimum useful width of a card?&quot; and let Grid
+        derive the column count from the available space.
       </p>
       <p>
-        The downside is that Grid is so expressive that teams sometimes overuse it for simple
-        alignment tasks. If you only need to line up a few controls in a single row, Grid is
-        usually unnecessary. The best CSS developers choose Grid because the layout calls for
-        it, not because it feels more advanced.
+        The downside is that Grid is so expressive that teams sometimes overuse
+        it for simple alignment tasks. If you only need to line up a few
+        controls in a single row, Grid is usually unnecessary. The best CSS
+        developers choose Grid because the layout calls for it, not because it
+        feels more advanced.
       </p>
     </>
   ),

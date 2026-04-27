@@ -108,7 +108,7 @@ export const formsAccessibility: LearningModule = {
       commonMistakes: [
         "Using placeholder as a label replacement — placeholder disappears on typing and has very low color contrast",
         "Missing for/id association — screen readers can't programmatically link the label to its control",
-        "Omitting type on buttons inside forms — the default is type=\"submit\", which can unexpectedly submit the form",
+        'Omitting type on buttons inside forms — the default is type="submit", which can unexpectedly submit the form',
         "Using <div> or <span> styled as buttons instead of real <button> elements — loses keyboard focus, Enter/Space, and ARIA semantics",
         "Not grouping radio/checkbox sets in <fieldset>/<legend> — makes the group's purpose invisible to assistive technology",
       ],
@@ -209,7 +209,7 @@ function closeModal() {
         },
       ],
       commonMistakes: [
-        "Adding ARIA roles to semantic elements that already have them: <nav role=\"navigation\"> is redundant",
+        'Adding ARIA roles to semantic elements that already have them: <nav role="navigation"> is redundant',
         "Using aria-label on elements that already have visible text — the visible text and accessible name become inconsistent",
         "Removing focus outlines with outline: 0 without providing an alternative focus indicator",
         "Using tabindex values > 0 — they create a separate tab order that overrides the natural DOM order and confuse users",
@@ -218,7 +218,7 @@ function closeModal() {
       interviewTips: [
         "WCAG 2.1 AA is the legal baseline in the US (ADA, Section 508), EU, and UK. Know the four principles: Perceivable, Operable, Understandable, Robust (POUR).",
         "The first rule of ARIA: don't use ARIA. Native semantic HTML handles most accessibility automatically. ARIA only adds what HTML can't express.",
-        "tabindex=\"0\" adds an element to the natural tab order. tabindex=\"-1\" makes it programmatically focusable (useful for modals, drawers) but removes it from the tab order.",
+        'tabindex="0" adds an element to the natural tab order. tabindex="-1" makes it programmatically focusable (useful for modals, drawers) but removes it from the tab order.',
       ],
       practiceTasks: [
         {
@@ -229,7 +229,7 @@ function closeModal() {
         {
           description:
             "Build a toggle button (like a dark mode switch) that correctly announces its state. Screen readers should say 'Dark mode on' or 'Dark mode off'.",
-          hint: "Use aria-pressed=\"true\"|\"false\" on the button element and update it via JS on click.",
+          hint: 'Use aria-pressed="true"|"false" on the button element and update it via JS on click.',
         },
       ],
     },
@@ -321,6 +321,12 @@ function closeModal() {
       difficulty: "medium",
       description:
         "Build a complete login form that meets WCAG AA accessibility requirements and passes an automated accessibility audit with zero violations.",
+      targetImage: {
+        src: "/wf-challenges/accessible-login-form.svg",
+        alt: "Centered login card mock with heading, helper text, labeled email and password fields, checkbox, password toggle, and primary action button.",
+        caption:
+          "Notice the structure as much as the visuals: grouped label-input-help-error patterns, a clear primary action, and supporting secondary controls.",
+      },
       requirements: [
         "Every input has an explicitly associated <label>",
         "Error messages are connected to their inputs via aria-describedby",
@@ -347,7 +353,7 @@ body { font-family: system-ui, sans-serif; min-height: 100vh; display: grid; pla
       expectedResult:
         "A login form that passes axe/Lighthouse accessibility audit with zero violations. Every field is reachable by Tab, errors are announced by screen readers, and focus is always visible.",
       hints: [
-        "Use aria-invalid=\"true\" and aria-describedby to connect error messages to their inputs.",
+        'Use aria-invalid="true" and aria-describedby to connect error messages to their inputs.',
         "The show/hide password button should update its aria-label or aria-pressed as the state changes.",
         "Test with VoiceOver (Mac) or NVDA (Windows) — tab through the form and listen to what gets announced.",
       ],
@@ -356,7 +362,12 @@ body { font-family: system-ui, sans-serif; min-height: 100vh; display: grid; pla
         "Implement inline validation that announces errors as you leave each field (aria-live region)",
         "Add a loading state to the submit button that's accessible (aria-busy, aria-label update)",
       ],
-      conceptsCovered: ["form-basics", "accessibility-fundamentals", "aria", "keyboard-navigation"],
+      conceptsCovered: [
+        "form-basics",
+        "accessibility-fundamentals",
+        "aria",
+        "keyboard-navigation",
+      ],
     },
   ],
 };
@@ -365,48 +376,55 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "form-basics": () => (
     <>
       <p>
-        Forms are the primary interaction mechanism on the web — they power login, checkout,
-        search, settings, and every other user-driven action. Getting form markup right has
-        outsized impact: the browser provides enormous amounts of built-in behaviour (
-        autocomplete, validation, submission) if you give it the right structure.
+        Forms are the primary interaction mechanism on the web — they power
+        login, checkout, search, settings, and every other user-driven action.
+        Getting form markup right has outsized impact: the browser provides
+        enormous amounts of built-in behaviour ( autocomplete, validation,
+        submission) if you give it the right structure.
       </p>
       <p>
-        The most important rule: every form control must have an accessible name. The
-        standard way is a <code>{"<label>"}</code> element associated via matching{" "}
-        <code>for</code> and <code>id</code> attributes. When a user focuses the input, the
-        label text is announced by screen readers. It also gives you a larger click target
-        — clicking the label focuses its input. Never use <code>placeholder</code> as a
-        substitute for a label: placeholders disappear on typing, have low contrast, and
-        are not consistently read by screen readers.
+        The most important rule: every form control must have an accessible
+        name. The standard way is a <code>{"<label>"}</code> element associated
+        via matching <code>for</code> and <code>id</code> attributes. When a
+        user focuses the input, the label text is announced by screen readers.
+        It also gives you a larger click target — clicking the label focuses its
+        input. Never use <code>placeholder</code> as a substitute for a label:
+        placeholders disappear on typing, have low contrast, and are not
+        consistently read by screen readers.
       </p>
       <p>
-        The <code>type</code> attribute on <code>{"<input>"}</code> does more than change
-        appearance. <code>type="email"</code> shows an email keyboard on mobile and provides
-        basic format validation. <code>type="tel"</code> shows a numeric pad. <code>type="date"</code>{" "}
-        provides a native date picker. <code>type="number"</code> accepts only numbers and
-        adds increment/decrement controls. Always choose the most specific type — the browser
-        (and mobile operating system) uses it to deliver the right keyboard and UX.
-        For grouped controls like radio buttons, wrap the group in{" "}
-        <code>{"<fieldset>"}</code> with a <code>{"<legend>"}</code> — this gives screen
-        readers the group label they need to understand the options in context.
+        The <code>type</code> attribute on <code>{"<input>"}</code> does more
+        than change appearance. <code>type="email"</code> shows an email
+        keyboard on mobile and provides basic format validation.{" "}
+        <code>type="tel"</code> shows a numeric pad. <code>type="date"</code>{" "}
+        provides a native date picker. <code>type="number"</code> accepts only
+        numbers and adds increment/decrement controls. Always choose the most
+        specific type — the browser (and mobile operating system) uses it to
+        deliver the right keyboard and UX. For grouped controls like radio
+        buttons, wrap the group in <code>{"<fieldset>"}</code> with a{" "}
+        <code>{"<legend>"}</code> — this gives screen readers the group label
+        they need to understand the options in context.
       </p>
       <p>
         Native validation also matters. Attributes like <code>required</code>,{" "}
-        <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>,
-        and <code>pattern</code> are not just convenience helpers — they create a shared
-        contract between the browser, assistive technology, and the user. Even if a product
-        eventually replaces native validation with custom error UI, starting from the native
-        constraints usually produces better keyboard behaviour, clearer semantics, and less
+        <code>minlength</code>, <code>maxlength</code>, <code>min</code>,{" "}
+        <code>max</code>, and <code>pattern</code> are not just convenience
+        helpers — they create a shared contract between the browser, assistive
+        technology, and the user. Even if a product eventually replaces native
+        validation with custom error UI, starting from the native constraints
+        usually produces better keyboard behaviour, clearer semantics, and less
         brittle code.
       </p>
       <p>
-        A strong form also communicates state, not just structure. Required fields should be
-        identified consistently. Error messages should be tied to controls with{" "}
-        <code>aria-describedby</code> or native mechanisms when possible. Submit buttons
-        should remain real <code>{"<button type=\"submit\">"} </code> elements, not clickable
-        <code>{"<div>"}</code>s. Interviews often use forms to test whether you trust the
-        platform or try to rebuild it from scratch. The best answers lean on native HTML
-        first, then layer custom behaviour only where the browser cannot do the job.
+        A strong form also communicates state, not just structure. Required
+        fields should be identified consistently. Error messages should be tied
+        to controls with <code>aria-describedby</code> or native mechanisms when
+        possible. Submit buttons should remain real{" "}
+        <code>{'<button type="submit">'} </code> elements, not clickable
+        <code>{"<div>"}</code>s. Interviews often use forms to test whether you
+        trust the platform or try to rebuild it from scratch. The best answers
+        lean on native HTML first, then layer custom behaviour only where the
+        browser cannot do the job.
       </p>
     </>
   ),
@@ -414,48 +432,53 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "accessibility-fundamentals": () => (
     <>
       <p>
-        Accessibility means building products that work for people with a range of
-        abilities — including those using screen readers, keyboard-only navigation,
-        voice control, or high-contrast displays. It&apos;s not a feature you add at the
-        end; it&apos;s a quality bar you maintain throughout. In many jurisdictions (the
-        US under ADA/Section 508, the EU under the EAA, the UK under the Equality Act),
-        inaccessible web products are a legal liability.
+        Accessibility means building products that work for people with a range
+        of abilities — including those using screen readers, keyboard-only
+        navigation, voice control, or high-contrast displays. It&apos;s not a
+        feature you add at the end; it&apos;s a quality bar you maintain
+        throughout. In many jurisdictions (the US under ADA/Section 508, the EU
+        under the EAA, the UK under the Equality Act), inaccessible web products
+        are a legal liability.
       </p>
       <p>
-        ARIA (Accessible Rich Internet Applications) is a set of HTML attributes that
-        fill gaps where native semantics fall short. ARIA <em>roles</em> define what
-        something is (<code>role="dialog"</code>, <code>role="alert"</code>). ARIA{" "}
-        <em>states</em> reflect current conditions (<code>aria-expanded="true"</code>,{" "}
-        <code>aria-checked="false"</code>). ARIA <em>properties</em> provide additional
-        context (<code>aria-label</code>, <code>aria-describedby</code>,{" "}
-        <code>aria-required</code>). The most important ARIA rule: if a native HTML element
-        or attribute can express the same meaning, use that instead.{" "}
-        <code>{"<button>"}</code> is better than{" "}
-        <code>{"<div role=\"button\" tabindex=\"0\">"}</code> in every way.
+        ARIA (Accessible Rich Internet Applications) is a set of HTML attributes
+        that fill gaps where native semantics fall short. ARIA <em>roles</em>{" "}
+        define what something is (<code>role="dialog"</code>,{" "}
+        <code>role="alert"</code>). ARIA <em>states</em> reflect current
+        conditions (<code>aria-expanded="true"</code>,{" "}
+        <code>aria-checked="false"</code>). ARIA <em>properties</em> provide
+        additional context (<code>aria-label</code>,{" "}
+        <code>aria-describedby</code>, <code>aria-required</code>). The most
+        important ARIA rule: if a native HTML element or attribute can express
+        the same meaning, use that instead. <code>{"<button>"}</code> is better
+        than <code>{'<div role="button" tabindex="0">'}</code> in every way.
       </p>
       <p>
-        Keyboard navigation is non-negotiable. Every interactive element must be reachable
-        and operable by keyboard: focusable, triggerable with Enter/Space, and clearly
-        indicated when focused. Never remove focus outlines without replacement — use{" "}
-        <code>:focus-visible</code> to style them without showing them on mouse click.
-        For modal dialogs, focus must be trapped inside while open and returned to the
-        trigger element when closed. These patterns keep keyboard and screen reader users
-        from getting lost.
+        Keyboard navigation is non-negotiable. Every interactive element must be
+        reachable and operable by keyboard: focusable, triggerable with
+        Enter/Space, and clearly indicated when focused. Never remove focus
+        outlines without replacement — use <code>:focus-visible</code> to style
+        them without showing them on mouse click. For modal dialogs, focus must
+        be trapped inside while open and returned to the trigger element when
+        closed. These patterns keep keyboard and screen reader users from
+        getting lost.
       </p>
       <p>
-        The most practical accessibility workflow is to think in three layers. First:
-        semantics. Are you using the correct HTML elements? Second: operability. Can someone
-        reach and use the interface with only a keyboard? Third: announcements. If state
-        changes, will assistive technology understand what changed? Most accessibility bugs
-        come from skipping the first layer and trying to patch semantics later with ARIA.
+        The most practical accessibility workflow is to think in three layers.
+        First: semantics. Are you using the correct HTML elements? Second:
+        operability. Can someone reach and use the interface with only a
+        keyboard? Third: announcements. If state changes, will assistive
+        technology understand what changed? Most accessibility bugs come from
+        skipping the first layer and trying to patch semantics later with ARIA.
       </p>
       <p>
-        In interviews, accessibility knowledge stands out when it sounds concrete instead of
-        moralistic. Good signals include mentioning focus order, visible focus styles,
-        landmark regions, form labels, heading hierarchy, and reduced motion support. A weak
-        answer says &quot;I care about accessibility.&quot; A strong answer says
-        &quot;I start with semantic elements, verify keyboard usage, then test the experience
-        with a screen reader or axe.&quot;
+        In interviews, accessibility knowledge stands out when it sounds
+        concrete instead of moralistic. Good signals include mentioning focus
+        order, visible focus styles, landmark regions, form labels, heading
+        hierarchy, and reduced motion support. A weak answer says &quot;I care
+        about accessibility.&quot; A strong answer says &quot;I start with
+        semantic elements, verify keyboard usage, then test the experience with
+        a screen reader or axe.&quot;
       </p>
     </>
   ),
@@ -463,32 +486,38 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "interactive-semantics": () => (
     <>
       <p>
-        Native interactive elements encode meaning and behavior at the same time. A link says
-        navigation. A button says action on the current page. When you choose the right
-        element, the browser gives you focus handling, keyboard support, semantics, and
-        default accessibility behavior for free. When you choose the wrong one, you spend the
-        implementation rebuilding what the platform already knew.
+        Native interactive elements encode meaning and behavior at the same
+        time. A link says navigation. A button says action on the current page.
+        When you choose the right element, the browser gives you focus handling,
+        keyboard support, semantics, and default accessibility behavior for
+        free. When you choose the wrong one, you spend the implementation
+        rebuilding what the platform already knew.
       </p>
       <p>
-        The accessible name is the short label assistive technology announces first. For many
-        native controls, visible text is enough. If the label exists elsewhere in the DOM,
-        <code>aria-labelledby</code> can point to it. If there is no visible label at all,
+        The accessible name is the short label assistive technology announces
+        first. For many native controls, visible text is enough. If the label
+        exists elsewhere in the DOM,
+        <code>aria-labelledby</code> can point to it. If there is no visible
+        label at all,
         <code>aria-label</code> can provide one. Description is separate:{" "}
-        <code>aria-describedby</code> adds guidance, warnings, or validation text. Keeping
-        those ideas separate helps avoid controls that sound verbose or contradictory.
+        <code>aria-describedby</code> adds guidance, warnings, or validation
+        text. Keeping those ideas separate helps avoid controls that sound
+        verbose or contradictory.
       </p>
       <p>
-        Button vs link is one of the highest-value semantic distinctions in frontend work.
-        If something opens a menu, toggles a state, submits a form, dismisses a toast, or
-        launches a dialog, it should almost certainly be a button. If it changes the URL or
-        takes the user somewhere else, it should be a link. The right answer is grounded in
-        intent, not visual styling.
+        Button vs link is one of the highest-value semantic distinctions in
+        frontend work. If something opens a menu, toggles a state, submits a
+        form, dismisses a toast, or launches a dialog, it should almost
+        certainly be a button. If it changes the URL or takes the user somewhere
+        else, it should be a link. The right answer is grounded in intent, not
+        visual styling.
       </p>
       <p>
-        This is also where fake controls hurt teams. Clickable cards, custom menu triggers,
-        and icon-only actions are common sources of accessibility debt. In interviews, being
-        able to explain how you preserve native semantics first and add ARIA only when HTML
-        runs out of vocabulary is a very strong signal.
+        This is also where fake controls hurt teams. Clickable cards, custom
+        menu triggers, and icon-only actions are common sources of accessibility
+        debt. In interviews, being able to explain how you preserve native
+        semantics first and add ARIA only when HTML runs out of vocabulary is a
+        very strong signal.
       </p>
     </>
   ),
