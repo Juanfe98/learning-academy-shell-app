@@ -244,6 +244,12 @@ body { font-family: system-ui, sans-serif; }`,
       difficulty: "medium",
       description:
         "Build a card grid that automatically adjusts the number of columns based on available space — without a single media query.",
+      targetImage: {
+        src: "/wf-challenges/responsive-card-grid.svg",
+        alt: "Responsive card grid mock with cards of equal row height, image areas, titles, text, and CTA rows arranged in an auto-fitting grid.",
+        caption:
+          "Focus on the repeatable card geometry and how the columns reflow as space changes. This is a no-media-query grid challenge, so the target is about structure more than exact pixels.",
+      },
       requirements: [
         "Cards are at least 280px wide",
         "Number of columns adjusts automatically to available width",
@@ -579,6 +585,12 @@ a { text-decoration: none; color: inherit; }`,
       difficulty: "medium",
       description:
         "Build a section where the background extends to the viewport edges while the content stays constrained to a max-width. A common pattern in marketing pages.",
+      targetImage: {
+        src: "/wf-challenges/full-bleed-section.svg",
+        alt: "Marketing page mock with alternating full-bleed sections whose backgrounds span the viewport while the inner content remains constrained to a centered max-width column.",
+        caption:
+          "Look at the relationship between the edge-to-edge background bands and the centered inner content. The challenge is to separate page background geometry from content width constraints.",
+      },
       requirements: [
         "Content area has a max-width of 1200px and is centered",
         "Section background extends full viewport width",
