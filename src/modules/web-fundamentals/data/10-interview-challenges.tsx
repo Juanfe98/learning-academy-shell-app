@@ -188,7 +188,12 @@ a { display: block; padding: 0.5rem 1rem; text-decoration: none; }`,
         "Add a toggle button that collapses the sidebar to 0px with a CSS transition",
         "Make the sidebar collapse to a 60px icon-only bar (not fully hidden) at medium viewports",
       ],
-      conceptsCovered: ["flexbox", "css-grid", "display-positioning", "overflow"],
+      conceptsCovered: [
+        "flexbox",
+        "css-grid",
+        "display-positioning",
+        "overflow",
+      ],
     },
     {
       id: "holy-grail-layout",
@@ -233,7 +238,7 @@ body { font-family: system-ui, sans-serif; }`,
       expectedResult:
         "A complete Holy Grail layout. Header and footer span the full width. Three columns in the middle share the space with fixed sidebars. The footer sticks to the bottom even with minimal content.",
       hints: [
-        "grid-template-areas is the most readable solution: \"header header header\" / \"left main right\" / \"footer footer footer\"",
+        'grid-template-areas is the most readable solution: "header header header" / "left main right" / "footer footer footer"',
         "grid-template-rows: auto 1fr auto on the container, with min-height: 100vh",
         "The sidebars and main area are in the same row — Grid automatically makes them equal height.",
       ],
@@ -379,7 +384,12 @@ ul { list-style: none; }`,
         "Make the popular badge position absolutely above the card boundary",
         "Add a subtle animated gradient background to the Pro card",
       ],
-      conceptsCovered: ["flexbox", "pseudo-elements", "css-variables", "responsive-design"],
+      conceptsCovered: [
+        "flexbox",
+        "pseudo-elements",
+        "css-variables",
+        "responsive-design",
+      ],
     },
     {
       id: "build-a-modal",
@@ -430,7 +440,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; }`,
         "Implement a focus trap (Tab cycles through modal's focusable elements only)",
         "Support multiple modals on the same page",
       ],
-      conceptsCovered: ["positioning", "z-index", "accessibility-fundamentals", "flexbox"],
+      conceptsCovered: [
+        "positioning",
+        "z-index",
+        "accessibility-fundamentals",
+        "flexbox",
+      ],
     },
     {
       id: "build-a-tooltip",
@@ -483,7 +498,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; }`,
         "Add a delay before the tooltip appears (transition-delay)",
         "Make the tooltip dismissible on Escape key using a JavaScript toggle approach instead of pure CSS",
       ],
-      conceptsCovered: ["positioning", "pseudo-elements", "transitions-transforms", "accessibility-fundamentals"],
+      conceptsCovered: [
+        "positioning",
+        "pseudo-elements",
+        "transitions-transforms",
+        "accessibility-fundamentals",
+      ],
     },
     {
       id: "sticky-footer",
@@ -588,7 +608,12 @@ a { text-decoration: none; color: inherit; }`,
         "Add a focus trap when the mobile menu is open",
         "Make the nav transparent at the top of the page and add a solid background on scroll",
       ],
-      conceptsCovered: ["flexbox", "transitions-transforms", "accessibility-fundamentals", "media-queries"],
+      conceptsCovered: [
+        "flexbox",
+        "transitions-transforms",
+        "accessibility-fundamentals",
+        "media-queries",
+      ],
     },
     {
       id: "full-bleed-section",
@@ -700,7 +725,13 @@ body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; 
         "Create an icon-only collapsed sidebar state at medium widths",
         "Add a loading skeleton version of the layout that preserves the same geometry",
       ],
-      conceptsCovered: ["css-grid", "flexbox", "responsive-design", "layout-debugging-workflow", "semantic-html"],
+      conceptsCovered: [
+        "css-grid",
+        "flexbox",
+        "responsive-design",
+        "layout-debugging-workflow",
+        "semantic-html",
+      ],
     },
     {
       id: "comparison-table-rebuild",
@@ -751,7 +782,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; c
         "Make the first column sticky during horizontal scroll",
         "Add visually-hidden helper text for icon-only status cells",
       ],
-      conceptsCovered: ["lists-and-tables", "responsive-design", "accessibility-fundamentals", "visual-ui"],
+      conceptsCovered: [
+        "lists-and-tables",
+        "responsive-design",
+        "accessibility-fundamentals",
+        "visual-ui",
+      ],
     },
     {
       id: "editorial-article-layout",
@@ -800,7 +836,13 @@ body { font-family: Georgia, serif; color: #111827; background: #fff; }`,
         "Use picture or responsive media for the hero image",
         "Add footnotes or source links using ordered lists and proper anchors",
       ],
-      conceptsCovered: ["semantic-html", "lists-and-tables", "responsive-media", "typography-spacing", "interactive-semantics"],
+      conceptsCovered: [
+        "semantic-html",
+        "lists-and-tables",
+        "responsive-media",
+        "typography-spacing",
+        "interactive-semantics",
+      ],
     },
     {
       id: "complex-form-wizard",
@@ -849,7 +891,123 @@ body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; c
         "Add a mobile stepper that collapses to a simpler progress indicator",
         "Add inline validation with aria-live announcements",
       ],
-      conceptsCovered: ["form-basics", "interactive-semantics", "accessibility-fundamentals", "responsive-design", "lists-and-tables"],
+      conceptsCovered: [
+        "form-basics",
+        "interactive-semantics",
+        "accessibility-fundamentals",
+        "responsive-design",
+        "lists-and-tables",
+      ],
+    },
+    {
+      id: "inbox-split-view",
+      moduleId: "interview-challenges",
+      title: "Inbox Split-View Workspace",
+      difficulty: "hard",
+      description:
+        "Build a three-pane inbox UI with folders, a message list, and a detail view. This is a realistic interview-style application screen that tests shells, lists, truncation, and content hierarchy all at once.",
+      targetImage: {
+        src: "/wf-challenges/inbox-split-view.svg",
+        alt: "Inbox application mock with left folder navigation, center message list, and right message detail pane.",
+        caption:
+          "Treat this as a compound screen: navigation region, repeated list items, and a content detail pane with its own internal layout.",
+      },
+      requirements: [
+        "Create a left navigation rail for mailbox categories or filters",
+        "Create a center message list using a semantic list structure",
+        "Create a right detail pane showing the selected message content",
+        "Message rows must support truncation without breaking the layout",
+        "The shell should adapt cleanly to narrower widths, with a clear collapse strategy",
+        "Use semantic landmarks and headings where appropriate",
+        "Keep visual hierarchy strong enough that users can instantly see navigation vs list vs content",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inbox Split View</title>
+</head>
+<body>
+  <!-- Build a realistic inbox workspace here -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; }`,
+      expectedResult:
+        "A convincing product-style inbox layout where the three regions feel coherent, the message list reads like a real list, and the detail pane has clear reading hierarchy.",
+      hints: [
+        "Think in shell regions first: left rail, list pane, detail pane.",
+        "The message list is usually a list of repeated interactive items, not a generic pile of divs.",
+        "This challenge is a great place to practice `min-width: 0` and text truncation in flex rows.",
+      ],
+      bonusTasks: [
+        "Add an unread state and a selected row state",
+        "Make the left rail sticky while the message pane scrolls",
+        "Create a responsive mobile mode where the panes become progressive views",
+      ],
+      conceptsCovered: [
+        "flexbox",
+        "css-grid",
+        "interactive-semantics",
+        "overflow",
+        "responsive-design",
+      ],
+    },
+    {
+      id: "team-directory-workspace",
+      moduleId: "interview-challenges",
+      title: "Team Directory Workspace",
+      difficulty: "hard",
+      description:
+        "Build a people directory UI with a filter sidebar, searchable results area, and supporting detail card. This kind of screen shows up in admin, HR, and operations products and is great layout-breakdown practice.",
+      targetImage: {
+        src: "/wf-challenges/team-directory-workspace.svg",
+        alt: "Team directory mock with filter sidebar, central member card grid or list, and a right-side profile summary panel.",
+        caption:
+          "This is a mixed-content workspace: a filter form, a repeated collection of people results, and a supporting profile or stats panel.",
+      },
+      requirements: [
+        "Create a filter sidebar with grouped controls and section headings",
+        "Create a central results region with repeated member items",
+        "Create a supporting profile or stats panel on the right",
+        "Use semantic structure for the filter form, repeated results, and supporting metadata",
+        "The results layout should remain readable across wide and narrow widths",
+        "Preserve hierarchy between primary browsing content and secondary supporting content",
+        "Use layout choices intentionally rather than forcing a single tool across the entire screen",
+      ],
+      starterHtml: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Directory Workspace</title>
+</head>
+<body>
+  <!-- Build a team directory workspace here -->
+</body>
+</html>`,
+      starterCss: `*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; }`,
+      expectedResult:
+        "A realistic admin-style directory screen with clear separation between filtering, browsing, and supporting member context.",
+      hints: [
+        "The filter area is usually a form, not just a visually grouped sidebar.",
+        "Repeated people results often belong in a list or grid of peer items.",
+        "The right panel should feel secondary in hierarchy even if it is visually strong.",
+      ],
+      bonusTasks: [
+        "Add a view toggle between grid and compact list",
+        "Make the filter sidebar collapsible on smaller widths",
+        "Use a description list for the summary metadata in the supporting panel",
+      ],
+      conceptsCovered: [
+        "layout-breakdown",
+        "form-basics",
+        "lists-and-tables",
+        "css-grid",
+        "responsive-design",
+      ],
     },
     {
       id: "layout-breakdown-notes",
@@ -900,7 +1058,13 @@ body { font-family: system-ui, sans-serif; background: #0f172a; color: #e5e7eb; 
         "Repeat the challenge with two different mockups and compare your breakdown notes",
         "Add a checklist you can reuse in future real interviews",
       ],
-      conceptsCovered: ["layout-debugging-workflow", "css-grid", "flexbox", "semantic-html", "responsive-design"],
+      conceptsCovered: [
+        "layout-debugging-workflow",
+        "css-grid",
+        "flexbox",
+        "semantic-html",
+        "responsive-design",
+      ],
     },
   ],
 };
@@ -909,30 +1073,33 @@ export const explanations: Record<string, () => React.ReactNode> = {
   "layout-debugging-workflow": () => (
     <>
       <p>
-        CSS bugs feel mysterious when you treat them as random styling failures. They become
-        much more manageable when you classify them. Is this a normal-flow problem, a flex or
-        grid sizing problem, an overflow clipping problem, a positioning problem, or a
-        stacking problem? That first classification step usually cuts the search space down
-        dramatically.
+        CSS bugs feel mysterious when you treat them as random styling failures.
+        They become much more manageable when you classify them. Is this a
+        normal-flow problem, a flex or grid sizing problem, an overflow clipping
+        problem, a positioning problem, or a stacking problem? That first
+        classification step usually cuts the search space down dramatically.
       </p>
       <p>
-        A reliable workflow starts with the nearest container, not the visibly broken child.
-        Ask: what layout mode is this parent using? What space is available? Is the child
-        allowed to shrink? Is overflow clipping it? Is the element positioned relative to the
-        ancestor you think it is? Those questions mirror how the browser actually computes
-        layout, which is why they work better than trial-and-error edits.
+        A reliable workflow starts with the nearest container, not the visibly
+        broken child. Ask: what layout mode is this parent using? What space is
+        available? Is the child allowed to shrink? Is overflow clipping it? Is
+        the element positioned relative to the ancestor you think it is? Those
+        questions mirror how the browser actually computes layout, which is why
+        they work better than trial-and-error edits.
       </p>
       <p>
-        Browser DevTools are part of the skill, not a crutch. Flex and grid overlays show
-        track boundaries and distribution. The box model shows whether spacing comes from
-        margin, padding, or size. Computed styles reveal the final winning values after the
-        cascade. Professional debugging is mostly about narrowing uncertainty quickly, and
-        DevTools does exactly that.
+        Browser DevTools are part of the skill, not a crutch. Flex and grid
+        overlays show track boundaries and distribution. The box model shows
+        whether spacing comes from margin, padding, or size. Computed styles
+        reveal the final winning values after the cascade. Professional
+        debugging is mostly about narrowing uncertainty quickly, and DevTools
+        does exactly that.
       </p>
       <p>
-        This matters in interviews because the interviewer is not only grading the final CSS.
-        They are also watching how you think when the UI is not behaving. If your process is
-        methodical, you look like someone who can debug production layouts without panic.
+        This matters in interviews because the interviewer is not only grading
+        the final CSS. They are also watching how you think when the UI is not
+        behaving. If your process is methodical, you look like someone who can
+        debug production layouts without panic.
       </p>
     </>
   ),

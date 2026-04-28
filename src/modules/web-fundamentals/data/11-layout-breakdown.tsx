@@ -26,8 +26,7 @@ export const layoutBreakdown: LearningModule = {
       codeExamples: [
         {
           title: "A plain-language breakdown before code",
-          description:
-            "Good layout work usually starts as notes, not CSS.",
+          description: "Good layout work usually starts as notes, not CSS.",
           html: `Mock: analytics dashboard
 
 1. Big regions
@@ -406,7 +405,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; c
         "Wrap the table in a horizontal scroll region for narrow screens",
         "Add a caption to the table and a heading for each region",
       ],
-      conceptsCovered: ["semantic-patterns", "lists-and-tables", "interactive-semantics", "layout-breakdown"],
+      conceptsCovered: [
+        "semantic-patterns",
+        "lists-and-tables",
+        "interactive-semantics",
+        "layout-breakdown",
+      ],
     },
     {
       id: "annotate-dashboard-regions",
@@ -455,7 +459,12 @@ body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; 
         "Create a second HTML outline using worse semantics and explain why it is worse",
         "Time-box yourself to 10 minutes for the shell only",
       ],
-      conceptsCovered: ["layout-breakdown", "css-grid", "flexbox", "semantic-html"],
+      conceptsCovered: [
+        "layout-breakdown",
+        "css-grid",
+        "flexbox",
+        "semantic-html",
+      ],
     },
     {
       id: "div-soup-to-semantics",
@@ -523,7 +532,12 @@ body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; c
         "Add a main landmark and an aside if the content split supports it",
         "Style the result as a two-column workspace layout",
       ],
-      conceptsCovered: ["semantic-html", "interactive-semantics", "lists-and-tables", "content-modeling"],
+      conceptsCovered: [
+        "semantic-html",
+        "interactive-semantics",
+        "lists-and-tables",
+        "content-modeling",
+      ],
     },
     {
       id: "settings-page-breakdown",
@@ -570,7 +584,12 @@ body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; 
         "Add a mobile layout where the nav moves above the form content",
         "Use a description list for a compact account summary panel",
       ],
-      conceptsCovered: ["layout-breakdown", "form-basics", "interactive-semantics", "semantic-html"],
+      conceptsCovered: [
+        "layout-breakdown",
+        "form-basics",
+        "interactive-semantics",
+        "semantic-html",
+      ],
     },
     {
       id: "comparison-page-content-model",
@@ -617,7 +636,12 @@ body { font-family: system-ui, sans-serif; background: #fff; color: #0f172a; }`,
         "Wrap the FAQ in details/summary for native disclosure behavior",
         "Add a mobile scroll region around the table with an accessible label",
       ],
-      conceptsCovered: ["lists-and-tables", "layout-breakdown", "semantic-html", "responsive-design"],
+      conceptsCovered: [
+        "lists-and-tables",
+        "layout-breakdown",
+        "semantic-html",
+        "responsive-design",
+      ],
     },
     {
       id: "kanban-board-breakdown",
@@ -664,7 +688,13 @@ body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; 
         "Add a sticky board header row",
         "Add visually hidden counts for each column heading",
       ],
-      conceptsCovered: ["layout-breakdown", "lists-and-tables", "css-grid", "flexbox", "content-modeling"],
+      conceptsCovered: [
+        "layout-breakdown",
+        "lists-and-tables",
+        "css-grid",
+        "flexbox",
+        "content-modeling",
+      ],
     },
   ],
 };
@@ -696,9 +726,9 @@ export const explanations: Record<string, () => React.ReactNode> = {
       </p>
       <p>
         Under interview pressure, the goal is not to impress with fast CSS. The
-        goal is to show that you can reduce ambiguity, choose a stable structure,
-        and build in an order that avoids rework. That is exactly what a good
-        layout breakdown does.
+        goal is to show that you can reduce ambiguity, choose a stable
+        structure, and build in an order that avoids rework. That is exactly
+        what a good layout breakdown does.
       </p>
     </>
   ),

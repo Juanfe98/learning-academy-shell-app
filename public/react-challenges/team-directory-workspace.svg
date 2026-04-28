@@ -1,0 +1,42 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="1000" fill="#F8FAFC"/>
+<text x="118" y="70" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700">Team directory</text>
+<text x="118" y="104" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Filter sidebar, searchable results, and a selected profile panel.</text>
+
+<rect x="90" y="140" width="282" height="770" rx="28" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="126" y="192" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Filters</text>
+<rect x="126" y="236" width="210" height="46" rx="14" fill="#E0F2FE"/>
+<text x="152" y="265" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">All</text>
+<rect x="126" y="294" width="210" height="46" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="152" y="323" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14">Product</text>
+<rect x="126" y="352" width="210" height="46" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="152" y="381" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14">Platform</text>
+
+<rect x="398" y="140" width="786" height="770" rx="28" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="440" y="192" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">24 team members</text>
+<rect x="440" y="228" width="700" height="48" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="464" y="258" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Search people, roles, or skills</text>
+<rect x="440" y="316" width="320" height="150" rx="22" fill="#E0F2FE"/>
+<circle cx="490" cy="364" r="26" fill="#38BDF8"/>
+<text x="530" y="354" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Maya Chen</text>
+<text x="530" y="380" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Staff Product Designer</text>
+<text x="530" y="406" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Product · Bogota</text>
+<rect x="780" y="316" width="320" height="150" rx="22" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<circle cx="830" cy="364" r="26" fill="#A78BFA"/>
+<text x="870" y="354" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Luis Gomez</text>
+<text x="870" y="380" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Frontend Engineer</text>
+<text x="870" y="406" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Platform · Medellin</text>
+
+<rect x="1210" y="140" width="300" height="770" rx="28" fill="#0F172A"/>
+<text x="1252" y="192" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Profile</text>
+<circle cx="1360" cy="274" r="44" fill="#38BDF8"/>
+<text x="1294" y="344" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Maya Chen</text>
+<text x="1280" y="374" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Staff Product Designer</text>
+<rect x="1252" y="424" width="216" height="180" rx="22" fill="#111827"/>
+<text x="1280" y="468" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Department</text>
+<text x="1384" y="468" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Product</text>
+<text x="1280" y="514" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Location</text>
+<text x="1384" y="514" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Bogota</text>
+<text x="1280" y="560" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Focus</text>
+<text x="1384" y="560" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Design systems</text>
+</svg>

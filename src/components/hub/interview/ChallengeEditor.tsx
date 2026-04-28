@@ -2,18 +2,31 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Clock, Play, CheckCircle2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronDown,
+  Clock,
+  Play,
+  CheckCircle2,
+  Star,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { javascript } from "@codemirror/lang-javascript";
 import { EditorView } from "@codemirror/view";
 import { Badge } from "@/components/ui";
 import OutputPanel from "./OutputPanel";
-import { buildSrcdoc, buildExecSrcdoc, buildPreviewSrcdoc } from "@/lib/interview/build-srcdoc";
+import {
+  buildSrcdoc,
+  buildExecSrcdoc,
+  buildPreviewSrcdoc,
+} from "@/lib/interview/build-srcdoc";
 import { useProgressStore } from "@/lib/store";
 import type { ReactChallenge } from "@/modules/react-interview/data/types";
 
-const CodeMirrorEditor = dynamic(() => import("@uiw/react-codemirror"), { ssr: false });
+const CodeMirrorEditor = dynamic(() => import("@uiw/react-codemirror"), {
+  ssr: false,
+});
 
 const DIFFICULTY_VARIANT: Record<string, "success" | "warning" | "default"> = {
   easy: "success",
@@ -60,30 +73,53 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
   const [hintsOpen, setHintsOpen] = useState(false);
   const [startTime] = useState(() => Date.now());
   const [timerDisplay, setTimerDisplay] = useState("0:00");
-  const [completed, setCompleted] = useState(false);
   const extensions = useMemo(() => {
     const seHubTheme = EditorView.theme({
-      "&": { background: "var(--bg-elevated)", color: "var(--text-primary)", fontSize: "13px", height: "100%" },
-      ".cm-scroller": { overflow: "auto", fontFamily: "ui-monospace, monospace" },
-      ".cm-gutters": { background: "var(--bg-surface)", border: "none", borderRight: "1px solid rgba(255,255,255,0.06)", color: "var(--text-muted)" },
+      "&": {
+        background: "var(--bg-elevated)",
+        color: "var(--text-primary)",
+        fontSize: "13px",
+        height: "100%",
+      },
+      ".cm-scroller": {
+        overflow: "auto",
+        fontFamily: "ui-monospace, monospace",
+      },
+      ".cm-gutters": {
+        background: "var(--bg-surface)",
+        border: "none",
+        borderRight: "1px solid rgba(255,255,255,0.06)",
+        color: "var(--text-muted)",
+      },
       ".cm-activeLineGutter": { background: "rgba(255,255,255,0.04)" },
       ".cm-activeLine": { background: "rgba(255,255,255,0.03)" },
       ".cm-cursor": { borderLeftColor: "#0ea5e9" },
-      ".cm-selectionBackground": { background: "rgba(14,165,233,0.2) !important" },
-      ".cm-focused .cm-selectionBackground": { background: "rgba(14,165,233,0.25) !important" },
+      ".cm-selectionBackground": {
+        background: "rgba(14,165,233,0.2) !important",
+      },
+      ".cm-focused .cm-selectionBackground": {
+        background: "rgba(14,165,233,0.25) !important",
+      },
     });
     return [javascript({ jsx: true }), seHubTheme];
   }, []);
 
   const markVisited = useProgressStore((s) => s.markModuleVisited);
   const markComplete = useProgressStore((s) => s.markModuleComplete);
-  const getStatus = useProgressStore((s) => s.getModuleStatus);
+  const completed = useProgressStore(
+    (s) =>
+      s.getModuleStatus("react-interview", `challenge/${challenge.id}`) ===
+      "completed"
+  );
 
   useEffect(() => {
-    const status = getStatus("react-interview", `challenge/${challenge.id}`);
-    if (status === "completed") setCompleted(true);
-    markVisited("react-interview", `challenge/${challenge.id}`, challenge.title, challenge.estimatedMinutes);
-  }, [challenge.id, challenge.title, challenge.estimatedMinutes, markVisited, getStatus]);
+    markVisited(
+      "react-interview",
+      `challenge/${challenge.id}`,
+      challenge.title,
+      challenge.estimatedMinutes
+    );
+  }, [challenge.id, challenge.title, challenge.estimatedMinutes, markVisited]);
 
   useEffect(() => {
     const id = setInterval(() => setTimerDisplay(elapsed(startTime)), 1000);
@@ -137,16 +173,13 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
       setExecSrcdoc(buildExecSrcdoc(transpiled));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      setExecSrcdoc(buildExecSrcdoc(
-        `console.error(${JSON.stringify(msg)});`
-      ));
+      setExecSrcdoc(buildExecSrcdoc(`console.error(${JSON.stringify(msg)});`));
     }
     setExecuting(false);
   }, [code]);
 
   function handleComplete() {
     markComplete("react-interview", `challenge/${challenge.id}`);
-    setCompleted(true);
   }
 
   function revealNextHint() {
@@ -177,7 +210,9 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
           Back
         </Link>
         <span className="w-px h-4 bg-border-subtle" />
-        <h1 className="text-sm font-semibold text-primary truncate flex-1">{challenge.title}</h1>
+        <h1 className="text-sm font-semibold text-primary truncate flex-1">
+          {challenge.title}
+        </h1>
         <Badge variant={DIFFICULTY_VARIANT[challenge.difficulty]}>
           {challenge.difficulty}
         </Badge>
@@ -203,8 +238,41 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
               <h2 className="text-xs font-semibold text-muted uppercase tracking-widest mb-2">
                 Problem
               </h2>
-              <p className="text-sm text-secondary leading-relaxed">{challenge.description}</p>
+              <p className="text-sm text-secondary leading-relaxed">
+                {challenge.description}
+              </p>
             </section>
+
+            {challenge.targetImage && (
+              <section
+                className="p-3 rounded-xl"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <h2 className="text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-2 text-primary">
+                  <Star size={13} style={{ color: "#0ea5e9" }} />
+                  Target UI
+                </h2>
+                <div
+                  className="overflow-hidden rounded-xl"
+                  style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={challenge.targetImage.src}
+                    alt={challenge.targetImage.alt}
+                    className="block w-full h-auto"
+                  />
+                </div>
+                {challenge.targetImage.caption && (
+                  <p className="mt-3 text-xs text-muted leading-relaxed">
+                    {challenge.targetImage.caption}
+                  </p>
+                )}
+              </section>
+            )}
 
             {/* Concepts */}
             {challenge.concepts.length > 0 && (
@@ -241,7 +309,9 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
                   <ChevronDown
                     size={12}
                     className="transition-transform"
-                    style={{ transform: hintsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    style={{
+                      transform: hintsOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
                   />
                 </button>
                 <AnimatePresence>
@@ -254,19 +324,23 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="mt-2 space-y-2">
-                        {challenge.hints.slice(0, revealedHints.size).map((hint, i) => (
-                          <div
-                            key={i}
-                            className="text-xs text-secondary p-2.5 rounded-lg leading-relaxed"
-                            style={{
-                              background: "rgba(255,255,255,0.04)",
-                              border: "1px solid var(--border-subtle)",
-                            }}
-                          >
-                            <span className="font-semibold text-muted mr-1">#{i + 1}</span>
-                            {hint}
-                          </div>
-                        ))}
+                        {challenge.hints
+                          .slice(0, revealedHints.size)
+                          .map((hint, i) => (
+                            <div
+                              key={i}
+                              className="text-xs text-secondary p-2.5 rounded-lg leading-relaxed"
+                              style={{
+                                background: "rgba(255,255,255,0.04)",
+                                border: "1px solid var(--border-subtle)",
+                              }}
+                            >
+                              <span className="font-semibold text-muted mr-1">
+                                #{i + 1}
+                              </span>
+                              {hint}
+                            </div>
+                          ))}
                         {revealedHints.size < challenge.hints.length && (
                           <button
                             onClick={revealNextHint}
@@ -291,7 +365,10 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
         {/* Right panel — editor + test runner */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Code editor */}
-          <div className="flex-1 min-h-0 overflow-hidden" style={{ minHeight: "60%" }}>
+          <div
+            className="flex-1 min-h-0 overflow-hidden"
+            style={{ minHeight: "60%" }}
+          >
             <CodeMirrorEditor
               value={code}
               onChange={setCode}

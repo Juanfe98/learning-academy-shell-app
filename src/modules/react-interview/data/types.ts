@@ -5,12 +5,19 @@ export interface ChallengeTest {
   code: string;
 }
 
+export interface ReactChallengeTargetImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface ReactChallenge {
   id: string;
   topicId: string;
   title: string;
   difficulty: Difficulty;
   description: string;
+  targetImage?: ReactChallengeTargetImage;
   concepts: string[];
   starterCode: string;
   hints: string[];

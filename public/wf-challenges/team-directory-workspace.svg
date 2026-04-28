@@ -1,0 +1,45 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="1000" fill="#F8FAFC"/>
+<text x="118" y="70" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700">Team directory</text>
+<text x="118" y="104" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">A realistic admin-style workspace with filters, member results, and a supporting profile panel.</text>
+
+<rect x="90" y="140" width="282" height="770" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<text x="126" y="192" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Filters</text>
+<text x="126" y="238" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Department</text>
+<rect x="126" y="254" width="210" height="46" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="150" y="283" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Product</text>
+<text x="126" y="334" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Location</text>
+<rect x="126" y="350" width="210" height="46" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="150" y="379" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Bogota</text>
+
+<rect x="398" y="140" width="786" height="770" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<text x="440" y="192" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">24 team members</text>
+<rect x="440" y="228" width="702" height="48" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="464" y="258" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Search people, roles, or skills</text>
+<rect x="440" y="316" width="320" height="150" rx="22" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<circle cx="490" cy="364" r="26" fill="#38BDF8"/>
+<text x="530" y="354" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Maya Chen</text>
+<text x="530" y="380" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Staff Product Designer</text>
+<rect x="530" y="404" width="92" height="24" rx="12" fill="#DBEAFE"/>
+<text x="556" y="420" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700">Product</text>
+<rect x="782" y="316" width="320" height="150" rx="22" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<circle cx="832" cy="364" r="26" fill="#A78BFA"/>
+<text x="872" y="354" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Luis Gomez</text>
+<text x="872" y="380" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Frontend Engineer</text>
+<rect x="872" y="404" width="96" height="24" rx="12" fill="#DCFCE7"/>
+<text x="897" y="420" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700">Platform</text>
+
+<rect x="1210" y="140" width="300" height="770" rx="28" fill="#0F172A"/>
+<text x="1252" y="192" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Profile</text>
+<circle cx="1358" cy="270" r="44" fill="#38BDF8"/>
+<text x="1292" y="340" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Maya Chen</text>
+<text x="1278" y="370" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Staff Product Designer</text>
+<rect x="1252" y="422" width="216" height="180" rx="22" fill="#111827"/>
+<text x="1280" y="468" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Location</text>
+<text x="1380" y="468" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Bogota</text>
+<text x="1280" y="514" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Focus</text>
+<text x="1380" y="514" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Design systems</text>
+<text x="1280" y="560" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Availability</text>
+<rect x="1376" y="542" width="72" height="26" rx="13" fill="#DCFCE7"/>
+<text x="1395" y="559" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Active</text>
+</svg>

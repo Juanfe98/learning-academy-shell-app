@@ -4,7 +4,8 @@ const topic: ChallengeTopic = {
   id: "performance",
   title: "Performance",
   icon: "⚡",
-  description: "Profile, memoize, and optimize React components for production.",
+  description:
+    "Profile, memoize, and optimize React components for production.",
   accentColor: "#f59e0b",
   challenges: [
     {
@@ -141,11 +142,17 @@ it("Next User button renders", () => {
     {
       id: "memo-context-split",
       topicId: "performance",
-      title: "Prevent all consumers from re-rendering when one context value changes",
+      title:
+        "Prevent all consumers from re-rendering when one context value changes",
       difficulty: "hard",
       description:
         "The `AppContext` below holds both `user` and `theme`. When `theme` changes, `UserDisplay` (which only reads `user`) also re-renders. Split the context into two — `UserContext` and `ThemeContext` — so each consumer only re-renders for the value it cares about.",
-      concepts: ["context splitting", "React.memo", "createContext", "re-rendering"],
+      concepts: [
+        "context splitting",
+        "React.memo",
+        "createContext",
+        "re-rendering",
+      ],
       starterCode: `const AppContext = React.createContext(null);
 
 const UserDisplay = React.memo(function UserDisplay() {
@@ -210,7 +217,13 @@ it("toggle button switches theme to light", () => {
       difficulty: "medium",
       description:
         "The `DataFetcher` below calls two `setState` updates in an async context (inside a `setTimeout`). In React 17 and earlier, async updates are NOT automatically batched — this causes two separate re-renders. Use `ReactDOM.flushSync` or `React.startTransition` (React 18+) to understand batching, or refactor into a single state object.",
-      concepts: ["batching", "setState", "React 18", "flushSync", "state consolidation"],
+      concepts: [
+        "batching",
+        "setState",
+        "React 18",
+        "flushSync",
+        "state consolidation",
+      ],
       starterCode: `function DataFetcher() {
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -258,6 +271,218 @@ it("Fetch button renders", () => {
         },
       ],
       estimatedMinutes: 15,
+    },
+    {
+      id: "react-team-directory",
+      topicId: "performance",
+      title: "Build a team directory with memoized search and filtering",
+      difficulty: "hard",
+      description:
+        "Build a realistic team directory UI with a department filter, a search box, a repeated member results view, and a profile detail pane. The main React skill is computing filtered results efficiently and keeping selection stable as the visible data changes.",
+      targetImage: {
+        src: "/react-challenges/team-directory-workspace.svg",
+        alt: "React interview target mock for a team directory workspace with filter sidebar, result cards, and profile summary panel.",
+        caption:
+          "This is a great derived-data challenge: search query, active department, visible results, and selected member should all stay in sync without redundant state.",
+      },
+      concepts: [
+        "useMemo",
+        "derived data",
+        "controlled inputs",
+        "selected state",
+        "list rendering",
+      ],
+      starterCode: `const MEMBERS = [
+  {
+    id: "u1",
+    name: "Maya Chen",
+    role: "Staff Product Designer",
+    department: "Product",
+    location: "Bogota",
+    focus: "Design systems",
+    status: "Active",
+  },
+  {
+    id: "u2",
+    name: "Luis Gomez",
+    role: "Frontend Engineer",
+    department: "Platform",
+    location: "Medellin",
+    focus: "Dashboard shell",
+    status: "Active",
+  },
+  {
+    id: "u3",
+    name: "Sara Lin",
+    role: "Product Manager",
+    department: "Product",
+    location: "Remote",
+    focus: "Onboarding flows",
+    status: "Away",
+  },
+  {
+    id: "u4",
+    name: "Diego Ruiz",
+    role: "Data Engineer",
+    department: "Data",
+    location: "Bogota",
+    focus: "Event pipelines",
+    status: "Active",
+  },
+  {
+    id: "u5",
+    name: "Ana Torres",
+    role: "UX Researcher",
+    department: "Product",
+    location: "Quito",
+    focus: "Usability studies",
+    status: "Offline",
+  },
+];
+
+function FilterSidebar({ activeDepartment, onChangeDepartment }) {
+  const departments = ["All", "Product", "Platform", "Data"];
+  return (
+    <aside>
+      <h2>Filters</h2>
+      <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
+        {departments.map((department) => (
+          <button
+            key={department}
+            type="button"
+            onClick={() => onChangeDepartment(department)}
+            style={{
+              textAlign: "left",
+              padding: "12px 14px",
+              borderRadius: 12,
+              border: "1px solid #cbd5e1",
+              background: activeDepartment === department ? "#e0f2fe" : "white",
+              fontWeight: activeDepartment === department ? 700 : 500,
+            }}
+          >
+            {department}
+          </button>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function MemberResults({ members, selectedMemberId, onSelectMember }) {
+  return (
+    <ul style={{ listStyle: "none", display: "grid", gap: 16 }}>
+      {members.map((member) => (
+        <li key={member.id}>
+          <button
+            type="button"
+            onClick={() => onSelectMember(member.id)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              padding: 16,
+              borderRadius: 16,
+              border: "1px solid #cbd5e1",
+              background: selectedMemberId === member.id ? "#e0f2fe" : "white",
+            }}
+          >
+            <strong>{member.name}</strong>
+            <p style={{ marginTop: 8 }}>{member.role}</p>
+            <p style={{ color: "#475569", marginTop: 6 }}>
+              {member.department} · {member.location}
+            </p>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function MemberProfile({ member }) {
+  if (!member) return <p>Select a team member.</p>;
+
+  return (
+    <section>
+      <h2>{member.name}</h2>
+      <p style={{ color: "#475569", marginTop: 8 }}>{member.role}</p>
+      <dl style={{ display: "grid", gap: 12, marginTop: 24 }}>
+        <div>
+          <dt>Department</dt>
+          <dd>{member.department}</dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>{member.location}</dd>
+        </div>
+        <div>
+          <dt>Focus</dt>
+          <dd>{member.focus}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>{member.status}</dd>
+        </div>
+      </dl>
+    </section>
+  );
+}
+
+function App() {
+  const [query, setQuery] = React.useState("");
+  const [activeDepartment, setActiveDepartment] = React.useState("All");
+  const [selectedMemberId, setSelectedMemberId] = React.useState("u1");
+
+  // TODO:
+  // 1. use React.useMemo to derive the visible members from query + activeDepartment
+  // 2. keep the selected member coherent when the visible list changes
+  // 3. render the 3-region workspace with filter sidebar, result list, and profile panel
+
+  return (
+    <div>
+      <h1>Team directory</h1>
+    </div>
+  );
+}
+
+export default App;`,
+      hints: [
+        "Memoize the visible list: filter by department first, then by a lowercase query against name and role.",
+        "As with the inbox challenge, derive the selected object from the visible list instead of storing a duplicate selected member object.",
+        "If the selected member is no longer visible after filtering, fall back to the first visible result or `null`.",
+      ],
+      tests: [
+        {
+          description: "renders the main shell and initial selected member",
+          code: `
+it("renders the directory shell and initial selected member", () => {
+  render(<App />);
+  expect(screen.getByText("Team directory")).toBeTruthy();
+  expect(screen.getByText("Filters")).toBeTruthy();
+  expect(screen.getByText("Maya Chen")).toBeTruthy();
+});`,
+        },
+        {
+          description: "search filters the member results",
+          code: `
+it("search filters results down to Maya", () => {
+  render(<App />);
+  fireEvent.change(document.querySelector("input"), { target: { value: "maya" } });
+  expect(screen.getByText("Maya Chen")).toBeTruthy();
+  expect(screen.queryByText("Luis Gomez")).toBeNull();
+});`,
+        },
+        {
+          description:
+            "changing the department filter updates the visible results and profile",
+          code: `
+it("department filter shows Product members only", () => {
+  render(<App />);
+  fireEvent.click(screen.getByText("Product"));
+  expect(screen.getByText("Maya Chen")).toBeTruthy();
+  expect(screen.queryByText("Luis Gomez")).toBeNull();
+});`,
+        },
+      ],
+      estimatedMinutes: 35,
     },
   ],
 };

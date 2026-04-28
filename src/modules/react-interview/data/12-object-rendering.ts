@@ -16,7 +16,12 @@ const topic: ChallengeTopic = {
       estimatedMinutes: 15,
       description:
         "You receive a `report` object with a `title`, a `summary`, and a `regions` array. Each region has a `name`, a `total`, and a `products` array. Render the report as a readable UI: show the title and summary at the top, then for each region render its name and total, and beneath it a table of its products (name, units, revenue). Wherever you see an array in the data — put a component there.",
-      concepts: ["object traversal", "array.map", "component decomposition", "JSX"],
+      concepts: [
+        "object traversal",
+        "array.map",
+        "component decomposition",
+        "JSX",
+      ],
       starterCode: `const report = {
   title: "Q1 Sales Report",
   summary: "Strong performance across all regions. North led in revenue.",
@@ -191,7 +196,12 @@ it("tbody has exactly 5 rows", () => {
       estimatedMinutes: 25,
       description:
         "You receive a `company` object that mirrors a real API response: it has a `name`, `founded` year, and a `departments` array. Each department has a `name`, `headcount`, `budget`, and an `employees` array. Each employee has `name`, `role`, and `yearsAtCompany`. Render a dashboard: company header at the top, then one card per department showing its stats and a table of its employees. No hardcoded field names — derive everything from the data shape.",
-      concepts: ["nested object traversal", "component decomposition", "array.map", "data-driven UI"],
+      concepts: [
+        "nested object traversal",
+        "component decomposition",
+        "array.map",
+        "data-driven UI",
+      ],
       starterCode: `const company = {
   name: "Acme Corp",
   founded: 2010,
@@ -293,6 +303,115 @@ it("renders budget values for each department", () => {
   expect(screen.getByText("$2,400,000")).toBeTruthy();
   expect(screen.getByText("$800,000")).toBeTruthy();
   expect(screen.getByText("$600,000")).toBeTruthy();
+});`,
+        },
+      ],
+    },
+    {
+      id: "react-product-comparison-table",
+      topicId: "object-rendering",
+      title: "Render a realistic product comparison table from config data",
+      difficulty: "hard",
+      estimatedMinutes: 35,
+      description:
+        "You receive a configuration object describing plans and feature rows. Render a semantic comparison table with a highlighted recommended plan, human-readable status cells, and a supporting section title. This is a realistic UI exercise in turning structured data into a polished React interface.",
+      targetImage: {
+        src: "/react-challenges/product-comparison-table.svg",
+        alt: "React interview target mock for a realistic product comparison page with a semantic feature matrix and highlighted recommended plan.",
+        caption:
+          "The UI should feel like a real pricing comparison screen, but the key skill is still data-to-UI rendering: headers, rows, status cells, and recommended-plan emphasis all come from config.",
+      },
+      concepts: [
+        "object traversal",
+        "config-driven UI",
+        "table rendering",
+        "conditional rendering",
+        "semantic HTML",
+      ],
+      starterCode: `const comparison = {
+  title: "Choose the right plan for your team",
+  recommendedPlanId: "growth",
+  plans: [
+    { id: "starter", name: "Starter", price: "$19" },
+    { id: "growth", name: "Growth", price: "$79" },
+    { id: "scale", name: "Scale", price: "$199" },
+  ],
+  featureRows: [
+    {
+      feature: "Seats included",
+      values: { starter: "5", growth: "20", scale: "Unlimited" },
+    },
+    {
+      feature: "Unlimited projects",
+      values: { starter: false, growth: true, scale: true },
+    },
+    {
+      feature: "SSO support",
+      values: { starter: false, growth: false, scale: true },
+    },
+    {
+      feature: "Audit logs",
+      values: { starter: false, growth: false, scale: true },
+    },
+  ],
+};
+
+function formatValue(value) {
+  // TODO:
+  // true -> "Included"
+  // false -> "Not included"
+  // strings stay as-is
+}
+
+function ComparisonTable({ comparison }) {
+  // TODO:
+  // 1. render the title
+  // 2. render a semantic table with a caption
+  // 3. render one plan column per comparison.plans entry
+  // 4. visually label the recommended plan
+  // 5. render feature rows from comparison.featureRows
+  return <section />;
+}
+
+function App() {
+  return <ComparisonTable comparison={comparison} />;
+}
+
+export default App;`,
+      hints: [
+        "Map `comparison.plans` once for the column headers, and again inside each feature row for the value cells.",
+        "Use a row header cell for the feature name: `<th scope='row'>`.",
+        "A small helper like `formatValue` keeps the JSX much cleaner when booleans and strings are mixed in the same table.",
+      ],
+      tests: [
+        {
+          description: "renders the page title and the three plan names",
+          code: `
+it("renders the page title and plan names", () => {
+  render(<App />);
+  expect(screen.getByText("Choose the right plan for your team")).toBeTruthy();
+  expect(screen.getByText("Starter")).toBeTruthy();
+  expect(screen.getByText("Growth")).toBeTruthy();
+  expect(screen.getByText("Scale")).toBeTruthy();
+});`,
+        },
+        {
+          description: "renders a semantic table and the feature row labels",
+          code: `
+it("renders a semantic table and feature labels", () => {
+  render(<App />);
+  expect(document.querySelector("table")).toBeTruthy();
+  expect(screen.getByText("Seats included")).toBeTruthy();
+  expect(screen.getByText("Unlimited projects")).toBeTruthy();
+});`,
+        },
+        {
+          description: "formats boolean plan values into human-readable labels",
+          code: `
+it("formats booleans as Included and Not included", () => {
+  render(<App />);
+  expect(screen.getAllByText("Included").length).toBeGreaterThan(0);
+  expect(screen.getAllByText("Not included").length).toBeGreaterThan(0);
 });`,
         },
       ],

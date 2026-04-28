@@ -1,17 +1,47 @@
 <svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="1600" height="1000" fill="#FFFFFF"/>
-<rect x="120" y="80" width="1360" height="370" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="180" y="136" width="260" height="18" rx="9" fill="#0F172A" fill-opacity=".14"/>
-<rect x="180" y="210" width="1240" height="54" rx="14" fill="#F1F5F9"/>
-<rect x="180" y="280" width="1240" height="54" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
-<rect x="180" y="350" width="1240" height="54" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
-<rect x="120" y="500" width="860" height="300" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="1040" y="500" width="440" height="300" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="180" y="556" width="220" height="18" rx="9" fill="#0F172A" fill-opacity=".14"/>
-<rect x="180" y="620" width="340" height="120" rx="22" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="560" y="620" width="340" height="120" rx="22" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="1090" y="556" width="180" height="18" rx="9" fill="#0F172A" fill-opacity=".14"/>
-<rect x="1090" y="620" width="340" height="48" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="1090" y="686" width="340" height="48" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
-<rect x="120" y="850" width="1360" height="80" rx="24" fill="#0F172A"/>
+<text x="120" y="70" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700">Compare plans without flattening the content model</text>
+<text x="120" y="104" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">This page mixes a table, explanatory cards, FAQs, and a footer CTA. Each region should keep its own structure.</text>
+
+<rect x="110" y="140" width="1380" height="386" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="156" y="194" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">Plan matrix</text>
+<text x="156" y="224" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="15">This top region is true tabular comparison data.</text>
+<rect x="156" y="266" width="1288" height="58" rx="14" fill="#F1F5F9"/>
+<text x="184" y="302" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Feature</text>
+<text x="588" y="302" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Starter</text>
+<text x="824" y="302" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Growth</text>
+<text x="1068" y="302" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Scale</text>
+<rect x="784" y="248" width="130" height="34" rx="17" fill="#DBEAFE"/>
+<text x="816" y="270" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Recommended</text>
+<rect x="156" y="340" width="1288" height="58" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="184" y="376" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">Unlimited projects</text>
+<text x="606" y="376" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">No</text>
+<text x="840" y="376" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Yes</text>
+<text x="1088" y="376" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Yes</text>
+<rect x="156" y="414" width="1288" height="58" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="184" y="450" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">Audit logs</text>
+<text x="606" y="450" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">-</text>
+<text x="840" y="450" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">-</text>
+<text x="1088" y="450" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Included</text>
+
+<rect x="110" y="560" width="860" height="300" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="156" y="614" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">Why teams choose Growth</text>
+<rect x="156" y="662" width="372" height="150" rx="22" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="184" y="700" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Automation tools</text>
+<text x="184" y="730" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Trigger recurring workflows, approvals, and project checks.</text>
+<rect x="552" y="662" width="372" height="150" rx="22" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="580" y="700" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Team permissions</text>
+<text x="580" y="730" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Granular access controls for editors, reviewers, and admins.</text>
+
+<rect x="1010" y="560" width="480" height="300" rx="30" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="1056" y="614" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">Frequently asked questions</text>
+<rect x="1056" y="662" width="388" height="54" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="1080" y="696" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Can I switch plans mid-cycle?</text>
+<rect x="1056" y="730" width="388" height="54" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="1080" y="764" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">What happens to seats after downgrading?</text>
+
+<rect x="110" y="894" width="1380" height="70" rx="24" fill="#0F172A"/>
+<text x="156" y="936" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Ready to choose a plan?</text>
+<rect x="1304" y="912" width="140" height="36" rx="18" fill="#38BDF8"/>
+<text x="1346" y="935" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Get started</text>
 </svg>

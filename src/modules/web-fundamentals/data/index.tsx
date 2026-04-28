@@ -1,14 +1,36 @@
 import type { LearningModule, Lesson, Challenge } from "./types";
-import { htmlFoundations, explanations as htmlExpl } from "./01-html-foundations";
-import { formsAccessibility, explanations as formsExpl } from "./02-forms-accessibility";
+import {
+  htmlFoundations,
+  explanations as htmlExpl,
+} from "./01-html-foundations";
+import {
+  formsAccessibility,
+  explanations as formsExpl,
+} from "./02-forms-accessibility";
 import { cssFoundations, explanations as cssExpl } from "./03-css-foundations";
-import { displayPositioning, explanations as displayExpl } from "./04-display-positioning";
+import {
+  displayPositioning,
+  explanations as displayExpl,
+} from "./04-display-positioning";
 import { flexbox, explanations as flexExpl } from "./05-flexbox";
 import { cssGrid, explanations as gridExpl } from "./06-css-grid";
-import { responsiveDesign, explanations as responsiveExpl } from "./07-responsive-design";
+import {
+  responsiveDesign,
+  explanations as responsiveExpl,
+} from "./07-responsive-design";
 import { visualUI, explanations as visualExpl } from "./08-visual-ui";
-import { transitionsAnimations, explanations as transitionsExpl } from "./09-transitions-animations";
-import { interviewChallenges, explanations as interviewExpl } from "./10-interview-challenges";
+import {
+  transitionsAnimations,
+  explanations as transitionsExpl,
+} from "./09-transitions-animations";
+import {
+  interviewChallenges,
+  explanations as interviewExpl,
+} from "./10-interview-challenges";
+import {
+  layoutBreakdown,
+  explanations as breakdownExpl,
+} from "./11-layout-breakdown";
 
 export type { LearningModule, Lesson, Challenge };
 export type { Difficulty, CodeExample, PracticeTask } from "./types";
@@ -24,6 +46,7 @@ export const WF_MODULES: LearningModule[] = [
   visualUI,
   transitionsAnimations,
   interviewChallenges,
+  layoutBreakdown,
 ];
 
 const allExplanations: Record<string, () => React.ReactNode> = {
@@ -37,6 +60,7 @@ const allExplanations: Record<string, () => React.ReactNode> = {
   ...visualExpl,
   ...transitionsExpl,
   ...interviewExpl,
+  ...breakdownExpl,
 };
 
 export function getModule(id: string): LearningModule | undefined {
@@ -59,7 +83,9 @@ export function getChallenge(id: string): Challenge | undefined {
   return undefined;
 }
 
-export function getLessonExplanation(id: string): (() => React.ReactNode) | undefined {
+export function getLessonExplanation(
+  id: string
+): (() => React.ReactNode) | undefined {
   return allExplanations[id];
 }
 
@@ -79,8 +105,14 @@ export function getPrevNextLesson(lessonId: string): {
     const idx = mod.lessons.findIndex((l) => l.id === lessonId);
     if (idx === -1) continue;
 
-    const prev = idx > 0 ? { id: mod.lessons[idx - 1].id, title: mod.lessons[idx - 1].title } : null;
-    const next = idx < mod.lessons.length - 1 ? { id: mod.lessons[idx + 1].id, title: mod.lessons[idx + 1].title } : null;
+    const prev =
+      idx > 0
+        ? { id: mod.lessons[idx - 1].id, title: mod.lessons[idx - 1].title }
+        : null;
+    const next =
+      idx < mod.lessons.length - 1
+        ? { id: mod.lessons[idx + 1].id, title: mod.lessons[idx + 1].title }
+        : null;
     return { prev, next };
   }
   return { prev: null, next: null };

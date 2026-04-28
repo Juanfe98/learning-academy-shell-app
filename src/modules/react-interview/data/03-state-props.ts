@@ -4,7 +4,8 @@ const topic: ChallengeTopic = {
   id: "state-props",
   title: "State & Props",
   icon: "📦",
-  description: "Master data flow: lifting state, controlled inputs, Context, and derived state.",
+  description:
+    "Master data flow: lifting state, controlled inputs, Context, and derived state.",
   accentColor: "#06b6d4",
   challenges: [
     {
@@ -14,7 +15,11 @@ const topic: ChallengeTopic = {
       difficulty: "easy",
       description:
         "Two sibling components — `TemperatureC` and `TemperatureF` — each manage their own state and are currently out of sync. Lift the state to their parent `TemperatureConverter` so that updating one field immediately updates the other.",
-      concepts: ["lifting state", "controlled components", "single source of truth"],
+      concepts: [
+        "lifting state",
+        "controlled components",
+        "single source of truth",
+      ],
       starterCode: `function TemperatureC({ value, onChange }) {
   return (
     <label>
@@ -134,7 +139,12 @@ it("inputs reflect typed values", () => {
       difficulty: "medium",
       description:
         "The `user` prop is passed through `App → Layout → Sidebar → UserAvatar` — three layers of prop drilling. The intermediate components (`Layout`, `Sidebar`) don't use `user` themselves. Refactor to use `React.createContext` and `useContext` so only `UserAvatar` reads from context.",
-      concepts: ["createContext", "useContext", "Context.Provider", "prop drilling"],
+      concepts: [
+        "createContext",
+        "useContext",
+        "Context.Provider",
+        "prop drilling",
+      ],
       starterCode: `function UserAvatar({ user }) {
   return <div className="avatar">{user.name[0]}</div>;
 }
@@ -191,7 +201,8 @@ it("renders main content area", () => {
     {
       id: "derive-from-state",
       topicId: "state-props",
-      title: "Eliminate redundant state by deriving from a single source of truth",
+      title:
+        "Eliminate redundant state by deriving from a single source of truth",
       difficulty: "medium",
       description:
         "The `FilteredList` component stores `items`, `filter`, and `filteredItems` in state. This creates a sync problem — `filteredItems` can drift out of sync with `items`. Remove `filteredItems` from state entirely and derive it directly from `items` and `filter` during render.",
@@ -247,6 +258,207 @@ it("filters items matching 'av'", () => {
         },
       ],
       estimatedMinutes: 10,
+    },
+    {
+      id: "react-inbox-split-view",
+      topicId: "state-props",
+      title: "Build an inbox split-view workspace with selected thread state",
+      difficulty: "hard",
+      description:
+        "Build a realistic inbox UI with folder navigation, a thread list, and a detail pane. The key challenge is coordinating selected state and derived visible data cleanly across the three panes without duplicating state.",
+      targetImage: {
+        src: "/react-challenges/inbox-split-view.svg",
+        alt: "React interview target mock for an inbox split-view workspace with mailbox navigation, thread list, and message detail panel.",
+        caption:
+          "Focus on state boundaries: active mailbox, selected thread, and visible thread list should stay coherent as the user switches folders and clicks different threads.",
+      },
+      concepts: [
+        "selected state",
+        "derived state",
+        "list rendering",
+        "component composition",
+        "single source of truth",
+      ],
+      starterCode: `const MAILBOXES = [
+  { id: "inbox", label: "Inbox" },
+  { id: "priority", label: "Priority" },
+  { id: "sent", label: "Sent" },
+];
+
+const THREADS = [
+  {
+    id: "t1",
+    mailbox: "priority",
+    sender: "Maya Chen",
+    subject: "Launch review notes",
+    preview: "We need one more pass on the onboarding review flow before Friday.",
+    body: "We need one more pass on the onboarding review flow before Friday. Please verify the summary step, the empty states, and the footer button hierarchy before we lock the release candidate.",
+    timestamp: "10:24 AM",
+    unread: true,
+  },
+  {
+    id: "t2",
+    mailbox: "priority",
+    sender: "Design Ops",
+    subject: "Token audit follow-up",
+    preview: "The updated spacing tokens are ready for implementation review.",
+    body: "The updated spacing tokens are ready for implementation review. If the dashboard shell lands today, we can align the card spacing pass tomorrow morning.",
+    timestamp: "9:48 AM",
+    unread: false,
+  },
+  {
+    id: "t3",
+    mailbox: "inbox",
+    sender: "Platform",
+    subject: "Invoice export bug",
+    preview: "CSV exports are dropping the region column on older accounts.",
+    body: "CSV exports are dropping the region column on older accounts. Repro steps are attached in the ticket. We should decide whether this is a hotfix or can wait for the next patch.",
+    timestamp: "Yesterday",
+    unread: true,
+  },
+  {
+    id: "t4",
+    mailbox: "sent",
+    sender: "You",
+    subject: "Re: Hiring panel notes",
+    preview: "Sharing the summary from today’s frontend panel.",
+    body: "Sharing the summary from today’s frontend panel. The candidate did well on decomposition and state modeling, but struggled with async race conditions.",
+    timestamp: "Mon",
+    unread: false,
+  },
+];
+
+function MailboxNav({ activeMailbox, onSelectMailbox }) {
+  return (
+    <nav aria-label="Mailboxes">
+      <ul style={{ listStyle: "none", display: "grid", gap: 8 }}>
+        {MAILBOXES.map((mailbox) => (
+          <li key={mailbox.id}>
+            <button
+              type="button"
+              onClick={() => onSelectMailbox(mailbox.id)}
+              style={{
+                width: "100%",
+                textAlign: "left",
+                padding: "12px 14px",
+                borderRadius: 12,
+                border: "1px solid #cbd5e1",
+                background: activeMailbox === mailbox.id ? "#e0f2fe" : "white",
+                fontWeight: activeMailbox === mailbox.id ? 700 : 500,
+              }}
+            >
+              {mailbox.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function ThreadList({ threads, selectedThreadId, onSelectThread }) {
+  return (
+    <ul style={{ listStyle: "none", display: "grid", gap: 12 }}>
+      {threads.map((thread) => (
+        <li key={thread.id}>
+          <button
+            type="button"
+            onClick={() => onSelectThread(thread.id)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              padding: 16,
+              borderRadius: 16,
+              border: "1px solid #cbd5e1",
+              background: selectedThreadId === thread.id ? "#e0f2fe" : "white",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+              <strong>{thread.sender}</strong>
+              <span>{thread.timestamp}</span>
+            </div>
+            <p style={{ fontWeight: 600, marginTop: 8 }}>{thread.subject}</p>
+            <p style={{ color: "#475569", marginTop: 6 }}>{thread.preview}</p>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ThreadDetail({ thread }) {
+  if (!thread) {
+    return <p>Select a thread to read the conversation.</p>;
+  }
+
+  return (
+    <article>
+      <h2>{thread.subject}</h2>
+      <p style={{ color: "#475569", marginTop: 8 }}>
+        From {thread.sender} · {thread.timestamp}
+      </p>
+      <p style={{ marginTop: 24, lineHeight: 1.6 }}>{thread.body}</p>
+    </article>
+  );
+}
+
+function App() {
+  const [activeMailbox, setActiveMailbox] = React.useState("priority");
+  const [selectedThreadId, setSelectedThreadId] = React.useState("t1");
+
+  // TODO:
+  // 1. derive the visible threads from activeMailbox
+  // 2. keep the selected thread in sync with the visible threads
+  // 3. render a 3-pane workspace using MailboxNav, ThreadList, and ThreadDetail
+
+  return (
+    <div>
+      <h1>Inbox workspace</h1>
+    </div>
+  );
+}
+
+export default App;`,
+      hints: [
+        "First derive the list: `const visibleThreads = THREADS.filter(thread => thread.mailbox === activeMailbox)`.",
+        "Then derive the selected object from that filtered list: `visibleThreads.find(thread => thread.id === selectedThreadId)`.",
+        "When the mailbox changes, if the current selected thread is no longer visible, fall back to the first visible thread.",
+      ],
+      tests: [
+        {
+          description:
+            "renders the three mailbox buttons and the initial selected thread",
+          code: `
+it("shows mailbox navigation and the initial selected thread", () => {
+  render(<App />);
+  expect(screen.getByText("Inbox")).toBeTruthy();
+  expect(screen.getByText("Priority")).toBeTruthy();
+  expect(screen.getByText("Sent")).toBeTruthy();
+  expect(screen.getByText("Launch review notes")).toBeTruthy();
+});`,
+        },
+        {
+          description: "clicking a visible thread updates the detail pane",
+          code: `
+it("updates the detail pane when a different thread is selected", () => {
+  render(<App />);
+  fireEvent.click(screen.getByText("Token audit follow-up"));
+  expect(screen.getByText(/updated spacing tokens are ready/i)).toBeTruthy();
+});`,
+        },
+        {
+          description:
+            "switching mailbox changes the visible thread list and detail",
+          code: `
+it("switching to Inbox shows inbox threads and selects one", () => {
+  render(<App />);
+  fireEvent.click(screen.getByText("Inbox"));
+  expect(screen.getByText("Invoice export bug")).toBeTruthy();
+  expect(screen.getByText(/CSV exports are dropping the region column/i)).toBeTruthy();
+});`,
+        },
+      ],
+      estimatedMinutes: 30,
     },
   ],
 };
