@@ -5,10 +5,10 @@ import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button, ProgressBar } from "@/components/ui";
 import { useProgressStore } from "@/lib/store";
-import type { MockAcademy } from "@/lib/mock-data";
+import type { HubAcademy } from "@/lib/hub-academies";
 
 interface PathCTAProps {
-  academy: MockAcademy;
+  academy: HubAcademy;
 }
 
 export default function PathCTA({ academy }: PathCTAProps) {

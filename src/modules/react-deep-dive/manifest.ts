@@ -8,7 +8,7 @@ const manifest: AcademyManifest = {
   version: "1.0.0",
   icon: "⚛️",
   accentColor: "#06b6d4",
-  totalEstimatedMinutes: 265,
+  totalEstimatedMinutes: 305,
   routes: [
     {
       slug: "rendering-model",
@@ -90,6 +90,14 @@ const manifest: AcademyManifest = {
       tags: ["react", "patterns", "compound-components", "composition"],
       component: () => import("./modules/component-patterns"),
     },
+    {
+      slug: "interview-challenges",
+      title: "Interview Challenges",
+      order: 10,
+      estimatedMinutes: 410,
+      tags: ["react", "interviews", "challenge-bank", "forms", "tables", "performance"],
+      component: () => import("./modules/interview-challenges"),
+    },
   ],
   learningPath: [
     "rendering-model",
@@ -102,6 +110,38 @@ const manifest: AcademyManifest = {
     "concurrent-features",
     "react-19",
     "component-patterns",
+    "interview-challenges",
+  ],
+  groups: [
+    {
+      id: "react-foundations",
+      title: "Render & State Foundations",
+      description: "The mental models behind rendering, state snapshots, effects, and memoization.",
+      routeSlugs: [
+        "rendering-model",
+        "use-state-use-reducer",
+        "use-effect-in-depth",
+        "use-ref-use-memo-use-callback",
+      ],
+    },
+    {
+      id: "react-coordination",
+      title: "Coordination & Modern React",
+      description: "Sharing state, extracting logic, async boundaries, and modern concurrent React features.",
+      routeSlugs: [
+        "context-in-depth",
+        "custom-hooks",
+        "suspense-and-data-fetching",
+        "concurrent-features",
+        "react-19",
+      ],
+    },
+    {
+      id: "react-architecture-practice",
+      title: "Architecture & Interview Practice",
+      description: "Component API design and realistic React interview challenges.",
+      routeSlugs: ["component-patterns", "interview-challenges"],
+    },
   ],
 };
 

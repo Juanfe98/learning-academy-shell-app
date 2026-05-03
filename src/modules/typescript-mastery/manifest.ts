@@ -85,6 +85,26 @@ const manifest: AcademyManifest = {
     "conditional-types",
     "advanced-patterns",
   ],
+  groups: [
+    {
+      id: "typescript-foundations",
+      title: "Type Foundations",
+      description: "The core mental model behind TypeScript's structural type system.",
+      routeSlugs: ["the-type-system", "types-and-interfaces"],
+    },
+    {
+      id: "type-construction",
+      title: "Reusable Type Construction",
+      description: "Building stronger reusable abstractions with generics, utility types, narrowing, and mapped types.",
+      routeSlugs: ["generics", "utility-types", "type-narrowing", "mapped-types"],
+    },
+    {
+      id: "advanced-inference-patterns",
+      title: "Advanced Inference & Patterns",
+      description: "Conditional typing, inference, and advanced design patterns for large codebases.",
+      routeSlugs: ["conditional-types", "advanced-patterns"],
+    },
+  ],
 };
 
 export default manifest;

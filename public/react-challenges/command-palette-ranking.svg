@@ -1,0 +1,18 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="100" y="74" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Command palette</text>
+<text x="100" y="110" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Urgent typing, deferred ranking, and a subtle stale-results signal while the list catches up.</text>
+<rect x="210" y="156" width="1180" height="700" rx="30" fill="#0F172A"/>
+<rect x="260" y="210" width="1080" height="64" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="300" y="250" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="16">Search commands</text>
+<text x="260" y="314" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Updating results...</text>
+<rect x="260" y="346" width="1080" height="420" rx="24" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="296" y="390" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Navigation</text>
+<rect x="296" y="410" width="1008" height="62" rx="16" fill="#172554"/>
+<text x="326" y="448" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Open project</text>
+<rect x="296" y="488" width="1008" height="62" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="326" y="526" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Open review queue</text>
+<text x="296" y="586" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Actions</text>
+<rect x="296" y="606" width="1008" height="62" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="326" y="644" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Assign reviewer</text>
+</svg>

@@ -254,6 +254,86 @@ pre {
   }
 }
 
+.article-table,
+.article-content > table {
+  margin: 1.75rem 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.1), transparent 35%),
+    rgba(255, 255, 255, 0.03);
+}
+
+.article-table__caption {
+  padding: 0.95rem 1rem 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.article-table__scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.article-table table,
+.article-content > table {
+  width: 100%;
+  min-width: var(--article-table-min-width, 760px);
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.article-table thead th,
+.article-content > table thead th {
+  padding: 1rem 1.05rem;
+  background: rgba(15, 23, 42, 0.96);
+  color: var(--text-primary);
+  text-align: left;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.4;
+}
+
+.article-table tbody tr,
+.article-content > table tbody tr {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.article-table tbody tr:nth-child(even),
+.article-content > table tbody tr:nth-child(even) {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.article-table tbody tr:hover,
+.article-content > table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.article-table tbody td,
+.article-table tbody th[scope="row"],
+.article-content > table tbody td,
+.article-content > table tbody th[scope="row"] {
+  padding: 0.95rem 1rem;
+  vertical-align: top;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  text-align: left;
+}
+
+.article-table tbody th[scope="row"],
+.article-content > table tbody th[scope="row"] {
+  width: 26%;
+  background: rgba(15, 23, 42, 0.46);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 /* Syntax token colours (used inside .article-content pre) */
 .tok-keyword  { color: #569cd6; }
 .tok-type     { color: #4ec9b0; }

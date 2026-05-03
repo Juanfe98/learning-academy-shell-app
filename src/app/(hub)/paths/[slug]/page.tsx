@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui";
 import ModuleList from "@/components/hub/ModuleList";
 import PathProgressPanel from "@/components/hub/PathProgressPanel";
 import PathCTA from "@/components/hub/PathCTA";
-import { MOCK_ACADEMIES } from "@/lib/mock-data";
+import { HUB_ACADEMIES } from "@/lib/hub-academies";
 
 /* ─── Not found ────────────────────────────────────────────────────────────── */
 
@@ -65,7 +65,7 @@ export default async function PathOverviewPage({
   params,
 }: PageProps<"/paths/[slug]">) {
   const { slug } = await params;
-  const academy = MOCK_ACADEMIES.find((a) => a.slug === slug);
+  const academy = HUB_ACADEMIES.find((a) => a.slug === slug);
 
   if (!academy) {
     return <AcademyNotFound />;

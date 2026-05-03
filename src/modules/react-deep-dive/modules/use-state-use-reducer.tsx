@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -8,6 +9,7 @@ export const toc: TocItem[] = [
   { id: "use-reducer", title: "useReducer: When and Why", level: 2 },
   { id: "designing-state-shape", title: "Designing State Shape", level: 2 },
   { id: "derived-vs-redundant-state", title: "Derived State vs Redundant State", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Editable Table + Bulk Actions", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -288,6 +290,35 @@ const sortedItems = useMemo(
   [items]
 );
 // For most string concatenation and filtering: no useMemo needed.`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Editable Table + Bulk Actions</h2>
+
+      <InterviewChallenge
+        title="Admin Users Table"
+        scenario={
+          <>
+            You are handed a production admin table with server-backed pagination, row selection,
+            inline role editing, a search box, and a bulk deactivate action. The current
+            implementation stores <code>selectedIds</code>, <code>selectedCount</code>,{" "}
+            <code>filteredUsers</code>, <code>isAllSelected</code>, and <code>dirtyRows</code> as
+            separate pieces of state. Users report that the selected count drifts, bulk actions
+            sometimes include rows that are no longer visible, and unsaved inline edits disappear
+            when the page changes.
+          </>
+        }
+        tasks={[
+          "Redesign the state shape so the table can support pagination, filtering, selection, and inline edits without synchronization bugs.",
+          "Explain which values should be derived during render versus stored, especially for selected counts, visible rows, and 'all selected' logic.",
+          "Describe how you would model optimistic row edits so drafts survive refetches and pagination without mutating the original dataset.",
+          "Defend whether this UI should stay on useState or move to useReducer, including the action names you would expect to see.",
+        ]}
+        pitfalls={[
+          "Storing filtered arrays in state instead of deriving them from source rows + filters.",
+          "Tracking selection by row index rather than a stable row id.",
+          "Mutating nested row objects, which breaks React's change detection and makes undo logic painful.",
+        ]}
+        signal="Strong answers normalize rows by id, keep filter/sort/page controls separate from source data, derive projections like visible rows and counts during render, and use a reducer once events start sounding like business operations instead of simple field changes."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

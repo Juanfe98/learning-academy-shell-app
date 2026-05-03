@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -8,6 +9,7 @@ export const toc: TocItem[] = [
   { id: "firing-order", title: "Effect Firing Order", level: 2 },
   { id: "when-not-to-use-useeffect", title: "When NOT to Use useEffect", level: 2 },
   { id: "strict-mode-double-invoke", title: "React 18 Strict Mode Double-Invoke", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Search Form Race Conditions", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -330,6 +332,33 @@ useEffect(() => {
 
 // The golden rule: if your effect's net result after
 // "run, cleanup, run" is different from "run" alone, you have a cleanup bug.`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Search Form Race Conditions</h2>
+
+      <InterviewChallenge
+        title="Debounced Search + URL Sync"
+        scenario={
+          <>
+            A marketplace search page has a debounced text input, category filters, a sort
+            dropdown, URL query-string synchronization, and server-backed results. Users report
+            flickering results, stale data replacing fresh data, and warnings about updates after
+            navigation. The existing code has one large <code>useEffect</code> that debounces the
+            input, pushes the URL, fires the fetch, and writes results into component state.
+          </>
+        }
+        tasks={[
+          "Split the responsibilities in this feature so each effect describes one synchronization relationship instead of one giant lifecycle blob.",
+          "Explain how you would prevent stale requests from overwriting fresh ones when the user types quickly or navigates away mid-request.",
+          "Decide what belongs in event handlers, what belongs in effects, and what can be derived from existing state during render.",
+          "Use Strict Mode double-invoke to explain how you would prove the solution cleans up timers, aborts requests, and avoids duplicate subscriptions.",
+        ]}
+        pitfalls={[
+          "Combining debounce timers, fetch requests, URL synchronization, and derived filtering in one effect.",
+          "Ignoring AbortController or an equivalent cancellation path for in-flight requests.",
+          "Silencing the exhaustive-deps lint rule instead of fixing the closure problem.",
+        ]}
+        signal="Great answers isolate the debounce, the URL sync, and the request lifecycle into separate setup/cleanup flows, use cancellation so stale work cannot commit, and keep pure derivation out of effects entirely."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

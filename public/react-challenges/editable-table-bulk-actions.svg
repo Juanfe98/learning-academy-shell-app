@@ -1,0 +1,70 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<rect x="92" y="78" width="1416" height="824" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<text x="140" y="138" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Users administration</text>
+<text x="140" y="172" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Customer Ops workspace with filtering, bulk actions, role editing, and draft state.</text>
+<rect x="140" y="214" width="360" height="52" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="170" y="246" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="16">Search by name or email</text>
+<rect x="524" y="214" width="170" height="52" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="575" y="246" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16">Role</text>
+<rect x="716" y="214" width="170" height="52" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="762" y="246" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16">Status</text>
+<rect x="906" y="214" width="122" height="52" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="941" y="246" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16">Page 3</text>
+<rect x="1052" y="214" width="316" height="52" rx="16" fill="#0EA5E9"/>
+<text x="1086" y="246" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Deactivate 3 selected users</text>
+<rect x="140" y="298" width="1328" height="72" rx="22" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="2"/>
+<text x="176" y="326" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">3 rows selected</text>
+<text x="176" y="350" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="15">Selection spans the filtered dataset, not only the visible page. 1 row has unsaved draft edits.</text>
+<rect x="140" y="394" width="1328" height="394" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="140" y="394" width="1328" height="70" rx="22" fill="#F1F5F9"/>
+<circle cx="184" cy="429" r="10" fill="#0EA5E9"/>
+<text x="222" y="435" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">User</text>
+<text x="512" y="435" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Email</text>
+<text x="814" y="435" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Role</text>
+<text x="1048" y="435" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Status</text>
+<text x="1260" y="435" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Draft state</text>
+<line x1="140" y1="464" x2="1468" y2="464" stroke="#CBD5E1"/>
+<line x1="140" y1="544" x2="1468" y2="544" stroke="#CBD5E1"/>
+<line x1="140" y1="624" x2="1468" y2="624" stroke="#CBD5E1"/>
+<line x1="140" y1="704" x2="1468" y2="704" stroke="#CBD5E1"/>
+<rect x="168" y="492" width="32" height="32" rx="10" fill="#0EA5E9" fill-opacity=".16" stroke="#0EA5E9" stroke-width="2"/>
+<circle cx="246" cy="508" r="18" fill="#38BDF8"/>
+<text x="278" y="502" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Maya Chen</text>
+<text x="278" y="522" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Staff Product Designer</text>
+<text x="502" y="512" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14">maya.chen@northstar.app</text>
+<rect x="810" y="488" width="116" height="42" rx="14" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2"/>
+<text x="840" y="514" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Editor</text>
+<rect x="1050" y="492" width="98" height="30" rx="15" fill="#DCFCE7"/>
+<text x="1076" y="511" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Active</text>
+<rect x="1252" y="488" width="138" height="42" rx="14" fill="#FEF3C7"/>
+<text x="1280" y="514" fill="#92400E" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Role changed</text>
+<rect x="168" y="572" width="32" height="32" rx="10" fill="#0EA5E9" fill-opacity=".16" stroke="#0EA5E9" stroke-width="2"/>
+<circle cx="246" cy="588" r="18" fill="#A78BFA"/>
+<text x="278" y="582" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Luis Gomez</text>
+<text x="278" y="602" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Frontend Engineer</text>
+<text x="502" y="592" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14">luis.gomez@northstar.app</text>
+<rect x="810" y="568" width="116" height="42" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="840" y="594" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Viewer</text>
+<rect x="1050" y="572" width="114" height="30" rx="15" fill="#FEE2E2"/>
+<text x="1076" y="591" fill="#991B1B" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Inactive</text>
+<rect x="1252" y="568" width="102" height="42" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="1284" y="594" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Saved</text>
+<rect x="168" y="652" width="32" height="32" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<circle cx="246" cy="668" r="18" fill="#F59E0B"/>
+<text x="278" y="662" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Priya Patel</text>
+<text x="278" y="682" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Support Manager</text>
+<text x="502" y="672" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14">priya.patel@northstar.app</text>
+<rect x="810" y="648" width="116" height="42" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="844" y="674" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Admin</text>
+<rect x="1050" y="652" width="98" height="30" rx="15" fill="#DCFCE7"/>
+<text x="1076" y="671" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Active</text>
+<rect x="1252" y="648" width="150" height="42" rx="14" fill="#E0F2FE"/>
+<text x="1276" y="674" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Awaiting save</text>
+<rect x="140" y="822" width="1328" height="52" rx="18" fill="#F1F5F9"/>
+<text x="176" y="854" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Showing 21–30 of 126 matching users</text>
+<rect x="1168" y="834" width="114" height="28" rx="14" fill="#E2E8F0"/>
+<text x="1205" y="853" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Previous</text>
+<rect x="1296" y="834" width="128" height="28" rx="14" fill="#0EA5E9"/>
+<text x="1338" y="853" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Next</text>
+</svg>

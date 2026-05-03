@@ -1,0 +1,67 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="96" y="74" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Checkout workspace</text>
+<text x="96" y="110" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Reactive pricing, input validation, async promo codes, and a summary that explains every derived number.</text>
+<rect x="80" y="150" width="920" height="770" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="1032" y="150" width="488" height="770" rx="28" fill="#0F172A"/>
+
+<text x="124" y="198" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Customer &amp; payment</text>
+<text x="124" y="232" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Fields react to region, invoice amount, and shipping method.</text>
+
+<text x="124" y="286" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Work email</text>
+<rect x="124" y="304" width="360" height="56" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="152" y="338" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">procurement@northstar.app</text>
+<text x="124" y="382" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Verified B2B account</text>
+
+<text x="520" y="286" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Country</text>
+<rect x="520" y="304" width="284" height="56" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="548" y="338" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">United States</text>
+<text x="520" y="382" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Tax and payment fields depend on region</text>
+
+<text x="124" y="430" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Promo code</text>
+<rect x="124" y="448" width="360" height="56" rx="16" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2"/>
+<text x="152" y="482" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">SPRINGTEAM24</text>
+<text x="124" y="526" fill="#B45309" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Checking code eligibility for annual team plan…</text>
+
+<text x="520" y="430" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Shipping</text>
+<rect x="520" y="448" width="284" height="56" rx="16" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+<text x="548" y="482" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Priority courier · 2 business days</text>
+<text x="520" y="526" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Changes tax and delivery estimate</text>
+
+<text x="124" y="574" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Card number</text>
+<rect x="124" y="592" width="680" height="56" rx="16" fill="#FFFFFF" stroke="#EF4444" stroke-width="2"/>
+<text x="152" y="626" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">4242 4242 4242 4000</text>
+<text x="124" y="670" fill="#B91C1C" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Card declined for recurring payments. Try another card or invoice billing.</text>
+
+<text x="124" y="718" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Invoice billing</text>
+<rect x="124" y="736" width="680" height="68" rx="18" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<text x="152" y="770" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Available because order total is above $5,000</text>
+<text x="152" y="794" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Requires billing contact approval before final confirmation.</text>
+
+<text x="1076" y="198" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Order summary</text>
+<text x="1076" y="232" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="14">Every number here is derived from the draft and current pricing rules.</text>
+
+<rect x="1076" y="268" width="400" height="184" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1110" y="310" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Items</text>
+<text x="1410" y="310" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">$4,800.00</text>
+<text x="1110" y="346" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Promo discount</text>
+<text x="1394" y="346" fill="#86EFAC" font-family="Inter, Arial, sans-serif" font-size="14">-$480.00</text>
+<text x="1110" y="382" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Shipping</text>
+<text x="1410" y="382" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">$42.00</text>
+<text x="1110" y="418" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Estimated tax</text>
+<text x="1402" y="418" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">$366.78</text>
+
+<rect x="1076" y="484" width="400" height="112" rx="22" fill="#172554"/>
+<text x="1110" y="528" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Grand total</text>
+<text x="1110" y="566" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">$4,728.78</text>
+<text x="1368" y="566" fill="#BFDBFE" font-family="Inter, Arial, sans-serif" font-size="12">USD</text>
+
+<rect x="1076" y="628" width="400" height="132" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1110" y="670" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Blocking issues</text>
+<text x="1110" y="706" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">1. Recurring card validation failed</text>
+<text x="1110" y="734" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">2. Promo check still pending</text>
+
+<rect x="1076" y="792" width="400" height="84" rx="18" fill="#14532D"/>
+<text x="1110" y="828" fill="#DCFCE7" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Customer-facing explanation</text>
+<text x="1110" y="856" fill="#F0FDF4" font-family="Inter, Arial, sans-serif" font-size="12">“Your 10% team discount is being verified before we charge the final amount.”</text>
+</svg>

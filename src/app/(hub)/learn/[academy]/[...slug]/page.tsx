@@ -9,6 +9,9 @@ import ModuleOverviewPage from "@/components/hub/learn/wf/ModuleOverviewPage";
 import LessonPage from "@/components/hub/learn/wf/LessonPage";
 import ChallengePage from "@/components/hub/learn/wf/ChallengePage";
 import PlaygroundLoader from "@/components/hub/learn/wf/PlaygroundLoader";
+import ReactInterviewSidebar from "@/components/hub/learn/react/ReactInterviewSidebar";
+import ReactInterviewOverviewPage from "@/components/hub/learn/react/ReactInterviewOverviewPage";
+import ReactInterviewChallengePage from "@/components/hub/learn/react/ReactInterviewChallengePage";
 import { findAcademy } from "@/lib/registry";
 import { MOCK_ACADEMIES } from "@/lib/mock-data";
 import {
@@ -18,6 +21,10 @@ import {
   getLessonExplanation,
   getPrevNextLesson,
 } from "@/modules/web-fundamentals/data";
+import {
+  REACT_DEEP_DIVE_INTERVIEW_MODULE,
+  getReactDeepDiveChallenge,
+} from "@/modules/react-deep-dive/interview-challenges-data";
 
 /* ─── Not found ──────────────────────────────────────────────────────────── */
 
@@ -112,6 +119,44 @@ function WFShellLayout({
   );
 }
 
+function ReactInterviewShellLayout({
+  academy,
+  currentSlug,
+  currentChallengeId,
+  children,
+}: {
+  academy: {
+    slug: string;
+    title: string;
+    icon: string;
+    accentColor: string;
+    routes: Array<{ slug: string; title: string }>;
+    learningPath: string[];
+  };
+  currentSlug: string;
+  currentChallengeId?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex min-h-screen lg:h-screen lg:overflow-hidden">
+      <aside
+        className="hidden lg:flex flex-col w-[300px] shrink-0 h-full"
+        style={{
+          background: "var(--bg-surface)",
+          borderRight: "1px solid var(--border-subtle)",
+        }}
+      >
+        <ReactInterviewSidebar
+          academy={academy}
+          currentSlug={currentSlug}
+          currentChallengeId={currentChallengeId}
+        />
+      </aside>
+      <div className="flex-1 min-w-0 lg:overflow-y-auto">{children}</div>
+    </div>
+  );
+}
+
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 
 export default async function ContentViewerPage({
@@ -171,6 +216,50 @@ export default async function ContentViewerPage({
     }
 
     return <NotFound message="This section is coming in the next update." />;
+  }
+
+  if (academySlug === "react-deep-dive") {
+    const registryAcademy = findAcademy(academySlug);
+    if (!registryAcademy) {
+      return <NotFound message="React Deep Dive is not available right now." />;
+    }
+
+    const serializableAcademy = {
+      ...registryAcademy,
+      routes: registryAcademy.routes.map(({ component: _c, ...r }) => r),
+    };
+
+    if (slug.length === 1 && routeSlug === "interview-challenges") {
+      return (
+        <ReactInterviewShellLayout
+          academy={serializableAcademy}
+          currentSlug="interview-challenges"
+        >
+          <ReactInterviewOverviewPage module={REACT_DEEP_DIVE_INTERVIEW_MODULE} />
+        </ReactInterviewShellLayout>
+      );
+    }
+
+    if (slug[0] === "challenge" && slug[1]) {
+      const challenge = getReactDeepDiveChallenge(slug[1]);
+      if (!challenge) {
+        return (
+          <NotFound
+            message={`Challenge "${slug[1]}" not found in React Deep Dive.`}
+          />
+        );
+      }
+
+      return (
+        <ReactInterviewShellLayout
+          academy={serializableAcademy}
+          currentSlug="challenge"
+          currentChallengeId={challenge.id}
+        >
+          <ReactInterviewChallengePage challenge={challenge} />
+        </ReactInterviewShellLayout>
+      );
+    }
   }
 
   /* ── Registry path: real content ────────────────────────────────────── */

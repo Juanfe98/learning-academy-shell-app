@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -7,6 +8,7 @@ export const toc: TocItem[] = [
   { id: "controlled-vs-uncontrolled", title: "Controlled vs Uncontrolled Components", level: 2 },
   { id: "higher-order-components", title: "Higher-Order Components in 2024", level: 2 },
   { id: "lifting-vs-pushing-state", title: "Lifting State Up vs Pushing State Down", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Complex Filter Drawer + Results List", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -359,6 +361,32 @@ function Dashboard() {
     </>
   );
 }`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Complex Filter Drawer + Results List</h2>
+
+      <InterviewChallenge
+        title="Marketplace Search UI"
+        scenario={
+          <>
+            You need to design a marketplace page with a collapsible filter drawer, a results
+            list, active-filter chips, a saved-search modal, and a compare tray that follows the
+            user across pagination. Interviewers want to see whether you can choose the right
+            component APIs, not just whether you can get something working.
+          </>
+        }
+        tasks={[
+          "Choose patterns for the drawer, modal, compare tray, and results list, and explain why each pattern fits the interaction model.",
+          "Decide where controlled APIs are necessary versus where local or uncontrolled state makes the component easier to reuse.",
+          "Design a component API that supports accessibility, future layout changes, and product variants without exploding prop count.",
+          "Explain whether Context is justified here, and if so which state deserves it versus staying local to a subtree.",
+        ]}
+        pitfalls={[
+          "Lifting every ephemeral toggle and input value to the page root.",
+          "Using one giant context for both server data and local UI behavior.",
+          "Building a rigid component API that only supports the first mock instead of a family of screens.",
+        ]}
+        signal="Strong answers usually combine slots for layout, controlled props for externally important state like selected filters, and local state or compound components for tightly coupled interactions like a drawer or compare tray."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

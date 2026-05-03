@@ -1,0 +1,186 @@
+<svg width="1500" height="1260" viewBox="0 0 1500 1260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1500" y2="1260" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#020617" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#93C5FD"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#C4B5FD"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#99F6E4"/>
+    </marker>
+    <marker id="arrowWarm" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#FDBA74"/>
+    </marker>
+  </defs>
+
+  <rect width="1500" height="1260" rx="28" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1452" height="1212" rx="20" stroke="#334155" stroke-width="2"/>
+
+  <text x="56" y="74" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">
+    Request Lifecycle Sequence Map
+  </text>
+  <text x="56" y="108" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="18">
+    Scenario: user opens https://app.example.com/dashboard. Follow the arrows top-to-bottom like a draw.io sequence diagram.
+  </text>
+
+  <!-- Actor headers -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="142" width="180" height="72" rx="14" fill="#1D4ED8" fill-opacity="0.18" stroke="#60A5FA"/>
+    <text x="160" y="186" text-anchor="middle" fill="#EFF6FF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Browser</text>
+
+    <rect x="290" y="142" width="180" height="72" rx="14" fill="#1D4ED8" fill-opacity="0.18" stroke="#60A5FA"/>
+    <text x="380" y="176" text-anchor="middle" fill="#EFF6FF" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">DNS Chain</text>
+    <text x="380" y="198" text-anchor="middle" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="13">OS, router, ISP, Route 53</text>
+
+    <rect x="510" y="142" width="180" height="72" rx="14" fill="#5B21B6" fill-opacity="0.20" stroke="#A78BFA"/>
+    <text x="600" y="186" text-anchor="middle" fill="#F5F3FF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">CloudFront</text>
+
+    <rect x="730" y="142" width="180" height="72" rx="14" fill="#5B21B6" fill-opacity="0.20" stroke="#A78BFA"/>
+    <text x="820" y="186" text-anchor="middle" fill="#F5F3FF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">ALB</text>
+
+    <rect x="950" y="142" width="180" height="72" rx="14" fill="#0F766E" fill-opacity="0.20" stroke="#5EEAD4"/>
+    <text x="1040" y="176" text-anchor="middle" fill="#ECFEFF" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">App Service</text>
+    <text x="1040" y="198" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Arial, sans-serif" font-size="13">ECS / Lambda</text>
+
+    <rect x="1170" y="142" width="180" height="72" rx="14" fill="#0F766E" fill-opacity="0.20" stroke="#5EEAD4"/>
+    <text x="1260" y="176" text-anchor="middle" fill="#ECFEFF" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">Cache / DB</text>
+    <text x="1260" y="198" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Arial, sans-serif" font-size="13">Redis, DynamoDB, Postgres</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="160" y1="214" x2="160" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+  <line x1="380" y1="214" x2="380" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+  <line x1="600" y1="214" x2="600" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+  <line x1="820" y1="214" x2="820" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+  <line x1="1040" y1="214" x2="1040" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+  <line x1="1260" y1="214" x2="1260" y2="1140" stroke="#334155" stroke-width="2" stroke-dasharray="8 8"/>
+
+  <!-- Step labels left -->
+  <g font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#CBD5E1">
+    <rect x="56" y="248" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="268" text-anchor="middle">1. DNS</text>
+    <rect x="56" y="348" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="368" text-anchor="middle">2. TCP</text>
+    <rect x="56" y="456" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="476" text-anchor="middle">3. TLS</text>
+    <rect x="56" y="586" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="606" text-anchor="middle">4. CDN</text>
+    <rect x="56" y="710" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="730" text-anchor="middle">5. ALB</text>
+    <rect x="56" y="836" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="856" text-anchor="middle">6. App</text>
+    <rect x="56" y="954" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="974" text-anchor="middle">7. Data</text>
+    <rect x="56" y="1074" width="118" height="30" rx="999" fill="#1E293B" stroke="#334155"/>
+    <text x="115" y="1094" text-anchor="middle">8. Return</text>
+  </g>
+
+  <!-- DNS -->
+  <line x1="160" y1="264" x2="380" y2="264" stroke="#93C5FD" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="270" y="252" text-anchor="middle" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">
+    Query: app.example.com
+  </text>
+  <line x1="380" y1="294" x2="160" y2="294" stroke="#93C5FD" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="270" y="316" text-anchor="middle" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="14">
+    Returns CloudFront IP | ~20ms cold, ~0ms cached
+  </text>
+
+  <!-- TCP -->
+  <line x1="160" y1="364" x2="600" y2="364" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="352" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">SYN</text>
+  <line x1="600" y1="394" x2="160" y2="394" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="416" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="14">SYN-ACK</text>
+  <line x1="160" y1="424" x2="600" y2="424" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="446" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="14">
+    ACK | ~10–50ms RTT
+  </text>
+
+  <!-- TLS -->
+  <line x1="160" y1="472" x2="600" y2="472" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="460" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">ClientHello</text>
+  <line x1="600" y1="512" x2="160" y2="512" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="500" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="14">ServerHello + Certificate</text>
+  <line x1="160" y1="552" x2="600" y2="552" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="380" y="574" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="14">
+    Key exchange → encrypted session | ~50–100ms
+  </text>
+
+  <!-- CDN -->
+  <rect x="520" y="610" width="160" height="56" rx="12" fill="#312E81" fill-opacity="0.45" stroke="#818CF8"/>
+  <text x="600" y="632" text-anchor="middle" fill="#F5F3FF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Cache check</text>
+  <text x="600" y="652" text-anchor="middle" fill="#DDD6FE" font-family="Inter, Arial, sans-serif" font-size="12">/dashboard HTML</text>
+  <path d="M600 666V700H820" stroke="#FDBA74" stroke-width="4" stroke-dasharray="10 8" fill="none" marker-end="url(#arrowWarm)"/>
+  <text x="706" y="692" text-anchor="middle" fill="#FED7AA" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">
+    Cache MISS → origin
+  </text>
+  <path d="M600 638H160" stroke="#86EFAC" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arrowTeal)"/>
+  <text x="380" y="626" text-anchor="middle" fill="#BBF7D0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">
+    Cache HIT → immediate response (~5ms)
+  </text>
+
+  <!-- ALB -->
+  <line x1="820" y1="724" x2="1040" y2="724" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="930" y="712" text-anchor="middle" fill="#EDE9FE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">
+    Route to healthy target
+  </text>
+  <text x="930" y="746" text-anchor="middle" fill="#DDD6FE" font-family="Inter, Arial, sans-serif" font-size="13">
+    Health checks, TLS termination, X-Forwarded-For | ~1–2ms
+  </text>
+
+  <!-- App -->
+  <rect x="960" y="812" width="160" height="66" rx="12" fill="#134E4A" fill-opacity="0.5" stroke="#5EEAD4"/>
+  <text x="1040" y="836" text-anchor="middle" fill="#ECFEFF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">
+    App handler
+  </text>
+  <text x="1040" y="858" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Arial, sans-serif" font-size="12">
+    auth, validate, business logic
+  </text>
+
+  <!-- Data -->
+  <line x1="1040" y1="970" x2="1260" y2="970" stroke="#99F6E4" stroke-width="4" marker-end="url(#arrowTeal)"/>
+  <text x="1150" y="958" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">
+    Check Redis first
+  </text>
+  <line x1="1260" y1="1002" x2="1040" y2="1002" stroke="#99F6E4" stroke-width="4" marker-end="url(#arrowTeal)"/>
+  <text x="1150" y="1024" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Arial, sans-serif" font-size="14">
+    Hit: ~0.5ms | Miss: DB query ~5–50ms then repopulate cache
+  </text>
+
+  <!-- Return -->
+  <path d="M1040 1088H820" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <path d="M820 1088H600" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <path d="M600 1088H160" stroke="#C4B5FD" stroke-width="4" marker-end="url(#arrowPurple)"/>
+  <text x="600" y="1074" text-anchor="middle" fill="#F5F3FF" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">
+    Serialize JSON, set headers, compress, return to client
+  </text>
+  <text x="600" y="1112" text-anchor="middle" fill="#DDD6FE" font-family="Inter, Arial, sans-serif" font-size="14">
+    Total: ~100–300ms on cache miss | ~10–50ms on CDN hit
+  </text>
+
+  <!-- Summary boxes -->
+  <rect x="1110" y="248" width="316" height="120" rx="16" fill="#111827" stroke="#334155"/>
+  <text x="1136" y="278" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">How to memorize it</text>
+  <text x="1136" y="306" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">1. Resolve where to go</text>
+  <text x="1136" y="330" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">2. Connect and encrypt</text>
+  <text x="1136" y="354" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">3. Check the edge cache</text>
+
+  <rect x="1110" y="386" width="316" height="132" rx="16" fill="#111827" stroke="#334155"/>
+  <text x="1136" y="416" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Then explain the origin path</text>
+  <text x="1136" y="444" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">4. ALB picks a healthy app instance</text>
+  <text x="1136" y="468" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">5. App authenticates + runs logic</text>
+  <text x="1136" y="492" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">6. Cache hit or DB miss shapes latency</text>
+
+  <rect x="1110" y="536" width="316" height="114" rx="16" fill="#111827" stroke="#334155"/>
+  <text x="1136" y="566" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">What usually matters most</text>
+  <text x="1136" y="594" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Cache hit ratio</text>
+  <text x="1136" y="618" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Database query quality</text>
+  <text x="1136" y="642" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Network RTT and TLS cost</text>
+</svg>

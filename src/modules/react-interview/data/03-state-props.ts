@@ -460,6 +460,87 @@ it("switching to Inbox shows inbox threads and selects one", () => {
       ],
       estimatedMinutes: 30,
     },
+    {
+      id: "seat-allocation-planner",
+      topicId: "state-props",
+      title: "Build a seat allocation planner with derived totals and warnings",
+      difficulty: "hard",
+      description:
+        "Build a workspace seat planner for an enterprise account. Each team can request a number of editor and viewer seats, the global budget is fixed, and the UI needs derived totals, remaining capacity, and warning banners when one team request pushes the whole plan over budget. The challenge is deciding what belongs in state versus what should be derived from the team rows.",
+      targetImage: {
+        src: "/react-challenges/seat-allocation-planner.svg",
+        alt: "React interview target mock for a team seat allocation planner with editable team rows, total seat summaries, and warning banners.",
+        caption:
+          "This is a state-shape interview question. Team inputs are the source of truth, while totals, remaining seats, and warning banners should be derived cleanly and consistently.",
+      },
+      concepts: [
+        "derived state",
+        "controlled inputs",
+        "single source of truth",
+        "budget warnings",
+        "list state",
+      ],
+      starterCode: `const INITIAL_TEAMS = [
+  { id: "design", name: "Design", editorSeats: 4, viewerSeats: 2 },
+  { id: "platform", name: "Platform", editorSeats: 6, viewerSeats: 3 },
+  { id: "support", name: "Support", editorSeats: 2, viewerSeats: 5 },
+];
+
+const MAX_TOTAL_SEATS = 18;
+
+function App() {
+  const [teams, setTeams] = React.useState(INITIAL_TEAMS);
+
+  function updateTeam(id, key, value) {
+    setTeams(current =>
+      current.map(team => team.id === id ? { ...team, [key]: Number(value) } : team)
+    );
+  }
+
+  // TODO:
+  // 1. derive total seats from all teams
+  // 2. derive remaining seats from MAX_TOTAL_SEATS
+  // 3. show warning text when remaining seats < 0
+  // 4. render:
+  //    - heading "Seat allocation planner"
+  //    - one row per team
+  //    - number inputs labeled "Editors for <team.id>" and "Viewers for <team.id>"
+  //    - text "Total seats: <n>"
+  //    - text "Remaining seats: <n>"
+
+  return <div><h1>Seat allocation planner</h1></div>;
+}
+
+export default App;`,
+      hints: [
+        "Keep only the editable team seat numbers in state. Everything aggregate should be derived from `teams`.",
+        "Compute `totalSeats` by summing editors plus viewers for every team.",
+        "Warnings are often simplest as derived messages from the current totals instead of their own state.",
+      ],
+      tests: [
+        {
+          description: "renders initial totals correctly",
+          code: `
+it("renders initial total and remaining seats", () => {
+  render(<App />);
+  expect(screen.getByText("Seat allocation planner")).toBeTruthy();
+  expect(screen.getByText("Total seats: 22")).toBeTruthy();
+  expect(screen.getByText("Remaining seats: -4")).toBeTruthy();
+});`,
+        },
+        {
+          description: "changing one team updates derived totals",
+          code: `
+it("updates totals when a team seat count changes", () => {
+  render(<App />);
+  fireEvent.change(screen.getByLabelText("Editors for design"), { target: { value: "2" } });
+  expect(screen.getByText("Total seats: 20")).toBeTruthy();
+  expect(screen.getByText("Remaining seats: -2")).toBeTruthy();
+});`,
+        },
+      ],
+      estimatedMinutes: 30,
+    },
   ],
 };
 

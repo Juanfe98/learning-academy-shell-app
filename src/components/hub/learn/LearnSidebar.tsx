@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { getAcademyGroups } from "@/lib/academy-groups";
 import { useProgressStore } from "@/lib/store";
+import type { AcademyGroup } from "@/lib/types/academy";
 
 interface SidebarAcademy {
   slug: string;
@@ -12,6 +14,7 @@ interface SidebarAcademy {
   accentColor: string;
   routes: Array<{ slug: string; title: string }>;
   learningPath: string[];
+  groups?: AcademyGroup[];
 }
 
 interface LearnSidebarProps {
@@ -25,6 +28,7 @@ export default function LearnSidebar({ academy, currentSlug }: LearnSidebarProps
   useEffect(() => setMounted(true), []);
 
   const routeProgress = mounted ? (academies[academy.slug]?.modules ?? {}) : {};
+  const groups = getAcademyGroups(academy);
   const isCompleted = (slug: string) => routeProgress[slug]?.completed === true;
 
   return (
@@ -51,64 +55,71 @@ export default function LearnSidebar({ academy, currentSlug }: LearnSidebarProps
 
       {/* Module list */}
       <nav className="flex-1 min-h-0 overflow-y-auto py-2 px-2" aria-label="Module navigation">
-        {academy.learningPath.map((routeSlug, index) => {
-          const route = academy.routes.find((r) => r.slug === routeSlug);
-          if (!route) return null;
+        {groups.map((group) => (
+          <div key={group.id} className="mb-3">
+            <div className="px-2.5 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
+              {group.title}
+            </div>
 
-          const isActive = routeSlug === currentSlug;
-          const completed = isCompleted(routeSlug);
+            {group.routeSlugs.map((routeSlug) => {
+              const index = academy.learningPath.indexOf(routeSlug);
+              const route = academy.routes.find((r) => r.slug === routeSlug);
+              if (!route || index === -1) return null;
 
-          return (
-            <Link
-              key={routeSlug}
-              href={`/learn/${academy.slug}/${routeSlug}`}
-              className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg my-0.5 transition-colors duration-100 group relative"
-              style={{
-                background: isActive ? `${academy.accentColor}14` : "transparent",
-                borderLeft: isActive ? `2px solid ${academy.accentColor}` : "2px solid transparent",
-              }}
-            >
-              {/* Step number / check */}
-              <div
-                className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                style={
-                  completed
-                    ? { background: "rgba(34,197,94,0.15)" }
-                    : isActive
-                    ? { background: `${academy.accentColor}25` }
-                    : { background: "rgba(255,255,255,0.05)" }
-                }
-              >
-                {completed ? (
-                  <CheckCircle2 size={12} className="text-success" />
-                ) : (
+              const isActive = routeSlug === currentSlug;
+              const completed = isCompleted(routeSlug);
+
+              return (
+                <Link
+                  key={routeSlug}
+                  href={`/learn/${academy.slug}/${routeSlug}`}
+                  className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg my-0.5 transition-colors duration-100 group relative"
+                  style={{
+                    background: isActive ? `${academy.accentColor}14` : "transparent",
+                    borderLeft: isActive ? `2px solid ${academy.accentColor}` : "2px solid transparent",
+                  }}
+                >
+                  <div
+                    className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
+                    style={
+                      completed
+                        ? { background: "rgba(34,197,94,0.15)" }
+                        : isActive
+                          ? { background: `${academy.accentColor}25` }
+                          : { background: "rgba(255,255,255,0.05)" }
+                    }
+                  >
+                    {completed ? (
+                      <CheckCircle2 size={12} className="text-success" />
+                    ) : (
+                      <span
+                        style={{
+                          color: isActive ? academy.accentColor : "var(--text-muted)",
+                        }}
+                      >
+                        {index + 1}
+                      </span>
+                    )}
+                  </div>
+
                   <span
+                    className="text-xs leading-snug truncate"
                     style={{
-                      color: isActive ? academy.accentColor : "var(--text-muted)",
+                      color: isActive
+                        ? "var(--text-primary)"
+                        : completed
+                          ? "var(--text-muted)"
+                          : "var(--text-secondary)",
+                      fontWeight: isActive ? 600 : 400,
                     }}
                   >
-                    {index + 1}
+                    {route.title}
                   </span>
-                )}
-              </div>
-
-              {/* Title */}
-              <span
-                className="text-xs leading-snug truncate"
-                style={{
-                  color: isActive
-                    ? "var(--text-primary)"
-                    : completed
-                    ? "var(--text-muted)"
-                    : "var(--text-secondary)",
-                  fontWeight: isActive ? 600 : 400,
-                }}
-              >
-                {route.title}
-              </span>
-            </Link>
-          );
-        })}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
     </div>
   );

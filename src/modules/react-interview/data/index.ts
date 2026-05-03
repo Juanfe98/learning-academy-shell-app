@@ -8,6 +8,9 @@ import patterns from "./06-patterns";
 import asyncEffects from "./07-async-effects";
 import forms from "./08-forms";
 import errorHandling from "./09-error-handling";
+import testing from "./10-testing";
+import concurrentModern from "./11-concurrent-modern";
+import objectRendering from "./12-object-rendering";
 import { ALL_TRACKS as _ALL_TRACKS } from "./tracks";
 
 export * from "./types";
@@ -23,6 +26,9 @@ export const ALL_TOPICS: ChallengeTopic[] = [
   asyncEffects,
   forms,
   errorHandling,
+  testing,
+  concurrentModern,
+  objectRendering,
 ];
 
 export const ALL_CHALLENGES: ReactChallenge[] = _ALL_TRACKS.flatMap((t) =>

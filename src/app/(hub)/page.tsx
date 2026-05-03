@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Flame, Clock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui";
 import PathCard from "@/components/hub/PathCard";
-import { MOCK_ACADEMIES } from "@/lib/mock-data";
+import { HUB_ACADEMIES } from "@/lib/hub-academies";
 import { useProgressStore } from "@/lib/store";
 
 /* ─── Helpers ────────────────────────────────────────────��───────────────── */
@@ -150,7 +150,7 @@ function PathsSection({
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {MOCK_ACADEMIES.map((academy, i) => (
+          {HUB_ACADEMIES.map((academy, i) => (
             <PathCard
               key={academy.slug}
               academy={academy}
@@ -245,7 +245,7 @@ function ResumeCTA({
 }) {
   if (!lastVisited) return null;
 
-  const academy = MOCK_ACADEMIES.find((a) => a.slug === lastVisited.academy);
+  const academy = HUB_ACADEMIES.find((a) => a.slug === lastVisited.academy);
   const route = academy?.routes.find((r) => r.slug === lastVisited.moduleSlug);
   if (!academy || !route) return null;
 
@@ -293,7 +293,7 @@ export default function HomePage() {
 
   const academyProgress = mounted
     ? Object.fromEntries(
-        MOCK_ACADEMIES.map((a) => [
+        HUB_ACADEMIES.map((a) => [
           a.slug,
           getAcademyProgress(
             a.slug,

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Lock, Clock, BookOpen, ArrowRight } from "lucide-react";
 import { ProgressBar, Badge } from "@/components/ui";
-import type { MockAcademy } from "@/lib/mock-data";
+import type { HubAcademy } from "@/lib/hub-academies";
 
 interface PathCardProps {
-  academy: MockAcademy;
+  academy: HubAcademy;
   progress: number;
   index?: number;
 }

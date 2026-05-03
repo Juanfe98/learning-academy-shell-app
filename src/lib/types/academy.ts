@@ -20,6 +20,7 @@ export interface AcademyManifest {
   accentColor: string;
   routes: AcademyRoute[];
   learningPath: string[];
+  groups?: AcademyGroup[];
   totalEstimatedMinutes: number;
 }
 
@@ -30,4 +31,11 @@ export interface AcademyRoute {
   estimatedMinutes: number;
   tags: string[];
   order: number;
+}
+
+export interface AcademyGroup {
+  id: string;
+  title: string;
+  description?: string;
+  routeSlugs: string[];
 }

@@ -1,0 +1,60 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="108" y="76" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Composable UI system target</text>
+<text x="108" y="112" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Cards, a command surface, and a details drawer that should feel like one reusable system.</text>
+<rect x="90" y="152" width="1420" height="760" rx="30" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="138" y="200" width="404" height="268" rx="24" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="582" y="200" width="404" height="268" rx="24" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="1026" y="200" width="436" height="640" rx="26" fill="#0F172A"/>
+<rect x="138" y="508" width="848" height="332" rx="26" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<text x="174" y="238" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Project summary card</text>
+<rect x="174" y="274" width="332" height="136" rx="20" fill="#DBEAFE"/>
+<text x="198" y="314" fill="#1E3A8A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Northstar migration</text>
+<text x="198" y="344" fill="#1E40AF" font-family="Inter, Arial, sans-serif" font-size="14">Owner: Maya Chen</text>
+<text x="198" y="372" fill="#1E40AF" font-family="Inter, Arial, sans-serif" font-size="14">Status: In review</text>
+<rect x="198" y="388" width="86" height="24" rx="12" fill="#FFFFFF"/>
+<text x="223" y="404" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700">Product</text>
+<rect x="296" y="388" width="104" height="24" rx="12" fill="#DBEAFE"/>
+<text x="322" y="404" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700">2 blockers</text>
+<text x="618" y="238" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Command combobox</text>
+<rect x="618" y="274" width="332" height="54" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="650" y="307" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="16">Search commands</text>
+<rect x="618" y="352" width="332" height="58" rx="18" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+<circle cx="650" cy="381" r="12" fill="#0EA5E9"/>
+<text x="678" y="376" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Open details drawer</text>
+<text x="678" y="396" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="12">⌘K · project action</text>
+<rect x="618" y="420" width="332" height="38" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="650" y="444" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13">Assign reviewer · Shift R</text>
+<text x="1064" y="246" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Details drawer</text>
+<text x="1064" y="278" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="14">Used for project details, member info, or change review.</text>
+<rect x="1064" y="312" width="360" height="56" rx="16" fill="#111827"/>
+<text x="1096" y="346" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15">Northstar migration</text>
+<rect x="1064" y="394" width="360" height="164" rx="20" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1094" y="432" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Key details</text>
+<text x="1094" y="466" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Owner</text>
+<text x="1250" y="466" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Maya Chen</text>
+<text x="1094" y="500" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Status</text>
+<text x="1250" y="500" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">In review</text>
+<text x="1094" y="534" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Last update</text>
+<text x="1250" y="534" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">2 hours ago</text>
+<rect x="1064" y="582" width="360" height="136" rx="20" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1094" y="620" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Activity</text>
+<text x="1094" y="654" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Priya requested keyboard navigation review</text>
+<text x="1094" y="682" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12">13 min ago · accessibility thread</text>
+<text x="174" y="546" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Reusable content cards</text>
+<rect x="174" y="590" width="232" height="188" rx="22" fill="#F1F5F9"/>
+<rect x="430" y="590" width="232" height="188" rx="22" fill="#F1F5F9"/>
+<rect x="686" y="590" width="264" height="188" rx="22" fill="#F1F5F9"/>
+<text x="210" y="626" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Member card</text>
+<text x="210" y="656" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13">Avatar, title, status badge, actions</text>
+<text x="210" y="690" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Luis Gomez</text>
+<text x="210" y="716" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Frontend Platform · Available</text>
+<text x="466" y="626" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Metric card</text>
+<text x="466" y="656" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13">Heading, KPI, trend, supporting note</text>
+<text x="466" y="690" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">92%</text>
+<text x="466" y="718" fill="#16A34A" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">+8% adoption this week</text>
+<text x="722" y="626" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Timeline panel</text>
+<text x="722" y="656" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13">Slots for items, actions, and metadata</text>
+<text x="722" y="690" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">09:00 Review API props</text>
+<text x="722" y="716" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">10:30 Approve drawer layout</text>
+</svg>

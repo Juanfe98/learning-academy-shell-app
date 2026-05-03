@@ -1,0 +1,75 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="102" y="72" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Marketplace search workspace</text>
+<text x="102" y="108" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Faceted search with typed query, active filters, result counts, and responsive result cards.</text>
+<rect x="84" y="144" width="300" height="760" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="428" y="144" width="1088" height="760" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<text x="126" y="194" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Filters</text>
+<text x="126" y="244" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Role</text>
+<rect x="126" y="262" width="212" height="46" rx="16" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+<text x="152" y="291" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Frontend engineer</text>
+<text x="126" y="334" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Location</text>
+<rect x="126" y="352" width="212" height="46" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="152" y="381" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Remote only</text>
+<text x="126" y="424" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Skills</text>
+<rect x="126" y="442" width="212" height="46" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="152" y="471" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">React, TypeScript</text>
+<text x="126" y="534" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Saved searches</text>
+<rect x="126" y="552" width="212" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<text x="148" y="584" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Senior React remote</text>
+<text x="148" y="608" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">126 results · updated 6m ago</text>
+<text x="148" y="632" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Design systems shortlist</text>
+<rect x="472" y="188" width="430" height="54" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="504" y="221" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16">Design systems engineer</text>
+<rect x="1220" y="188" width="250" height="54" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+<text x="1262" y="221" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16">Sort: relevance</text>
+<rect x="472" y="248" width="166" height="28" rx="14" fill="#DBEAFE"/>
+<text x="500" y="267" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Remote only</text>
+<rect x="648" y="248" width="184" height="28" rx="14" fill="#DCFCE7"/>
+<text x="676" y="267" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">React + TypeScript</text>
+<rect x="472" y="272" width="998" height="54" rx="18" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="2"/>
+<text x="506" y="296" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">126 matching results</text>
+<text x="506" y="316" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="13">Filters: frontend engineer · remote only · react · typescript</text>
+<rect x="472" y="356" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="496" y="382" width="258" height="120" rx="18" fill="#D1FAE5"/>
+<text x="514" y="416" fill="#14532D" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Northstar</text>
+<text x="514" y="444" fill="#14532D" font-family="Inter, Arial, sans-serif" font-size="14">Design systems engineer</text>
+<text x="514" y="472" fill="#166534" font-family="Inter, Arial, sans-serif" font-size="13">Remote · Full-time · Senior</text>
+<text x="500" y="526" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Maya Chen</text>
+<text x="500" y="552" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">React · Tokens · Accessibility</text>
+<rect x="808" y="356" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="832" y="382" width="258" height="120" rx="18" fill="#E0F2FE"/>
+<text x="850" y="416" fill="#0C4A6E" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Canopy</text>
+<text x="850" y="444" fill="#0C4A6E" font-family="Inter, Arial, sans-serif" font-size="14">Frontend platform engineer</text>
+<text x="850" y="472" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="13">Hybrid · Bogotá · Mid-level</text>
+<text x="836" y="526" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Luis Gomez</text>
+<text x="836" y="552" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">React · Vite · Performance</text>
+<rect x="1144" y="356" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="1168" y="382" width="258" height="120" rx="18" fill="#FDE68A"/>
+<text x="1186" y="416" fill="#78350F" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Orbit Labs</text>
+<text x="1186" y="444" fill="#78350F" font-family="Inter, Arial, sans-serif" font-size="14">React UI engineer</text>
+<text x="1186" y="472" fill="#92400E" font-family="Inter, Arial, sans-serif" font-size="13">Remote · Contract · 6 months</text>
+<text x="1172" y="526" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Priya Patel</text>
+<text x="1172" y="552" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Forms · React Hook Form · UX</text>
+<rect x="472" y="612" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="496" y="638" width="258" height="120" rx="18" fill="#E9D5FF"/>
+<text x="514" y="672" fill="#581C87" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Tidal</text>
+<text x="514" y="700" fill="#581C87" font-family="Inter, Arial, sans-serif" font-size="14">Staff frontend architect</text>
+<text x="514" y="728" fill="#6B21A8" font-family="Inter, Arial, sans-serif" font-size="13">Remote · Principal · Platform strategy</text>
+<text x="500" y="782" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Ava Torres</text>
+<text x="500" y="808" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Architecture · DX · Leadership</text>
+<rect x="808" y="612" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="832" y="638" width="258" height="120" rx="18" fill="#FECDD3"/>
+<text x="850" y="672" fill="#881337" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Mercury Health</text>
+<text x="850" y="700" fill="#881337" font-family="Inter, Arial, sans-serif" font-size="14">Design systems lead</text>
+<text x="850" y="728" fill="#9F1239" font-family="Inter, Arial, sans-serif" font-size="13">Hybrid · Healthcare · Accessibility</text>
+<text x="836" y="782" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Daniel Kim</text>
+<text x="836" y="808" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Tokens · Figma parity · Governance</text>
+<rect x="1144" y="612" width="306" height="224" rx="22" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="1168" y="638" width="258" height="120" rx="18" fill="#BFDBFE"/>
+<text x="1186" y="672" fill="#1E3A8A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Pine</text>
+<text x="1186" y="700" fill="#1E3A8A" font-family="Inter, Arial, sans-serif" font-size="14">UI systems engineer</text>
+<text x="1186" y="728" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="13">Remote · Marketplace · Growth team</text>
+<text x="1172" y="782" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Noah Rivera</text>
+<text x="1172" y="808" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Lists · A/B testing · Analytics</text>
+</svg>

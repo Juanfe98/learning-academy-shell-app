@@ -12,7 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Badge, ProgressBar } from "@/components/ui";
-import { MOCK_ACADEMIES } from "@/lib/mock-data";
+import { HUB_ACADEMIES } from "@/lib/hub-academies";
 import { useProgressStore } from "@/lib/store";
 import type { AcademyProgress } from "@/lib/store";
 
@@ -218,7 +218,7 @@ function AcademyProgressSection({
     <section>
       <h2 className="text-lg font-semibold text-primary mb-4">Learning Paths</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {MOCK_ACADEMIES.map((academy, i) => {
+        {HUB_ACADEMIES.map((academy, i) => {
           const modules = Object.values(academies[academy.slug]?.modules ?? {});
           const completedCount = modules.filter((m) => m.completed).length;
           const percent =
@@ -443,7 +443,7 @@ function RecentActivitySection({
 }) {
   const entries: ActivityEntry[] = [];
 
-  for (const academy of MOCK_ACADEMIES) {
+  for (const academy of HUB_ACADEMIES) {
     const academyProgress = academies[academy.slug];
     if (!academyProgress?.modules) continue;
 

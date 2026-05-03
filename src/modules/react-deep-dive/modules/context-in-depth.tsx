@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -7,6 +8,7 @@ export const toc: TocItem[] = [
   { id: "splitting-context", title: "Splitting Context Into Multiple Providers", level: 2 },
   { id: "context-plus-usereducer", title: "The Context + useReducer Pattern", level: 2 },
   { id: "when-to-use-external-state", title: "When to Reach for Zustand or Jotai", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Dashboard Re-render Storm", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -275,6 +277,34 @@ function CartBadge() {
 // - Component library internals (sharing state between Tabs and Tab children)
 // - Dependency injection (passing a logger, a router, an analytics client)
 // Reserve external libraries for state that changes frequently and has many consumers.`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Dashboard Re-render Storm</h2>
+
+      <InterviewChallenge
+        title="One AppContext to Rule Them All"
+        scenario={
+          <>
+            A dashboard currently stores theme, auth state, feature flags, websocket
+            notifications, live KPI values, and left-nav UI state inside a single{" "}
+            <code>AppContext</code>. Product says the dashboard stutters whenever notifications
+            stream in. The interview goal is to see whether you can diagnose render churn with
+            evidence and propose a refactor that improves subscription granularity without turning
+            the codebase into accidental complexity.
+          </>
+        }
+        tasks={[
+          "Explain how you would prove the problem with the React DevTools Profiler instead of guessing from the code alone.",
+          "Refactor the provider strategy so slow-moving dependencies and high-frequency feeds no longer force the same consumers to re-render.",
+          "Decide when split contexts are enough versus when selector-based external state is justified.",
+          "Describe how you would keep dispatch ergonomics good while avoiding one monolithic provider value object.",
+        ]}
+        pitfalls={[
+          "Memoizing one giant context object and assuming that solves subscription granularity.",
+          "Moving all state to Zustand or another store before profiling the actual bottleneck.",
+          "Keeping state and dispatch in one changing object when many consumers only need one of them.",
+        ]}
+        signal="High-signal answers separate low-frequency dependencies from hot feeds, use split providers and state/dispatch separation first, and only reach for selector-based external stores when profiling shows Context's all-or-nothing subscription model is the real bottleneck."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

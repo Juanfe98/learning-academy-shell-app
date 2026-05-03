@@ -387,6 +387,87 @@ it("clicking todo immediately shows toggled state", () => {
       ],
       estimatedMinutes: 25,
     },
+    {
+      id: "command-palette-ranking",
+      topicId: "concurrent-modern",
+      title: "Build a command palette with deferred ranking and stale results state",
+      difficulty: "hard",
+      description:
+        "Build a command palette where typing should feel instant, but command ranking is intentionally expensive. Use `useDeferredValue` to defer the ranking work, `useMemo` to derive the ranked commands, and a subtle stale state so the user knows the results are still catching up while typing quickly.",
+      targetImage: {
+        src: "/react-challenges/command-palette-ranking.svg",
+        alt: "React interview target mock for a command palette with search input, grouped command results, and a stale-results hint while ranking catches up.",
+        caption:
+          "This is not just a filter exercise. It is about understanding urgent input updates versus deferred expensive work in a UI that should still feel instant.",
+      },
+      concepts: [
+        "useDeferredValue",
+        "useMemo",
+        "derived state",
+        "responsive input",
+        "stale UI indicators",
+      ],
+      starterCode: `const COMMANDS = [
+  { id: "open-project", label: "Open project", group: "Navigation" },
+  { id: "open-reviews", label: "Open review queue", group: "Navigation" },
+  { id: "assign-reviewer", label: "Assign reviewer", group: "Actions" },
+  { id: "copy-link", label: "Copy share link", group: "Actions" },
+  { id: "toggle-theme", label: "Toggle theme", group: "Preferences" },
+  { id: "open-billing", label: "Open billing settings", group: "Preferences" },
+];
+
+function expensiveRank(commands, query) {
+  const lower = query.toLowerCase();
+  return commands
+    .filter(command => command.label.toLowerCase().includes(lower))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function App() {
+  const [query, setQuery] = React.useState("");
+
+  // TODO:
+  // 1. derive deferredQuery with React.useDeferredValue(query)
+  // 2. memoize rankedCommands using deferredQuery
+  // 3. compute isStale when query !== deferredQuery
+  // 4. render:
+  //    - heading "Command palette"
+  //    - input with placeholder "Search commands"
+  //    - stale text "Updating results..." when stale
+  //    - command buttons showing each label
+
+  return <div><h1>Command palette</h1></div>;
+}
+
+export default App;`,
+      hints: [
+        "Typing into the input should always update immediately; only the expensive ranking should lag.",
+        "Use `useMemo` around `expensiveRank(COMMANDS, deferredQuery)` so the work runs only when the deferred query changes.",
+        "A stale indicator should be derived, not stored: `query !== deferredQuery`.",
+      ],
+      tests: [
+        {
+          description: "renders command palette shell",
+          code: `
+it("renders command palette shell", () => {
+  render(<App />);
+  expect(screen.getByText("Command palette")).toBeTruthy();
+  expect(screen.getByPlaceholderText("Search commands")).toBeTruthy();
+});`,
+        },
+        {
+          description: "typing query filters command list",
+          code: `
+it("filters commands by query", () => {
+  render(<App />);
+  fireEvent.change(screen.getByPlaceholderText("Search commands"), { target: { value: "open" } });
+  expect(screen.getByText("Open project")).toBeTruthy();
+  expect(screen.getByText("Open review queue")).toBeTruthy();
+});`,
+        },
+      ],
+      estimatedMinutes: 25,
+    },
   ],
 };
 

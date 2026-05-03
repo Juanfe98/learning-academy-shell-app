@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -10,6 +11,7 @@ export const toc: TocItem[] = [
   { id: "useasync", title: "useAsync", level: 3 },
   { id: "rules-of-hooks", title: "Rules of Hooks and Why They Exist", level: 2 },
   { id: "testing-custom-hooks", title: "Testing Custom Hooks", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Reusable Server Table Hook", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -368,6 +370,33 @@ describe("useDebounce", () => {
     expect(result.current).toBe("updated");
   });
 });`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Reusable Server Table Hook</h2>
+
+      <InterviewChallenge
+        title="Build useServerTable Without Overfitting"
+        scenario={
+          <>
+            You need a reusable hook for admin screens that all need pagination, sorting,
+            search, row selection, URL synchronization, and background refetching. The trap is
+            building a god-hook that hardcodes one screen&apos;s assumptions. Interviewers often
+            use this kind of prompt to test whether you can extract behavior cleanly without
+            turning your hook into a hidden framework.
+          </>
+        }
+        tasks={[
+          "Define the hook boundary: which concerns belong inside the hook versus remaining as explicit parameters or callbacks from the consuming screen.",
+          "Explain how you would model server state, UI state, and derived state so the hook remains predictable across tables with different columns and filters.",
+          "Describe how you would test the hook's race conditions, abort behavior, and URL synchronization without coupling tests to implementation details.",
+          "Call out the point where a custom hook is the right abstraction and the point where a dedicated table component or data library would be the better tool.",
+        ]}
+        pitfalls={[
+          "Returning a giant object full of unstable inline callbacks that cause consumers to re-render unpredictably.",
+          "Hiding product-specific business rules inside a supposedly generic hook.",
+          "Stuffing presentational JSX into the hook, which makes the abstraction impossible to reuse across different table UIs.",
+        ]}
+        signal="A senior answer keeps the hook focused on stateful coordination, leaves rendering and business-specific column logic outside, and treats hook extraction as API design rather than 'move code into another file'."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

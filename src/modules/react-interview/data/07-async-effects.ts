@@ -253,6 +253,89 @@ it("like button is clickable", () => {
       ],
       estimatedMinutes: 25,
     },
+    {
+      id: "shipping-quote-race",
+      topicId: "async-effects",
+      title: "Fix stale shipping quotes in a checkout sidebar",
+      difficulty: "hard",
+      description:
+        "Build a checkout sidebar that fetches shipping quotes whenever country or delivery speed changes. Standard quotes return quickly and express quotes return slowly. The user can switch options fast, so stale responses from older requests must not overwrite the newest quote, and the loading state should always reflect the current request only.",
+      targetImage: {
+        src: "/react-challenges/shipping-quote-race.svg",
+        alt: "React interview target mock for a checkout sidebar with country, delivery speed, and asynchronously loaded shipping quotes.",
+        caption:
+          "This is a true effect-management prompt: one small UI, but plenty of stale-response and loading-state edge cases that expose whether the async model is solid.",
+      },
+      concepts: [
+        "useEffect cleanup",
+        "race conditions",
+        "async state",
+        "loading states",
+        "stale responses",
+      ],
+      starterCode: `const QUOTES = {
+  "US|standard": { label: "Standard", price: "$12.00" },
+  "US|express": { label: "Express", price: "$32.00" },
+  "CO|standard": { label: "Standard", price: "$9.00" },
+  "CO|express": { label: "Express", price: "$24.00" },
+};
+
+function fetchQuote(country, speed) {
+  const delay = speed === "express" ? 300 : 80;
+  return new Promise(resolve => {
+    setTimeout(() => resolve(QUOTES[\`\${country}|\${speed}\`]), delay);
+  });
+}
+
+function App() {
+  const [country, setCountry] = React.useState("US");
+  const [speed, setSpeed] = React.useState("standard");
+  const [quote, setQuote] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  // TODO:
+  // 1. fetch a quote whenever country or speed changes
+  // 2. ignore stale responses from older requests
+  // 3. render:
+  //    - heading "Shipping quote"
+  //    - select with aria-label "Country"
+  //    - buttons "Standard" and "Express"
+  //    - loading text "Refreshing quote..."
+  //    - final quote text "Quote: <price>"
+
+  return <div><h1>Shipping quote</h1></div>;
+}
+
+export default App;`,
+      hints: [
+        "Use a local `ignore` flag or request token inside the effect so only the newest response can update state.",
+        "Start loading before the fetch, and only end loading if the response still belongs to the current request.",
+        "If the user changes speed twice quickly, the later choice should win regardless of which response resolves last.",
+      ],
+      tests: [
+        {
+          description: "renders checkout quote shell",
+          code: `
+it("renders shipping quote controls", () => {
+  render(<App />);
+  expect(screen.getByText("Shipping quote")).toBeTruthy();
+  expect(screen.getByLabelText("Country")).toBeTruthy();
+  expect(screen.getByText("Express")).toBeTruthy();
+});`,
+        },
+        {
+          description: "shows express quote after selecting express",
+          code: `
+it("shows express quote after changing speed", async () => {
+  render(<App />);
+  fireEvent.click(screen.getByText("Express"));
+  expect(screen.getByText("Refreshing quote...")).toBeTruthy();
+  await screen.findByText("Quote: $32.00");
+});`,
+        },
+      ],
+      estimatedMinutes: 30,
+    },
   ],
 };
 

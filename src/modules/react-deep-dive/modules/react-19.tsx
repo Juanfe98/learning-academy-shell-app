@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -8,6 +9,7 @@ export const toc: TocItem[] = [
   { id: "ref-as-prop", title: "ref as a Regular Prop", level: 2 },
   { id: "react-compiler", title: "The React Compiler", level: 2 },
   { id: "day-to-day-impact", title: "What This Means for Day-to-Day Code", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Multi-step Checkout Form", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -312,6 +314,34 @@ function ProductCard({ product, onAddToCart }: Props) {
         And for new projects with the React Compiler enabled, manual memoization becomes an
         exception rather than a rule.
       </p>
+
+      <h2 id="interview-challenge">Interview Challenge: Multi-step Checkout Form</h2>
+
+      <InterviewChallenge
+        title="Server-Backed Checkout"
+        scenario={
+          <>
+            You are asked to build a multi-step checkout with shipping details, billing,
+            coupon entry, inventory checks, and final order submission. The submit button lives
+            deep inside a composed payment section. The UI needs pending indicators, field-level
+            validation errors, and an optimistic coupon preview, but the interviewer wants to see
+            whether you can use React 19 primitives instead of inventing a giant client-side form
+            state machine by hand.
+          </>
+        }
+        tasks={[
+          "Explain how you would combine action functions, useActionState, and useFormStatus so deep children can react to submission state without prop drilling.",
+          "Decide which interactions deserve optimistic UI and which ones should wait for the server because reconciliation is risky.",
+          "Describe how server validation errors should flow back into the UI without duplicating the entire form model in client state.",
+          "Separate truly local UI state, such as step navigation or disclosure panels, from the mutation pipeline managed by the form action.",
+        ]}
+        pitfalls={[
+          "Using optimistic UI for mutations that are difficult to reconcile, like inventory or payment authorization.",
+          "Threading pending booleans manually through every layer of the form tree.",
+          "Treating every single input concern as a server action concern, even when it is just local interaction state.",
+        ]}
+        signal="Great answers use React 19 form primitives for mutation state, keep local presentation state local, and reserve optimistic flows for reversible interactions like applying a coupon or appending a draft list item."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

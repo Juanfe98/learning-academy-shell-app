@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -8,6 +9,7 @@ export const toc: TocItem[] = [
   { id: "starttransition", title: "startTransition for Non-Hook Contexts", level: 2 },
   { id: "when-to-use-which", title: "When to Use Which", level: 2 },
   { id: "real-examples", title: "Real Examples", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Laggy Faceted Search", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -297,6 +299,32 @@ function Dashboard() {
     </div>
   );
 }`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Laggy Faceted Search</h2>
+
+      <InterviewChallenge
+        title="Large Catalog Search"
+        scenario={
+          <>
+            A product catalog page has text search, faceted filters, sortable results, and a
+            result grid with expensive cards. Typing in the search box feels sticky, but the team
+            is already using <code>useMemo</code> everywhere and still sees jank. The interview
+            goal is to see whether you understand what concurrent features can and cannot solve.
+          </>
+        }
+        tasks={[
+          "Explain how you would profile the lag first so you know whether the bottleneck is CPU-bound rendering, network delay, or too much unnecessary work.",
+          "Decide where useTransition helps, where useDeferredValue helps, and where neither helps because the real fix is reducing work.",
+          "Describe what UI feedback you would show while deferred results catch up so the interface feels responsive instead of confusing.",
+          "Call out cases where virtualization, memoization discipline, or moving work to the server matters more than transition APIs.",
+        ]}
+        pitfalls={[
+          "Using transitions as a substitute for fixing wasteful renders.",
+          "Deferring the input's own state update, which makes typing feel worse instead of better.",
+          "Adding spinners everywhere rather than preserving current content with subtle pending feedback.",
+        ]}
+        signal="Senior answers start with profiling, keep urgent interactions urgent, use concurrent APIs to prioritize work rather than magically speed it up, and still reduce the actual amount of rendering when the data size demands it."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

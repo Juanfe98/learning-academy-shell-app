@@ -1,0 +1,67 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<rect x="88" y="78" width="1424" height="824" rx="28" fill="#0F172A"/>
+<text x="132" y="140" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Analytics operations dashboard</text>
+<text x="132" y="172" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="17">Shared filters, live websocket updates, and chart-heavy panels competing for render budget.</text>
+<rect x="132" y="184" width="320" height="52" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="166" y="216" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Search incident, service, or owner</text>
+<rect x="474" y="184" width="180" height="52" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="516" y="216" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Region: us-east-1</text>
+<rect x="680" y="184" width="180" height="52" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="724" y="216" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Window: 24h</text>
+<rect x="132" y="274" width="268" height="150" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="428" y="274" width="268" height="150" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="724" y="274" width="268" height="150" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="1020" y="274" width="268" height="150" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="1316" y="274" width="152" height="628" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="132" y="456" width="694" height="446" rx="24" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="854" y="456" width="434" height="214" rx="24" fill="#111827" stroke="#334155" stroke-width="2"/>
+<rect x="854" y="688" width="434" height="214" rx="24" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="164" y="304" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Conversion</text>
+<text x="164" y="360" fill="#DCFCE7" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700">+18%</text>
+<text x="164" y="388" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Versus last week</text>
+<text x="460" y="304" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">P95 latency</text>
+<text x="460" y="360" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700">124 ms</text>
+<text x="460" y="388" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Checkout API</text>
+<text x="756" y="304" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Cache hit rate</text>
+<text x="756" y="360" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700">86%</text>
+<text x="756" y="388" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Edge + Redis</text>
+<text x="1052" y="304" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Events/sec</text>
+<text x="1052" y="360" fill="#FDA4AF" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700">42</text>
+<text x="1052" y="388" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13">Realtime feed</text>
+<text x="164" y="500" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Conversion trend</text>
+<text x="164" y="530" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Blue: purchases · Gold: add-to-cart</text>
+<text x="174" y="858" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">09:00</text>
+<text x="330" y="858" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">12:00</text>
+<text x="490" y="858" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">15:00</text>
+<text x="650" y="858" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">18:00</text>
+<text x="758" y="858" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">21:00</text>
+<path d="M180 812C240 690 278 730 338 648C396 570 450 602 504 546C566 480 626 498 684 430C716 392 742 344 782 302" stroke="#06B6D4" stroke-width="6" stroke-linecap="round"/>
+<path d="M180 746C236 720 284 702 338 690C402 676 462 640 526 620C590 598 648 604 708 592C742 586 762 570 782 558" stroke="#F59E0B" stroke-width="6" stroke-linecap="round"/>
+<text x="888" y="494" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Live notifications</text>
+<rect x="888" y="534" width="366" height="104" rx="18" fill="#172554"/>
+<text x="918" y="572" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Checkout retries spiked in us-east-1</text>
+<text x="918" y="604" fill="#BFDBFE" font-family="Inter, Arial, sans-serif" font-size="13">14 seconds ago · queue depth rising</text>
+<rect x="888" y="646" width="366" height="104" rx="18" fill="#1F2937"/>
+<text x="918" y="684" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Customer list panel rerendered 39 times</text>
+<text x="918" y="716" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="13">Triggered by shared filter object identity on websocket tick</text>
+<text x="888" y="724" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Slow panels</text>
+<rect x="888" y="766" width="366" height="104" rx="18" fill="#111827"/>
+<text x="918" y="804" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Analytics chart</text>
+<text x="1170" y="804" fill="#F59E0B" font-family="Inter, Arial, sans-serif" font-size="13">48ms render</text>
+<text x="918" y="836" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="13">KPI grid rerenders when live feed updates</text>
+<text x="918" y="862" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Memoize derived series, split websocket subscriber, virtualize side feed</text>
+<text x="1342" y="316" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Live feed</text>
+<rect x="1342" y="360" width="100" height="84" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1356" y="394" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Alert</text>
+<text x="1356" y="416" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="11">High queue depth</text>
+<rect x="1342" y="470" width="100" height="84" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1356" y="504" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Deploy</text>
+<text x="1356" y="526" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="11">api@1.23.8</text>
+<rect x="1342" y="580" width="100" height="84" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1356" y="614" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Note</text>
+<text x="1356" y="636" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="11">3 owners online</text>
+<rect x="1342" y="690" width="100" height="84" rx="18" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1356" y="724" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Trace</text>
+<text x="1356" y="746" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="11">Slow commit 92ms</text>
+</svg>

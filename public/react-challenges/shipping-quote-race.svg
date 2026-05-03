@@ -1,0 +1,25 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="100" y="74" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Shipping quote</text>
+<text x="100" y="110" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Country and delivery speed change the quote, and slower stale responses must never win.</text>
+<rect x="82" y="148" width="1436" height="772" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="120" y="202" width="640" height="520" rx="24" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="802" y="202" width="674" height="520" rx="24" fill="#0F172A"/>
+<text x="156" y="244" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Checkout shipping</text>
+<rect x="156" y="292" width="260" height="58" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="184" y="326" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">United States</text>
+<text x="156" y="280" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Country</text>
+<rect x="156" y="390" width="160" height="48" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="204" y="420" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14">Standard</text>
+<rect x="336" y="390" width="160" height="48" rx="16" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+<text x="388" y="420" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Express</text>
+<text x="156" y="476" fill="#B45309" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Refreshing quote...</text>
+<text x="842" y="244" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Quote panel</text>
+<rect x="842" y="286" width="594" height="168" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="874" y="328" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Latest quote</text>
+<text x="874" y="380" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">$32.00</text>
+<text x="874" y="414" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12">Express · 2 business days</text>
+<rect x="842" y="482" width="594" height="116" rx="20" fill="#172554"/>
+<text x="874" y="522" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Async edge case</text>
+<text x="874" y="556" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">If the user switches from Express back to Standard quickly, the slow Express response must not overwrite the newer Standard quote.</text>
+</svg>

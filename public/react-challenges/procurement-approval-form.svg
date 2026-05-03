@@ -1,0 +1,42 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="90" y="72" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Procurement request</text>
+<text x="90" y="108" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Conditional approval rules, payment-method-specific fields, and a summary panel that explains blockers.</text>
+<rect x="72" y="148" width="960" height="780" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="1060" y="148" width="468" height="780" rx="28" fill="#0F172A"/>
+<text x="116" y="206" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Request details</text>
+<text x="116" y="238" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">High-value invoice requests require explicit approval and budget validation.</text>
+<rect x="116" y="278" width="360" height="58" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="144" y="312" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">Quarterly research seats</text>
+<text x="116" y="266" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Item name</text>
+<rect x="510" y="278" width="220" height="58" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="538" y="312" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">$6,200</text>
+<text x="510" y="266" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Amount</text>
+<rect x="764" y="278" width="220" height="58" rx="16" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+<text x="818" y="312" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Invoice</text>
+<text x="764" y="266" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Payment type</text>
+<rect x="116" y="382" width="420" height="58" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="144" y="416" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">Northstar Research</text>
+<text x="116" y="370" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Vendor name</text>
+<rect x="570" y="382" width="414" height="58" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="598" y="416" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">ENG-24-UI</text>
+<text x="570" y="370" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Budget code</text>
+<rect x="116" y="486" width="868" height="66" rx="18" fill="#FFFFFF" stroke="#EF4444" stroke-width="2"/>
+<text x="144" y="524" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="15">Approver email</text>
+<text x="116" y="578" fill="#B91C1C" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">Approver email is required for invoice requests above $5,000</text>
+<rect x="116" y="626" width="868" height="102" rx="20" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<text x="144" y="664" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Approval policy preview</text>
+<text x="144" y="694" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">Invoice purchases above $5,000 require manager approval and a valid budget code.</text>
+<text x="1098" y="206" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Approval summary</text>
+<rect x="1098" y="246" width="392" height="170" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1128" y="288" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Request amount</text>
+<text x="1354" y="288" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">$6,200</text>
+<text x="1128" y="324" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Payment type</text>
+<text x="1376" y="324" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">Invoice</text>
+<text x="1128" y="360" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Blocking rules</text>
+<text x="1382" y="360" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="14">1</text>
+<rect x="1098" y="448" width="392" height="124" rx="20" fill="#172554"/>
+<text x="1128" y="490" fill="#DBEAFE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Current blocker</text>
+<text x="1128" y="524" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="13">Approver email missing for invoice request</text>
+<text x="1128" y="550" fill="#BFDBFE" font-family="Inter, Arial, sans-serif" font-size="12">Submit stays disabled until an approver is added.</text>
+</svg>

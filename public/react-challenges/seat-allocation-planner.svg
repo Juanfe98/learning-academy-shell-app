@@ -1,0 +1,37 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="980" fill="#F8FAFC"/>
+<text x="88" y="72" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Seat allocation planner</text>
+<text x="88" y="108" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="18">Editable team seat requests with derived totals, remaining capacity, and over-budget warnings.</text>
+<rect x="72" y="148" width="1456" height="772" rx="28" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+<rect x="110" y="192" width="930" height="580" rx="24" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="1074" y="192" width="414" height="580" rx="24" fill="#0F172A"/>
+<text x="146" y="232" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Team</text>
+<text x="494" y="232" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Editor seats</text>
+<text x="726" y="232" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Viewer seats</text>
+<rect x="138" y="262" width="874" height="92" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="166" y="302" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Design</text>
+<text x="166" y="328" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Needs more editors for token migration</text>
+<text x="530" y="312" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">4</text>
+<text x="762" y="312" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">2</text>
+<rect x="138" y="372" width="874" height="92" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="166" y="412" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Platform</text>
+<text x="166" y="438" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Largest editor footprint in this workspace</text>
+<text x="530" y="422" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">6</text>
+<text x="762" y="422" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">3</text>
+<rect x="138" y="482" width="874" height="92" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="166" y="522" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Support</text>
+<text x="166" y="548" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="12">Mostly viewer seats for shift leads</text>
+<text x="530" y="532" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">2</text>
+<text x="762" y="532" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15">5</text>
+<text x="1110" y="236" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Plan summary</text>
+<rect x="1110" y="274" width="342" height="156" rx="22" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="1140" y="314" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Total seats</text>
+<text x="1384" y="314" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">22</text>
+<text x="1140" y="350" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Seat budget</text>
+<text x="1378" y="350" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14">18</text>
+<text x="1140" y="386" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Remaining seats</text>
+<text x="1366" y="386" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="14">-4</text>
+<rect x="1110" y="458" width="342" height="118" rx="20" fill="#7F1D1D"/>
+<text x="1140" y="498" fill="#FECACA" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Warning</text>
+<text x="1140" y="532" fill="#FEE2E2" font-family="Inter, Arial, sans-serif" font-size="13">Current requests exceed the workspace seat budget by 4 seats.</text>
+</svg>

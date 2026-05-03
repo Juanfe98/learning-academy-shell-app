@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { ProgressBar } from "@/components/ui";
 import { useProgressStore } from "@/lib/store";
-import type { MockAcademy } from "@/lib/mock-data";
+import type { HubAcademy } from "@/lib/hub-academies";
 
 interface PathProgressPanelProps {
-  academy: MockAcademy;
+  academy: HubAcademy;
 }
 
 export default function PathProgressPanel({ academy }: PathProgressPanelProps) {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, Map } from "lucide-react";
 import PathCard from "@/components/hub/PathCard";
-import { MOCK_ACADEMIES } from "@/lib/mock-data";
+import { HUB_ACADEMIES } from "@/lib/hub-academies";
 import { useProgressStore } from "@/lib/store";
 
 type Filter = "all" | "available" | "soon";
@@ -15,8 +15,8 @@ const FILTERS: { id: Filter; label: string }[] = [
   { id: "soon", label: "Coming Soon" },
 ];
 
-const TOTAL_MODULES = MOCK_ACADEMIES.reduce((s, a) => s + a.moduleCount, 0);
-const TOTAL_HOURS = MOCK_ACADEMIES.reduce((s, a) => s + a.totalHours, 0);
+const TOTAL_MODULES = HUB_ACADEMIES.reduce((s, a) => s + a.moduleCount, 0);
+const TOTAL_HOURS = HUB_ACADEMIES.reduce((s, a) => s + a.totalHours, 0);
 
 const container = {
   hidden: {},
@@ -31,12 +31,12 @@ export default function PathsPage() {
   useEffect(() => setMounted(true), []);
 
   const counts: Record<Filter, number> = {
-    all: MOCK_ACADEMIES.length,
-    available: MOCK_ACADEMIES.filter((a) => !a.comingSoon).length,
-    soon: MOCK_ACADEMIES.filter((a) => a.comingSoon).length,
+    all: HUB_ACADEMIES.length,
+    available: HUB_ACADEMIES.filter((a) => !a.comingSoon).length,
+    soon: HUB_ACADEMIES.filter((a) => a.comingSoon).length,
   };
 
-  const filtered = MOCK_ACADEMIES.filter((a) => {
+  const filtered = HUB_ACADEMIES.filter((a) => {
     if (filter === "available") return !a.comingSoon;
     if (filter === "soon") return a.comingSoon;
     return true;
@@ -74,7 +74,7 @@ export default function PathsPage() {
         <div className="flex flex-wrap items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5">
             <Map size={12} aria-hidden />
-            {MOCK_ACADEMIES.length} paths
+            {HUB_ACADEMIES.length} paths
           </span>
           <span className="w-px h-3 bg-border-subtle" aria-hidden />
           <span className="flex items-center gap-1.5">

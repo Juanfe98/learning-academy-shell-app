@@ -302,6 +302,93 @@ it("Remove deletes a row", () => {
       ],
       estimatedMinutes: 30,
     },
+    {
+      id: "procurement-approval-form",
+      topicId: "forms",
+      title: "Build a procurement approval form with conditional validation",
+      difficulty: "hard",
+      description:
+        "Build an enterprise procurement request form with category, vendor, budget code, manager approval, and payment method fields. The challenge is that validation rules change based on request amount and payment type: card purchases need receipt details, invoice purchases over $5,000 need an approver email, and the summary must explain why submit is blocked.",
+      targetImage: {
+        src: "/react-challenges/procurement-approval-form.svg",
+        alt: "React interview target mock for a procurement approval form with conditional invoice fields, inline errors, and an approval summary panel.",
+        caption:
+          "This is a reactive form challenge. Fields become required based on earlier answers, and the user should always understand both the current total and the current blocking rules.",
+      },
+      concepts: [
+        "controlled inputs",
+        "conditional validation",
+        "derived state",
+        "reactive forms",
+        "submission gating",
+      ],
+      starterCode: `function App() {
+  const [values, setValues] = React.useState({
+    itemName: "Quarterly research seats",
+    amountInput: "6200",
+    paymentType: "invoice",
+    approverEmail: "",
+    budgetCode: "ENG-24-UI",
+    vendorName: "Northstar Research",
+  });
+
+  function update(field, value) {
+    setValues(current => ({ ...current, [field]: value }));
+  }
+
+  // TODO:
+  // 1. derive amount from amountInput
+  // 2. require approverEmail when paymentType === "invoice" and amount >= 5000
+  // 3. require budgetCode always and vendorName always
+  // 4. show inline errors only when a field is invalid
+  // 5. render:
+  //    - heading "Procurement request"
+  //    - an input with aria-label "Amount"
+  //    - a select with aria-label "Payment type"
+  //    - an input with aria-label "Approver email"
+  //    - summary text "Blocking rules: <n>"
+  //    - submit button text "Submit request"
+
+  return <div><h1>Procurement request</h1></div>;
+}
+
+export default App;`,
+      hints: [
+        "Keep raw inputs in state as strings. Parse numeric values into derived values when checking rules.",
+        "Not every missing field is always an error. Tie each rule to the current payment type and amount.",
+        "A simple derived array of blocking messages often works better than many booleans.",
+      ],
+      tests: [
+        {
+          description: "renders procurement form shell",
+          code: `
+it("renders procurement request shell", () => {
+  render(<App />);
+  expect(screen.getByText("Procurement request")).toBeTruthy();
+  expect(screen.getByLabelText("Payment type")).toBeTruthy();
+});`,
+        },
+        {
+          description: "invoice above threshold requires approver email",
+          code: `
+it("requires approver email for high-value invoice requests", () => {
+  render(<App />);
+  expect(screen.getByText("Blocking rules: 1")).toBeTruthy();
+  expect(screen.getByText("Approver email is required for invoice requests above $5,000")).toBeTruthy();
+});`,
+        },
+        {
+          description: "adding approver email removes the blocking rule",
+          code: `
+it("clears blocker when approver email is added", () => {
+  render(<App />);
+  fireEvent.change(screen.getByLabelText("Approver email"), { target: { value: "manager@northstar.app" } });
+  expect(screen.getByText("Blocking rules: 0")).toBeTruthy();
+});`,
+        },
+      ],
+      estimatedMinutes: 40,
+    },
   ],
 };
 

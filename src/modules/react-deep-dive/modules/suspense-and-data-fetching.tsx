@@ -1,3 +1,4 @@
+import { InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -8,6 +9,7 @@ export const toc: TocItem[] = [
   { id: "error-boundaries", title: "Error Boundaries", level: 2 },
   { id: "nested-suspense-boundaries", title: "Nested Suspense Boundaries", level: 2 },
   { id: "the-waterfall-problem", title: "The Waterfall Problem", level: 2 },
+  { id: "interview-challenge", title: "Interview Challenge: Dashboard Loading Architecture", level: 2 },
   { id: "key-takeaways", title: "Key Takeaways", level: 2 },
 ];
 
@@ -298,6 +300,33 @@ router.on("navigate", ({ params }) => {
   queryClient.prefetchQuery({ queryKey: ["user", params.userId], ... });
   queryClient.prefetchQuery({ queryKey: ["orders", params.userId], ... });
 });`}</code></pre>
+
+      <h2 id="interview-challenge">Interview Challenge: Dashboard Loading Architecture</h2>
+
+      <InterviewChallenge
+        title="Profile + Activity + Recommendations"
+        scenario={
+          <>
+            A dashboard route renders a user profile header, recent activity, recommendation
+            cards, and a large analytics panel. The interviewer asks you to design the loading
+            architecture so the page does not flash one giant spinner, avoids waterfalls, and
+            degrades gracefully if one section fails. This is less about memorizing Suspense API
+            details and more about proving you can choose boundary placement intentionally.
+          </>
+        }
+        tasks={[
+          "Place Suspense and Error Boundary layers so users see meaningful progressive disclosure rather than an all-or-nothing route spinner.",
+          "Identify which fetches can start in parallel, which ones depend on prior data, and where prefetching would have the biggest UX impact.",
+          "Explain the difference between initial-load placeholders, stale-while-revalidate experiences, and retry behavior after a section error.",
+          "Describe how your answer changes between a client-only app with React Query and a framework setup with server components.",
+        ]}
+        pitfalls={[
+          "Wrapping the whole route in one boundary and calling it done.",
+          "Letting child sections kick off fetches only after parent data resolves, creating an avoidable waterfall.",
+          "Using Suspense fallbacks where keeping stale content visible would be a better experience.",
+        ]}
+        signal="The best answers talk about loading granularity as a product decision, start independent work in parallel, and use Suspense as boundary design rather than as a generic spinner mechanism."
+      />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 
