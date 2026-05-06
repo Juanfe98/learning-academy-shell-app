@@ -31,6 +31,7 @@ export interface AcademyRoute {
   estimatedMinutes: number;
   tags: string[];
   order: number;
+  keywords?: string[];
 }
 
 export interface AcademyGroup {

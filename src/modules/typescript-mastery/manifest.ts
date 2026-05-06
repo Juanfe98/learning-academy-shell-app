@@ -8,7 +8,7 @@ const manifest: AcademyManifest = {
   version: "1.0.0",
   icon: "🔷",
   accentColor: "#3b82f6",
-  totalEstimatedMinutes: 220,
+  totalEstimatedMinutes: 370,
   routes: [
     {
       slug: "the-type-system",
@@ -74,6 +74,46 @@ const manifest: AcademyManifest = {
       tags: ["typescript", "advanced", "satisfies"],
       component: () => import("./modules/advanced-patterns"),
     },
+    {
+      slug: "classes",
+      title: "Classes in TypeScript",
+      order: 8,
+      estimatedMinutes: 35,
+      tags: ["typescript", "classes", "oop", "access-modifiers", "abstract"],
+      component: () => import("./modules/classes"),
+    },
+    {
+      slug: "enums",
+      title: "Enums & Literal Types",
+      order: 9,
+      estimatedMinutes: 25,
+      tags: ["typescript", "enums", "union-types", "const-enum"],
+      component: () => import("./modules/enums"),
+    },
+    {
+      slug: "async-typescript",
+      title: "Async TypeScript",
+      order: 10,
+      estimatedMinutes: 35,
+      tags: ["typescript", "async", "promises", "awaited", "error-handling"],
+      component: () => import("./modules/async-typescript"),
+    },
+    {
+      slug: "tsconfig",
+      title: "tsconfig.json Deep Dive",
+      order: 11,
+      estimatedMinutes: 30,
+      tags: ["typescript", "tsconfig", "configuration", "strict", "module-resolution"],
+      component: () => import("./modules/tsconfig"),
+    },
+    {
+      slug: "function-overloads",
+      title: "Function Overloads",
+      order: 12,
+      estimatedMinutes: 25,
+      tags: ["typescript", "overloads", "function-signatures"],
+      component: () => import("./modules/function-overloads"),
+    },
   ],
   learningPath: [
     "the-type-system",
@@ -84,6 +124,11 @@ const manifest: AcademyManifest = {
     "mapped-types",
     "conditional-types",
     "advanced-patterns",
+    "classes",
+    "enums",
+    "async-typescript",
+    "tsconfig",
+    "function-overloads",
   ],
   groups: [
     {
@@ -103,6 +148,12 @@ const manifest: AcademyManifest = {
       title: "Advanced Inference & Patterns",
       description: "Conditional typing, inference, and advanced design patterns for large codebases.",
       routeSlugs: ["conditional-types", "advanced-patterns"],
+    },
+    {
+      id: "backend-interview-prep",
+      title: "Backend Interview Prep",
+      description: "Classes, enums, async patterns, configuration, and function overloads — the topics backend interviewers probe most.",
+      routeSlugs: ["classes", "enums", "async-typescript", "tsconfig", "function-overloads"],
     },
   ],
 };

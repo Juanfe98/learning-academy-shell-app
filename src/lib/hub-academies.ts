@@ -26,6 +26,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 0,
     estimatedMinutes: 30,
     tags: ["fundamentals", "architecture", "overview"],
+    keywords: ["scalability", "availability", "reliability", "CAP theorem", "trade-offs", "requirements gathering", "back of envelope estimation", "NFR"],
   },
   {
     slug: "request-lifecycle",
@@ -33,6 +34,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 1,
     estimatedMinutes: 35,
     tags: ["networking", "dns", "http", "architecture"],
+    keywords: ["browser to server", "HTTP request", "TCP handshake", "TLS", "DNS resolution", "load balancer", "response", "round trip"],
   },
   {
     slug: "networking-fundamentals",
@@ -40,6 +42,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 2,
     estimatedMinutes: 40,
     tags: ["networking", "http", "tcp", "dns", "tls"],
+    keywords: ["OSI model", "IP", "port", "UDP", "TCP vs UDP", "subnet", "CIDR", "packet", "latency", "bandwidth", "SSL"],
   },
   {
     slug: "aws-cloud-networking",
@@ -47,6 +50,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 3,
     estimatedMinutes: 40,
     tags: ["aws", "vpc", "networking", "security-groups"],
+    keywords: ["VPC", "subnet", "NACL", "security group", "internet gateway", "NAT gateway", "VPN", "peering", "private subnet", "public subnet", "route table"],
   },
   {
     slug: "traffic-entry-layer",
@@ -54,6 +58,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 4,
     estimatedMinutes: 35,
     tags: ["aws", "cdn", "load-balancer", "api-gateway", "route53"],
+    keywords: ["CloudFront", "ALB", "NLB", "Route 53", "weighted routing", "failover routing", "API Gateway throttle", "WAF", "edge caching"],
   },
   {
     slug: "stateless-horizontal-scaling",
@@ -61,6 +66,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 5,
     estimatedMinutes: 30,
     tags: ["architecture", "scaling", "stateless", "ecs", "lambda"],
+    keywords: ["horizontal vs vertical", "auto-scaling", "ECS task", "Lambda concurrency", "stateless service", "session externalization", "scale out"],
   },
   {
     slug: "sql-vs-nosql",
@@ -68,6 +74,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 6,
     estimatedMinutes: 40,
     tags: ["databases", "sql", "nosql", "dynamodb", "postgres"],
+    keywords: ["relational", "ACID", "BASE", "RDS", "Aurora", "MongoDB", "when to use NoSQL", "schema design", "normalization", "denormalization"],
   },
   {
     slug: "dynamodb-deep-dive",
@@ -75,6 +82,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 7,
     estimatedMinutes: 45,
     tags: ["aws", "dynamodb", "nosql", "databases"],
+    keywords: ["partition key", "sort key", "GSI", "LSI", "DynamoDB streams", "single table design", "read consistency", "WCU", "RCU", "hot partition"],
   },
   {
     slug: "s3-object-storage",
@@ -82,6 +90,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 8,
     estimatedMinutes: 30,
     tags: ["aws", "s3", "storage", "object-storage"],
+    keywords: ["bucket", "presigned URL", "multipart upload", "S3 lifecycle", "versioning", "static hosting", "object storage vs block", "S3 event notification"],
   },
   {
     slug: "caching-strategies",
@@ -89,6 +98,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 9,
     estimatedMinutes: 35,
     tags: ["caching", "redis", "performance", "architecture"],
+    keywords: ["ElastiCache", "Redis cluster", "cache hit", "cache miss", "write-through", "write-behind", "read-through", "cache eviction", "LRU", "TTL", "Memcached"],
   },
   {
     slug: "performance-engineering",
@@ -96,6 +106,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 10,
     estimatedMinutes: 35,
     tags: ["performance", "latency", "throughput", "optimization"],
+    keywords: ["P99", "P95", "percentile latency", "bottleneck", "profiling", "X-Ray", "slow query", "connection pooling", "flame graph", "benchmarking"],
   },
   {
     slug: "queues-background-workers",
@@ -103,6 +114,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 11,
     estimatedMinutes: 35,
     tags: ["aws", "sqs", "queues", "async", "workers"],
+    keywords: ["SQS", "visibility timeout", "dead letter queue", "FIFO queue", "at-least-once delivery", "idempotency", "Lambda trigger", "batch processing", "job queue"],
   },
   {
     slug: "event-driven-architecture",
@@ -110,6 +122,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 12,
     estimatedMinutes: 40,
     tags: ["events", "pub-sub", "kafka", "eventbridge", "architecture"],
+    keywords: ["EventBridge", "SNS", "Kafka", "consumer group", "topic", "offset", "at-least-once", "exactly-once", "choreography vs orchestration", "event sourcing"],
   },
   {
     slug: "reliability-availability",
@@ -117,6 +130,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 13,
     estimatedMinutes: 35,
     tags: ["reliability", "availability", "aws", "multi-az", "failover"],
+    keywords: ["SLA", "SLO", "SLI", "uptime", "multi-AZ", "multi-region", "failover", "RTO", "RPO", "disaster recovery", "99.9%", "nines"],
   },
   {
     slug: "resilience-patterns",
@@ -124,6 +138,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 14,
     estimatedMinutes: 35,
     tags: ["resilience", "circuit-breaker", "retries", "idempotency", "distributed-systems"],
+    keywords: ["circuit breaker", "retry with backoff", "jitter", "timeout", "bulkhead", "idempotency key", "exponential backoff", "fallback"],
   },
   {
     slug: "auth-architecture",
@@ -131,6 +146,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 15,
     estimatedMinutes: 40,
     tags: ["auth", "jwt", "oauth2", "cognito", "iam", "security"],
+    keywords: ["OAuth 2.0", "OIDC", "Cognito", "IAM roles", "access token", "authorization code flow", "API Gateway authorizer", "OpenID Connect"],
   },
   {
     slug: "cloud-security",
@@ -138,6 +154,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 16,
     estimatedMinutes: 35,
     tags: ["security", "aws", "iam", "encryption", "secrets"],
+    keywords: ["IAM policy", "least privilege", "KMS", "Secrets Manager", "Parameter Store", "encryption at rest", "encryption in transit", "VPC endpoint", "CloudTrail"],
   },
   {
     slug: "observability",
@@ -145,6 +162,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 17,
     estimatedMinutes: 35,
     tags: ["observability", "logs", "metrics", "traces", "cloudwatch"],
+    keywords: ["CloudWatch", "X-Ray", "distributed tracing", "structured logs", "dashboard", "alarm", "anomaly detection", "correlation ID", "OpenTelemetry"],
   },
   {
     slug: "incident-response",
@@ -152,6 +170,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 18,
     estimatedMinutes: 30,
     tags: ["incidents", "debugging", "production", "runbooks", "postmortem"],
+    keywords: ["runbook", "postmortem", "MTTD", "MTTR", "on-call", "alerting", "escalation", "rollback", "feature flag", "blameless"],
   },
   {
     slug: "cicd-deployment",
@@ -159,6 +178,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 19,
     estimatedMinutes: 35,
     tags: ["ci-cd", "deployment", "docker", "github-actions", "aws"],
+    keywords: ["blue-green", "canary", "rolling", "CodePipeline", "GitHub Actions", "artifact", "deployment strategy", "rollback", "zero downtime deploy"],
   },
   {
     slug: "containers-orchestration",
@@ -166,6 +186,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
     order: 20,
     estimatedMinutes: 40,
     tags: ["docker", "containers", "ecs", "kubernetes", "lambda"],
+    keywords: ["Dockerfile", "image", "container", "ECS task definition", "Fargate", "ECR", "Kubernetes comparison", "auto-scaling", "health check", "k8s"],
   },
 ];
 
