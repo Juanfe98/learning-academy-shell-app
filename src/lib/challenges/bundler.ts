@@ -65,11 +65,13 @@ export async function buildBundle(
     }
     try {
       const ext = path.split(".").pop() ?? "";
+      // Presets run in reverse array order. TypeScript must strip types first,
+      // then React transforms JSX, then env compiles to CommonJS.
       const presets: (string | [string, object])[] = [
         ["env", { targets: { browsers: "last 2 versions" }, modules: "commonjs" }],
       ];
-      if (ext === "tsx" || ext === "jsx") presets.unshift("react");
-      if (ext === "ts" || ext === "tsx") presets.unshift("typescript");
+      if (ext === "tsx" || ext === "jsx") presets.push("react");
+      if (ext === "ts" || ext === "tsx") presets.push("typescript");
 
       const result = Babel.transform(entry.content, {
         presets,

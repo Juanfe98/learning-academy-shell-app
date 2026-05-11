@@ -9,6 +9,50 @@ const tsOopShapes: Challenge = {
   tags: ["typescript", "oop", "abstract-classes"],
   environment: "node-ts",
   entryFile: "index.ts",
+  tests: `import { Circle, Rectangle, Shape } from "./shapes";
+
+describe("Circle", () => {
+  const c = new Circle(5);
+
+  it("area() returns π × r²", () => {
+    expect(c.area()).toBeCloseTo(Math.PI * 25, 4);
+  });
+
+  it("perimeter() returns 2π × r", () => {
+    expect(c.perimeter()).toBeCloseTo(2 * Math.PI * 5, 4);
+  });
+
+  it("describe() formats to 2 decimal places", () => {
+    expect(c.describe()).toBe("Area: 78.54, Perimeter: 31.42");
+  });
+});
+
+describe("Rectangle", () => {
+  const r = new Rectangle(4, 6);
+
+  it("area() returns width × height", () => {
+    expect(r.area()).toBe(24);
+  });
+
+  it("perimeter() returns 2 × (width + height)", () => {
+    expect(r.perimeter()).toBe(20);
+  });
+
+  it("describe() formats to 2 decimal places", () => {
+    expect(r.describe()).toBe("Area: 24.00, Perimeter: 20.00");
+  });
+});
+
+describe("Polymorphism", () => {
+  it("Circle instanceof Shape", () => {
+    expect(new Circle(3) instanceof Shape).toBe(true);
+  });
+
+  it("Rectangle instanceof Shape", () => {
+    expect(new Rectangle(2, 5) instanceof Shape).toBe(true);
+  });
+});
+`,
   files: [
     {
       filename: "shapes.ts",

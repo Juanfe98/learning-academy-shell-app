@@ -14,6 +14,13 @@ export interface Challenge {
   environment: "react-js" | "react-ts" | "node-ts";
   files: ChallengeFile[];
   entryFile: string;
+  tests?: string; // TypeScript test file content (describe/it/expect)
+}
+
+export interface TestResult {
+  description: string;
+  pass: boolean;
+  error?: string;
 }
 
 export interface ConsoleEntry {

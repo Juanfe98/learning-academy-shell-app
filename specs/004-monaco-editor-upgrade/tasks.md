@@ -14,7 +14,7 @@
 
 **Purpose**: Install the one new dependency and verify it resolves correctly before any code is written.
 
-- [ ] T001 Install `@monaco-editor/react` via `pnpm add @monaco-editor/react` and verify `pnpm build` still passes (package.json + pnpm-lock.yaml updated)
+- [x] T001 Install `@monaco-editor/react` via `pnpm add @monaco-editor/react` and verify `pnpm build` still passes (package.json + pnpm-lock.yaml updated)
 
 **Checkpoint**: `pnpm build` passes with new package installed. `node_modules/@monaco-editor/react` exists.
 

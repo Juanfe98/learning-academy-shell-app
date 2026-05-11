@@ -32,7 +32,7 @@ export const TEST_RUNNER_SRC = `
   function expect(value) {
     function make(v, negated) {
       return {
-        not: make(v, true),
+        get not() { return make(v, !negated); },
         toBe: function(expected) {
           var pass = v === expected;
           if (negated) pass = !pass;

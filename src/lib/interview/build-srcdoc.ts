@@ -1,5 +1,37 @@
 import { TEST_RUNNER_SRC } from "./test-runner-src";
 
+// Lightweight test runner — no DOM or React deps, for node-ts challenges.
+// NOTE: `not` must be a getter, not an eagerly-evaluated property — otherwise
+// `mk(v, neg)` infinitely recurses building the `not` chain before any assertion runs.
+const NODE_TEST_RUNNER_SRC = `(function(){
+  var _r=[],_s="";
+  function describe(l,fn){var p=_s;_s=l;try{fn();}catch(e){_r.push({description:l,pass:false,error:String(e&&e.message?e.message:e)});}_s=p;}
+  function it(l,fn){var fl=_s?_s+" > "+l:l;try{fn();_r.push({description:fl,pass:true});}catch(e){_r.push({description:fl,pass:false,error:String(e&&e.message?e.message:e)});}}
+  function expect(v){
+    function mk(v,neg){
+      return {
+        get not(){return mk(v,!neg);},
+        toBe:function(e){var p=v===e;if(neg)p=!p;if(!p)throw new Error("Expected "+JSON.stringify(v)+(neg?" not":"")+" to be "+JSON.stringify(e));},
+        toEqual:function(e){var p=JSON.stringify(v)===JSON.stringify(e);if(neg)p=!p;if(!p)throw new Error("Expected "+JSON.stringify(v)+(neg?" not":"")+" to equal "+JSON.stringify(e));},
+        toBeCloseTo:function(e,d){var dec=d!==undefined?d:2;var p=Math.abs(v-e)<Math.pow(10,-dec)/2;if(neg)p=!p;if(!p)throw new Error("Expected "+v+(neg?" not":"")+" to be close to "+e+" ("+dec+" decimals)");},
+        toBeTruthy:function(){var p=!!v;if(neg)p=!p;if(!p)throw new Error("Expected "+JSON.stringify(v)+(neg?" not":"")+" to be truthy");},
+        toBeFalsy:function(){var p=!v;if(neg)p=!p;if(!p)throw new Error("Expected "+JSON.stringify(v)+(neg?" not":"")+" to be falsy");},
+        toBeGreaterThan:function(n){var p=v>n;if(neg)p=!p;if(!p)throw new Error("Expected "+v+(neg?" not":"")+" to be > "+n);},
+        toBeLessThan:function(n){var p=v<n;if(neg)p=!p;if(!p)throw new Error("Expected "+v+(neg?" not":"")+" to be < "+n);},
+        toContain:function(e){var p=Array.isArray(v)?v.indexOf(e)!==-1:String(v).indexOf(String(e))!==-1;if(neg)p=!p;if(!p)throw new Error("Expected "+JSON.stringify(v)+(neg?" not":"")+" to contain "+JSON.stringify(e));},
+        toThrow:function(){var threw=false;try{v();}catch(e){threw=true;}var p=threw;if(neg)p=!p;if(!p)throw new Error("Expected function "+(neg?"not ":"")+"to throw");}
+      };
+    }
+    return mk(v,false);
+  }
+  window.describe=describe;window.it=it;window.expect=expect;
+  setTimeout(function(){window.parent.postMessage({type:"TEST_RESULTS",results:_r},"*");},50);
+})();`;
+
+export function buildNodeTestSrcdoc(bundledCode: string): string {
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body><script>${NODE_TEST_RUNNER_SRC}</script><script>try{${bundledCode}}catch(e){window.parent.postMessage({type:"TEST_RESULTS",results:[{description:"Runtime error",pass:false,error:e&&e.message?e.message:String(e)}]},"*");}</script></body></html>`;
+}
+
 const PLAYGROUND_CONSOLE_SRC = `(function(){["log","warn","error","info"].forEach(function(m){var o=console[m];console[m]=function(){var a=Array.prototype.slice.call(arguments).map(function(x){try{return typeof x==="string"?x:JSON.stringify(x,null,2);}catch(_){return String(x);}});o.apply(console,arguments);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:m,args:a,timestamp:Date.now()},"*");};});window.addEventListener("error",function(e){window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:[e.error&&e.error.message?e.error.message:String(e.message)],timestamp:Date.now()},"*");});window.addEventListener("unhandledrejection",function(e){var msg=e.reason&&e.reason.message?e.reason.message:String(e.reason);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:["Unhandled rejection: "+msg],timestamp:Date.now()},"*");});})();`;
 
 // buildBundle() in bundler.ts handles mount — no separate mount snippet needed.
