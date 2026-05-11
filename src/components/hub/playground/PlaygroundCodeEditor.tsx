@@ -2,8 +2,7 @@
 
 import { useMemo } from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
-import { EditorView } from "@codemirror/view";
+import { createSeHubTheme, getLanguageExtension } from "@/lib/editor/theme";
 
 interface Props {
   filename: string;
@@ -11,30 +10,10 @@ interface Props {
   onChange: (value: string) => void;
 }
 
+const editorTheme = createSeHubTheme("16px");
+
 export default function PlaygroundCodeEditor({ filename, value, onChange }: Props) {
-  const extensions = useMemo(() => {
-    const theme = EditorView.theme({
-      "&": {
-        background: "var(--bg-elevated)",
-        color: "var(--text-primary)",
-        fontSize: "13px",
-        height: "100%",
-      },
-      ".cm-scroller": { overflow: "auto", fontFamily: "ui-monospace, monospace" },
-      ".cm-gutters": {
-        background: "var(--bg-surface)",
-        border: "none",
-        borderRight: "1px solid rgba(255,255,255,0.06)",
-        color: "var(--text-muted)",
-      },
-      ".cm-activeLineGutter": { background: "rgba(255,255,255,0.04)" },
-      ".cm-activeLine": { background: "rgba(255,255,255,0.03)" },
-      ".cm-cursor": { borderLeftColor: "#0ea5e9" },
-      ".cm-selectionBackground": { background: "rgba(14,165,233,0.2) !important" },
-      ".cm-focused .cm-selectionBackground": { background: "rgba(14,165,233,0.25) !important" },
-    });
-    return [javascript({ jsx: true }), theme];
-  }, []);
+  const langExtension = useMemo(() => getLanguageExtension(filename), [filename]);
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
@@ -52,8 +31,8 @@ export default function PlaygroundCodeEditor({ filename, value, onChange }: Prop
         value={value}
         onChange={onChange}
         height="100%"
-        extensions={extensions as import("@codemirror/state").Extension[]}
-        theme="dark"
+        theme={editorTheme}
+        extensions={[langExtension]}
         style={{ flex: 1, overflow: "hidden" }}
         basicSetup={{ lineNumbers: true, foldGutter: true, autocompletion: true }}
       />

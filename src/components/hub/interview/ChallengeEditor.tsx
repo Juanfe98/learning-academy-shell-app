@@ -13,7 +13,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { javascript } from "@codemirror/lang-javascript";
-import { EditorView } from "@codemirror/view";
+import { createSeHubTheme } from "@/lib/editor/theme";
+
+const challengeEditorTheme = createSeHubTheme("13px");
 import { Badge } from "@/components/ui";
 import OutputPanel from "./OutputPanel";
 import {
@@ -73,36 +75,7 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
   const [hintsOpen, setHintsOpen] = useState(false);
   const [startTime] = useState(() => Date.now());
   const [timerDisplay, setTimerDisplay] = useState("0:00");
-  const extensions = useMemo(() => {
-    const seHubTheme = EditorView.theme({
-      "&": {
-        background: "var(--bg-elevated)",
-        color: "var(--text-primary)",
-        fontSize: "13px",
-        height: "100%",
-      },
-      ".cm-scroller": {
-        overflow: "auto",
-        fontFamily: "ui-monospace, monospace",
-      },
-      ".cm-gutters": {
-        background: "var(--bg-surface)",
-        border: "none",
-        borderRight: "1px solid rgba(255,255,255,0.06)",
-        color: "var(--text-muted)",
-      },
-      ".cm-activeLineGutter": { background: "rgba(255,255,255,0.04)" },
-      ".cm-activeLine": { background: "rgba(255,255,255,0.03)" },
-      ".cm-cursor": { borderLeftColor: "#0ea5e9" },
-      ".cm-selectionBackground": {
-        background: "rgba(14,165,233,0.2) !important",
-      },
-      ".cm-focused .cm-selectionBackground": {
-        background: "rgba(14,165,233,0.25) !important",
-      },
-    });
-    return [javascript({ jsx: true }), seHubTheme];
-  }, []);
+  const extensions = useMemo(() => [javascript({ jsx: true, typescript: true })], []);
 
   const markVisited = useProgressStore((s) => s.markModuleVisited);
   const markComplete = useProgressStore((s) => s.markModuleComplete);
@@ -373,8 +346,8 @@ export default function ChallengeEditor({ challenge, trackId }: Props) {
               value={code}
               onChange={setCode}
               height="100%"
-              extensions={extensions as import("@codemirror/state").Extension[]}
-              theme="dark"
+              theme={challengeEditorTheme}
+              extensions={extensions}
               style={{ height: "100%", fontSize: 13 }}
               basicSetup={{
                 lineNumbers: true,
