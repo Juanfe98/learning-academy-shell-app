@@ -60,19 +60,14 @@ src/
       types.ts                          ← Challenge, ChallengeFile, ConsoleEntry
       registry.ts                       ← CHALLENGE_REGISTRY: Challenge[]
       transpile.ts                      ← sucrase.transform() wrapper
+      transpile.test.ts                 ← unit tests (co-located, matches project convention)
     store/
       challenge.store.ts                ← useChallengeStore (Zustand + persist)
+      challenge.store.test.ts           ← unit tests (co-located, matches project convention)
   modules/
     challenges/
       react-counter/                    ← first reference challenge
         index.ts
-
-tests/
-  lib/
-    challenges/
-      transpile.test.ts
-    store/
-      challenge.store.test.ts
 ```
 
 **Structure Decision**: Single Next.js app (Option 1 variant). New route group pages inside existing `(hub)/`. New `components/hub/playground/` following existing hub component conventions. New `lib/challenges/` following existing `lib/mock-data.ts` / `lib/registry.ts` patterns.

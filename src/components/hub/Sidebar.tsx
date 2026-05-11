@@ -12,6 +12,7 @@ import {
   Zap,
   BrainCircuit,
   Briefcase,
+  Code2,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/paths", label: "Learning Paths", icon: Map },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/interview", label: "Interview Prep", icon: BrainCircuit },
+  { href: "/playground", label: "Playground", icon: Code2, matchPrefix: true },
   { href: "/jobs", label: "Job Targets", icon: Briefcase, matchPrefix: true },
 ];
 
