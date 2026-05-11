@@ -62,9 +62,23 @@ export default function PlaygroundListPage() {
                   ))}
                 </div>
               </div>
-              <Badge variant={DIFFICULTY_VARIANT[challenge.difficulty]}>
-                {challenge.difficulty}
-              </Badge>
+              <div className="flex items-center gap-1.5 shrink-0">
+                {challenge.environment !== "react-js" && (
+                  <span
+                    className="px-2 py-0.5 rounded-full text-[11px] font-semibold"
+                    style={{
+                      background: "rgba(99,102,241,0.15)",
+                      border: "1px solid rgba(99,102,241,0.3)",
+                      color: "var(--accent-primary)",
+                    }}
+                  >
+                    TS
+                  </span>
+                )}
+                <Badge variant={DIFFICULTY_VARIANT[challenge.difficulty]}>
+                  {challenge.difficulty}
+                </Badge>
+              </div>
             </div>
           </Link>
         ))}

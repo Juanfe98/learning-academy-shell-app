@@ -28,7 +28,7 @@ function __resolve(id,from){
     else stack.push(p);
   }
   var base="./"+stack.join("/");
-  var exts=["",".jsx",".js","/index.jsx","/index.js"];
+  var exts=["",".jsx",".js",".tsx",".ts","/index.jsx","/index.js","/index.tsx","/index.ts"];
   for(var e=0;e<exts.length;e++){if(__m[base+exts[e]])return base+exts[e];}
   return null;
 }`;
@@ -48,7 +48,11 @@ function __req(id,from){
 }`;
 }
 
-export async function buildBundle(fileMap: FileMap, entryPath: string): Promise<BundleResult> {
+export async function buildBundle(
+  fileMap: FileMap,
+  entryPath: string,
+  environment: "react-js" | "react-ts" | "node-ts" = "react-js"
+): Promise<BundleResult> {
   const Babel = await import("@babel/standalone");
 
   const transpiled: Record<string, string> = {};
@@ -60,11 +64,15 @@ export async function buildBundle(fileMap: FileMap, entryPath: string): Promise<
       continue;
     }
     try {
+      const ext = path.split(".").pop() ?? "";
+      const presets: (string | [string, object])[] = [
+        ["env", { targets: { browsers: "last 2 versions" }, modules: "commonjs" }],
+      ];
+      if (ext === "tsx" || ext === "jsx") presets.unshift("react");
+      if (ext === "ts" || ext === "tsx") presets.unshift("typescript");
+
       const result = Babel.transform(entry.content, {
-        presets: [
-          "react",
-          ["env", { targets: { browsers: "last 2 versions" }, modules: "commonjs" }],
-        ],
+        presets,
         filename: path.replace(/^\.\//, ""),
       });
       transpiled[path] = result.code ?? "";
@@ -90,7 +98,17 @@ export async function buildBundle(fileMap: FileMap, entryPath: string): Promise<
       `\n};\n`;
   }
 
-  bundle += `
+  if (environment === "node-ts") {
+    bundle += `
+try{
+  __req(${JSON.stringify(normalizedEntry)},".");
+} catch(e) {
+  var _msg=e&&e.message?e.message:String(e);
+  window.parent&&window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:[_msg],timestamp:Date.now()},"*");
+}
+`;
+  } else {
+    bundle += `
 try{
   var __entry=__req(${JSON.stringify(normalizedEntry)},".");
   var App=(__entry&&__entry.default)||__entry;
@@ -105,6 +123,7 @@ try{
   window.parent&&window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:[_msg],timestamp:Date.now()},"*");
 }
 `;
+  }
 
   return { bundle, css };
 }

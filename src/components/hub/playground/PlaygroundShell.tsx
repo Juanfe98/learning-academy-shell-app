@@ -101,10 +101,12 @@ export default function PlaygroundShell({
           />
         </div>
 
-        {/* Right: preview + console */}
+        {/* Right: preview + console (preview hidden for node-ts) */}
         <div className="w-[380px] shrink-0 flex flex-col min-h-0" style={{ borderLeft: "1px solid var(--border-subtle)" }}>
-          <PlaygroundPreviewFrame srcdoc={srcdoc} onConsoleMessage={onConsoleMessage} />
-          <div className="h-[220px] shrink-0 flex flex-col">
+          {challenge.environment !== "node-ts" && (
+            <PlaygroundPreviewFrame srcdoc={srcdoc} onConsoleMessage={onConsoleMessage} />
+          )}
+          <div className={challenge.environment === "node-ts" ? "flex-1 flex flex-col min-h-0" : "h-[220px] shrink-0 flex flex-col"}>
             <PlaygroundConsolePanel entries={consoleEntries} onClear={onClearConsole} />
           </div>
         </div>

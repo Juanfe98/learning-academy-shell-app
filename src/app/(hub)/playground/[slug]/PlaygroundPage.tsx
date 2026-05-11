@@ -49,7 +49,7 @@ export default function PlaygroundPage({ challenge }: Props) {
   const rebuildPreview = useCallback(
     async (map: FileMap) => {
       setConsoleEntries([]);
-      const { bundle, css, error } = await buildBundle(map, normalizedEntry);
+      const { bundle, css, error } = await buildBundle(map, normalizedEntry, challenge.environment);
       if (error) {
         setConsoleEntries([{ id: crypto.randomUUID(), method: "error", args: [error], timestamp: Date.now() }]);
         setSrcdoc(buildPlaygroundSrcdoc("", ""));
@@ -89,7 +89,11 @@ export default function PlaygroundPage({ challenge }: Props) {
   const handleCreateFile = useCallback(
     (_parentPath: string, fullPath: string) => {
       const ext = fullPath.split(".").pop() ?? "jsx";
-      const lang: FileEntry["language"] = ext === "css" ? "css" : ext === "js" ? "js" : "jsx";
+      const lang: FileEntry["language"] =
+        ext === "css" ? "css" :
+        ext === "ts"  ? "ts"  :
+        ext === "tsx" ? "tsx" :
+        ext === "js"  ? "js"  : "jsx";
       const entry: FileEntry = { content: "", language: lang, seed: false };
       store.getState().addFile(challenge.slug, fullPath, entry);
       setFileMap((prev) => {
