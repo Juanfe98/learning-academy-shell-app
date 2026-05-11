@@ -9,7 +9,7 @@ export async function transpileJSX(source: string): Promise<TranspileResult> {
     const result = Babel.transform(source, {
       presets: [
         "react",
-        ["env", { targets: { browsers: "last 2 versions" }, modules: "umd" }],
+        ["env", { targets: { browsers: "last 2 versions" }, modules: "commonjs" }],
       ],
       filename: "challenge.jsx",
     });

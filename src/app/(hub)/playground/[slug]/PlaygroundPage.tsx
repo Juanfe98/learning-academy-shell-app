@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { Challenge, ConsoleEntry } from "@/lib/challenges/types";
-import { transpileJSX, stripHostImports } from "@/lib/challenges/transpile";
-import { buildPlaygroundSrcdoc, PLAYGROUND_MOUNT_SRC } from "@/lib/interview/build-srcdoc";
+import { buildSeedFileMap, type FileMap, type FileEntry } from "@/lib/challenges/file-tree";
+import { buildBundle } from "@/lib/challenges/bundler";
+import { buildPlaygroundSrcdoc } from "@/lib/interview/build-srcdoc";
 import { useChallengeStore } from "@/lib/store/challenge.store";
 import PlaygroundShell from "@/components/hub/playground/PlaygroundShell";
 
@@ -17,101 +18,137 @@ interface Props {
   challenge: Challenge;
 }
 
-function buildFileMap(challenge: Challenge): Record<string, string> {
-  const map: Record<string, string> = {};
-  for (const f of challenge.files) map[f.filename] = f.content;
-  return map;
-}
-
 export default function PlaygroundPage({ challenge }: Props) {
+  const seedFileMap = buildSeedFileMap(challenge.files as Parameters<typeof buildSeedFileMap>[0]);
+  const normalizedEntry = "./" + challenge.entryFile;
+
   const [mounted, setMounted] = useState(false);
-  const [activeFile, setActiveFile] = useState(challenge.entryFile);
-  const [fileEdits, setFileEdits] = useState<Record<string, string>>(
-    buildFileMap(challenge)
-  );
+  const [activeFile, setActiveFile] = useState(normalizedEntry);
+  const [fileMap, setFileMap] = useState<FileMap>(seedFileMap);
+  const [folders, setFolders] = useState<string[]>([]);
   const [consoleEntries, setConsoleEntries] = useState<ConsoleEntry[]>([]);
   const [srcdoc, setSrcdoc] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { getFileContent, setFileContent, resetChallenge } = useChallengeStore();
+  const store = useChallengeStore;
 
   useEffect(() => {
-    useChallengeStore.persist.rehydrate();
+    store.persist.rehydrate();
     setMounted(true);
-  }, []);
+  }, [store]);
 
-  // After hydration, load saved content for all files
   useEffect(() => {
     if (!mounted) return;
-    const saved: Record<string, string> = {};
-    for (const f of challenge.files) {
-      saved[f.filename] = getFileContent(challenge.slug, f.filename, f.content);
-    }
-    setFileEdits(saved);
-  }, [mounted, challenge, getFileContent]);
-
-  const cssContent = useMemo(() => {
-    const cssFile = challenge.files.find((f) => f.language === "css");
-    return cssFile ? fileEdits[cssFile.filename] ?? cssFile.content : undefined;
-  }, [challenge.files, fileEdits]);
+    const saved = store.getState().getFileMap(challenge.slug, seedFileMap);
+    const savedFolders = store.getState().folders[challenge.slug] ?? [];
+    setFileMap(saved);
+    setFolders(savedFolders);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, challenge.slug]);
 
   const rebuildPreview = useCallback(
-    async (edits: Record<string, string>) => {
-      const entryContent = edits[challenge.entryFile] ?? "";
-      if (!entryContent.trim()) {
-        setSrcdoc(buildPlaygroundSrcdoc("", cssContent));
-        return;
-      }
-      const { code, error } = await transpileJSX(entryContent + PLAYGROUND_MOUNT_SRC);
+    async (map: FileMap) => {
+      setConsoleEntries([]);
+      const { bundle, css, error } = await buildBundle(map, normalizedEntry);
       if (error) {
-        setConsoleEntries((prev) => [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            method: "error",
-            args: [error],
-            timestamp: Date.now(),
-          },
-        ]);
-        setSrcdoc(buildPlaygroundSrcdoc("", cssContent));
+        setConsoleEntries([{ id: crypto.randomUUID(), method: "error", args: [error], timestamp: Date.now() }]);
+        setSrcdoc(buildPlaygroundSrcdoc("", ""));
         return;
       }
-      setSrcdoc(buildPlaygroundSrcdoc(stripHostImports(code), cssContent));
+      setSrcdoc(buildPlaygroundSrcdoc(bundle, css));
     },
-    [challenge.entryFile, cssContent]
+    [normalizedEntry]
   );
 
-  // Trigger initial preview once mounted
   useEffect(() => {
     if (!mounted) return;
-    rebuildPreview(fileEdits);
+    rebuildPreview(fileMap);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted]);
 
+  const scheduleRebuild = useCallback(
+    (map: FileMap) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => rebuildPreview(map), 500);
+    },
+    [rebuildPreview]
+  );
+
   const handleCodeChange = useCallback(
-    (filename: string, content: string) => {
-      setFileEdits((prev) => {
-        const next = { ...prev, [filename]: content };
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => {
-          setConsoleEntries([]);
-          rebuildPreview(next);
-        }, 500);
+    (path: string, content: string) => {
+      setFileMap((prev) => {
+        const next = { ...prev, [path]: { ...prev[path], content } };
+        scheduleRebuild(next);
+        store.getState().setFileContent(challenge.slug, path, content);
         return next;
       });
-      setFileContent(challenge.slug, filename, content);
     },
-    [challenge.slug, setFileContent, rebuildPreview]
+    [challenge.slug, scheduleRebuild, store]
+  );
+
+  const handleCreateFile = useCallback(
+    (_parentPath: string, fullPath: string) => {
+      const ext = fullPath.split(".").pop() ?? "jsx";
+      const lang: FileEntry["language"] = ext === "css" ? "css" : ext === "js" ? "js" : "jsx";
+      const entry: FileEntry = { content: "", language: lang, seed: false };
+      store.getState().addFile(challenge.slug, fullPath, entry);
+      setFileMap((prev) => {
+        const next = { ...prev, [fullPath]: entry };
+        return next;
+      });
+      setActiveFile(fullPath);
+    },
+    [challenge.slug, store]
+  );
+
+  const handleCreateFolder = useCallback(
+    (_parentPath: string, fullPath: string) => {
+      store.getState().addFolder(challenge.slug, fullPath);
+      setFolders((prev) => [...new Set([...prev, fullPath])]);
+    },
+    [challenge.slug, store]
+  );
+
+  const handleDeleteFile = useCallback(
+    (path: string) => {
+      store.getState().deleteFile(challenge.slug, path);
+      setFileMap((prev) => {
+        const next = { ...prev };
+        delete next[path];
+        scheduleRebuild(next);
+        return next;
+      });
+      if (activeFile === path) setActiveFile(normalizedEntry);
+    },
+    [challenge.slug, activeFile, normalizedEntry, scheduleRebuild, store]
+  );
+
+  const handleDeleteFolder = useCallback(
+    (folderPath: string) => {
+      store.getState().deleteFolder(challenge.slug, folderPath);
+      const prefix = folderPath.endsWith("/") ? folderPath : folderPath + "/";
+      setFileMap((prev) => {
+        const next = { ...prev };
+        for (const p of Object.keys(next)) {
+          if (p === folderPath || p.startsWith(prefix)) delete next[p];
+        }
+        scheduleRebuild(next);
+        return next;
+      });
+      setFolders((prev) => prev.filter((f) => f !== folderPath && !f.startsWith(prefix)));
+      if (activeFile.startsWith(prefix)) setActiveFile(normalizedEntry);
+    },
+    [challenge.slug, activeFile, normalizedEntry, scheduleRebuild, store]
   );
 
   const handleReset = useCallback(() => {
-    const original = buildFileMap(challenge);
-    resetChallenge(challenge.slug, challenge.files);
-    setFileEdits(original);
+    store.getState().resetChallenge(challenge.slug, seedFileMap);
+    setFileMap({ ...seedFileMap });
+    setFolders([]);
+    setActiveFile(normalizedEntry);
     setConsoleEntries([]);
-    setActiveFile(challenge.entryFile);
-    rebuildPreview(original);
-  }, [challenge, resetChallenge, rebuildPreview]);
+    rebuildPreview(seedFileMap);
+  }, [challenge.slug, seedFileMap, normalizedEntry, rebuildPreview, store]);
 
   const handleConsoleMessage = useCallback((entry: ConsoleEntry) => {
     setConsoleEntries((prev) => [...prev.slice(-199), entry]);
@@ -122,12 +159,17 @@ export default function PlaygroundPage({ challenge }: Props) {
   return (
     <PlaygroundShell
       challenge={challenge}
+      fileMap={fileMap}
+      folders={folders}
       activeFile={activeFile}
-      files={fileEdits}
       consoleEntries={consoleEntries}
       srcdoc={srcdoc}
       onFileSelect={setActiveFile}
       onCodeChange={handleCodeChange}
+      onCreateFile={handleCreateFile}
+      onCreateFolder={handleCreateFolder}
+      onDeleteFile={handleDeleteFile}
+      onDeleteFolder={handleDeleteFolder}
       onConsoleMessage={handleConsoleMessage}
       onClearConsole={() => setConsoleEntries([])}
       onReset={handleReset}
