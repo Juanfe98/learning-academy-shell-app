@@ -389,13 +389,13 @@ Minimum requirements per module:
 - Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values
 
 <!-- SPECKIT START -->
-Active feature: **Coding Challenge Playground** (`001-coding-challenge-playground`)
+Active feature: **Playground File Explorer** (`002-playground-file-explorer`)
 
-Implementation plan: `specs/001-coding-challenge-playground/plan.md`
+Implementation plan: `specs/002-playground-file-explorer/plan.md`
 
 For technical decisions, component contracts, data model, and developer quickstart, read:
-- `specs/001-coding-challenge-playground/research.md`
-- `specs/001-coding-challenge-playground/data-model.md`
-- `specs/001-coding-challenge-playground/contracts/ui-contracts.md`
-- `specs/001-coding-challenge-playground/quickstart.md`
+- `specs/002-playground-file-explorer/research.md`
+- `specs/002-playground-file-explorer/data-model.md`
+- `specs/002-playground-file-explorer/contracts/ui-contracts.md`
+- `specs/002-playground-file-explorer/quickstart.md`
 <!-- SPECKIT END -->
