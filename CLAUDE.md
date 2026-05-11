@@ -387,3 +387,15 @@ Minimum requirements per module:
 - Name real failure modes: "the most common mistake here is…", "this causes…in production"
 - Interview framing is mandatory — every section should connect to what interviewers actually ask
 - Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values
+
+<!-- SPECKIT START -->
+Active feature: **Coding Challenge Playground** (`001-coding-challenge-playground`)
+
+Implementation plan: `specs/001-coding-challenge-playground/plan.md`
+
+For technical decisions, component contracts, data model, and developer quickstart, read:
+- `specs/001-coding-challenge-playground/research.md`
+- `specs/001-coding-challenge-playground/data-model.md`
+- `specs/001-coding-challenge-playground/contracts/ui-contracts.md`
+- `specs/001-coding-challenge-playground/quickstart.md`
+<!-- SPECKIT END -->
