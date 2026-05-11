@@ -6,6 +6,8 @@ import pythonMastery from "@/modules/python-mastery/manifest";
 import systemDesignAws from "@/modules/system-design-aws/manifest";
 import expressBackend from "@/modules/express-backend/manifest";
 import nodejsMastery from "@/modules/nodejs-mastery/manifest";
+import nextjsMastery from "@/modules/nextjs-mastery/manifest";
+import indeedSrReactNextjs from "@/modules/indeed-senior-react-nextjs-11802/manifest";
 
 export const REGISTRY: AcademyManifest[] = [
   webFundamentals,
@@ -15,6 +17,8 @@ export const REGISTRY: AcademyManifest[] = [
   systemDesignAws,
   expressBackend,
   nodejsMastery,
+  nextjsMastery,
+  indeedSrReactNextjs,
 ];
 
 export function findAcademy(slug: string): AcademyManifest | undefined {
