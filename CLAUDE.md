@@ -247,3 +247,143 @@ Vitest tests live alongside store code: `src/lib/store/progress.store.test.ts`
 4. **`MOCK_TOC` stays in `MockModuleContent.tsx`** — re-exported as `export type { TocItem }` for backward compat; canonical `TocItem` type lives in `src/lib/types/academy.ts`
 5. **Framer Motion `animate` import** — `import { animate } from "framer-motion"` (imperative, not the component)
 6. **`skipHydration: true`** — without `StoreHydrator`, the store is always empty on first render
+
+---
+
+## Academy module content standards
+
+These standards apply to ALL module `.tsx` files written for any academy. The gold-standard reference is `src/modules/nodejs-mastery/modules/event-loop-and-async-patterns.tsx` — match that level of depth and component usage.
+
+### Available rich components — use them aggressively
+
+All imports come from two places:
+
+```tsx
+import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { ArticleTable, InterviewPlaybook, InterviewChallenge, SolutionReveal } from "@/components/ui";
+import type { TocItem } from "@/lib/types/academy";
+```
+
+#### `MermaidDiagram` — use for ANY concept with a flow, sequence, or hierarchy
+
+Define diagrams as `String.raw\`` constants **before** the component function (not inline):
+
+```tsx
+const myDiagram = String.raw`flowchart TD
+  A["Start"] --> B["Step"]
+  B --> C["End"]`;
+
+// Inside JSX:
+<MermaidDiagram
+  chart={myDiagram}
+  title="Descriptive Title"
+  caption="One sentence that tells the reader what to notice."
+  minHeight={400}
+/>
+```
+
+**When to use:** event loops, request lifecycles, cache layers, auth flows, build pipelines, state machines, class hierarchies, anything with arrows. Default assumption: every module should have at least 2 MermaidDiagram usages.
+
+Supported diagram types: `flowchart TD/LR`, `sequenceDiagram`, `stateDiagram-v2`, `classDiagram`, `erDiagram`.
+
+#### `ArticleTable` — use for comparisons, decision matrices, API references
+
+```tsx
+<ArticleTable
+  caption="One sentence describing what to compare."
+  minWidth={860}
+>
+  <table>
+    <thead>
+      <tr>
+        <th>Column A</th>
+        <th>Column B</th>
+        <th>When to use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>optionA</code></td>
+        <td>description</td>
+        <td>use case</td>
+      </tr>
+    </tbody>
+  </table>
+</ArticleTable>
+```
+
+**When to use:** comparing two APIs, SSR vs SSG vs ISR decision matrix, method signatures, config options, error types, performance tradeoffs. Default assumption: every module should have at least 1 ArticleTable.
+
+#### `InterviewPlaybook` — structured answer guide for interview sections
+
+```tsx
+<InterviewPlaybook
+  title="How to answer: [interview question]"
+  intro="One sentence on what makes a strong answer vs a weak one."
+  steps={[
+    "Step 1: open with the core concept, stated simply.",
+    "Step 2: name a real failure mode or gotcha.",
+    "Step 3: close with a production implication.",
+  ]}
+/>
+```
+
+**When to use:** end of each major conceptual section, whenever the topic maps to a common interview question. Every module should have at least 1 InterviewPlaybook.
+
+#### `InterviewChallenge` — hands-on scenario problem
+
+```tsx
+<InterviewChallenge
+  title="Challenge Title"
+  scenario={
+    <>
+      Prose description of the problem scenario. Make it concrete and realistic.
+    </>
+  }
+  tasks={[
+    "Task 1: specific thing the candidate must do or explain.",
+    "Task 2: tradeoff to evaluate.",
+    "Task 3: edge case to handle.",
+  ]}
+/>
+```
+
+**When to use:** once per module, ideally near the end. Creates a practical exercise the reader can work through.
+
+#### `SolutionReveal` — hidden answer/explanation after a challenge
+
+Wrap inside `InterviewChallenge` or standalone after a question. Check existing modules for exact prop signature.
+
+---
+
+### Module structure template
+
+Every module must follow this structure:
+
+```
+1. Opening paragraph — why this topic matters, what mental model it builds
+2. Section 1 (H2) — foundational concept with MermaidDiagram
+3. Section 2 (H2) — deeper mechanics with code examples + ArticleTable comparison
+4. Section 3+ (H2/H3) — advanced patterns, edge cases, common bugs
+5. Interview Framing section — InterviewPlaybook for each major question the topic generates
+6. InterviewChallenge — one hands-on problem
+7. Key Takeaways (H2) — 4–6 <li> bullet summary
+```
+
+Minimum requirements per module:
+- **≥ 2 MermaidDiagram** usages
+- **≥ 1 ArticleTable** for comparisons
+- **≥ 1 InterviewPlaybook** per major concept
+- **≥ 1 InterviewChallenge** per module
+- **≥ 1 code block** per major concept (in `<pre><code>{`...`}</code></pre>`)
+- **Key Takeaways** section at the end
+- **300–500 lines** of TSX content — this is the depth bar
+
+### Content quality rules
+
+- Write like a senior engineer explaining to a smart peer, not like documentation
+- Lead with WHY (mental model, production implication) before HOW (syntax, API)
+- Every code example must be real, runnable code — no pseudocode or placeholders
+- Name real failure modes: "the most common mistake here is…", "this causes…in production"
+- Interview framing is mandatory — every section should connect to what interviewers actually ask
+- Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values

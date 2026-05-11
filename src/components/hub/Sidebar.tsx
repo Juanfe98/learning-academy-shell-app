@@ -11,6 +11,7 @@ import {
   Settings,
   Zap,
   BrainCircuit,
+  Briefcase,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/paths", label: "Learning Paths", icon: Map },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/interview", label: "Interview Prep", icon: BrainCircuit },
+  { href: "/jobs", label: "Job Targets", icon: Briefcase, matchPrefix: true },
 ];
 
 function NavItem({
@@ -117,13 +119,13 @@ function SidebarContent({
         aria-label="Main navigation"
         className={cn("flex-1 py-4 space-y-0.5", collapsed ? "px-2" : "px-3")}
       >
-        {navItems.map(({ href, label, icon }) => (
+        {navItems.map(({ href, label, icon, matchPrefix }) => (
           <NavItem
             key={href}
             href={href}
             label={label}
             icon={icon}
-            active={pathname === href}
+            active={matchPrefix ? pathname.startsWith(href) : pathname === href}
             collapsed={collapsed}
             onClick={onNav}
           />
