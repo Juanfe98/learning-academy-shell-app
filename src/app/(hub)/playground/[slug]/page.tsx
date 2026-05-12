@@ -10,5 +10,5 @@ export default async function Page({ params }: Props) {
   const { slug } = await params;
   const challenge = getChallengeBySlug(slug);
   if (!challenge) notFound();
-  return <PlaygroundPage challenge={challenge} />;
+  return <PlaygroundPage key={challenge.slug} challenge={challenge} />;
 }

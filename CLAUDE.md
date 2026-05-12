@@ -389,13 +389,13 @@ Minimum requirements per module:
 - Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values
 
 <!-- SPECKIT START -->
-Active feature: **Playground File Explorer** (`002-playground-file-explorer`)
+Active feature: **Resizable Playground Panels** (`005-resizable-panels`)
 
-Implementation plan: `specs/002-playground-file-explorer/plan.md`
+Implementation plan: `specs/005-resizable-panels/plan.md`
 
 For technical decisions, component contracts, data model, and developer quickstart, read:
-- `specs/002-playground-file-explorer/research.md`
-- `specs/002-playground-file-explorer/data-model.md`
-- `specs/002-playground-file-explorer/contracts/ui-contracts.md`
-- `specs/002-playground-file-explorer/quickstart.md`
+- `specs/005-resizable-panels/research.md`
+- `specs/005-resizable-panels/data-model.md`
+- `specs/005-resizable-panels/contracts/ui-contracts.md`
+- `specs/005-resizable-panels/quickstart.md`
 <!-- SPECKIT END -->

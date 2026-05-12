@@ -1,6 +1,6 @@
 export interface FileEntry {
   content: string;
-  language: "jsx" | "js" | "css";
+  language: "jsx" | "js" | "css" | "ts" | "tsx";
   seed: boolean;
 }
 
@@ -87,7 +87,7 @@ export function normalizePath(importId: string, fromFile: string): string[] {
     else stack.push(p);
   }
   const base = "./" + stack.join("/");
-  return [base, base + ".jsx", base + ".js", base + "/index.jsx", base + "/index.js"];
+  return [base, base + ".jsx", base + ".js", base + ".tsx", base + ".ts", base + "/index.jsx", base + "/index.js", base + "/index.tsx", base + "/index.ts"];
 }
 
 export function buildSeedFileMap(files: { filename: string; content: string; language: FileEntry["language"] }[]): FileMap {

@@ -1,6 +1,6 @@
 export interface ChallengeFile {
   filename: string;
-  language: "jsx" | "js" | "css";
+  language: "jsx" | "js" | "css" | "ts" | "tsx";
   content: string;
   readOnly?: boolean;
 }
@@ -11,9 +11,17 @@ export interface Challenge {
   description: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   tags: string[];
-  environment: "react-js";
+  environment: "react-js" | "react-ts" | "node-ts";
   files: ChallengeFile[];
   entryFile: string;
+  tests?: string; // TypeScript test file content (describe/it/expect)
+  problemStatement?: string; // full markdown spec shown in the challenge panel
+}
+
+export interface TestResult {
+  description: string;
+  pass: boolean;
+  error?: string;
 }
 
 export interface ConsoleEntry {
