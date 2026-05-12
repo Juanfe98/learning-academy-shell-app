@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Badge } from "@/components/ui";
 
 const DIFFICULTY_VARIANT: Record<string, "success" | "warning" | "default"> = {
@@ -13,12 +14,153 @@ interface Props {
   description: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   tags: string[];
+  problemStatement?: string;
 }
 
-export default function ChallengeDescription({ title, description, difficulty, tags }: Props) {
+// ---------------------------------------------------------------------------
+// Minimal markdown renderer — covers the subset used in challenge specs:
+//   ## Heading, ### Sub-heading, - list, ```code block```, **bold**, `inline`
+// ---------------------------------------------------------------------------
+
+function inlineRender(text: string): ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith("**") && part.endsWith("**"))
+          return <strong key={i}>{part.slice(2, -2)}</strong>;
+        if (part.startsWith("`") && part.endsWith("`"))
+          return (
+            <code
+              key={i}
+              className="font-mono text-[11px] px-1 py-0.5 rounded"
+              style={{ background: "rgba(99,102,241,0.1)", color: "var(--accent-secondary)" }}
+            >
+              {part.slice(1, -1)}
+            </code>
+          );
+        return part;
+      })}
+    </>
+  );
+}
+
+function renderMarkdown(text: string): ReactNode {
+  const lines = text.split("\n");
+  const nodes: ReactNode[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Horizontal rule
+    if (/^-{3,}$/.test(line.trim())) {
+      nodes.push(<hr key={i} style={{ borderColor: "var(--border-subtle)", margin: "10px 0" }} />);
+      i++;
+      continue;
+    }
+
+    // Code block
+    if (line.startsWith("```")) {
+      const codeLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].startsWith("```")) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      nodes.push(
+        <pre
+          key={i}
+          className="text-[11px] font-mono leading-relaxed rounded p-2 overflow-x-auto"
+          style={{ background: "var(--bg-base)", color: "var(--text-secondary)", margin: "4px 0" }}
+        >
+          {codeLines.join("\n")}
+        </pre>
+      );
+      i++;
+      continue;
+    }
+
+    // ## Heading
+    if (line.startsWith("## ")) {
+      nodes.push(
+        <h3
+          key={i}
+          className="text-[11px] font-semibold uppercase tracking-widest mt-4 mb-1"
+          style={{ color: "var(--accent-secondary)" }}
+        >
+          {line.slice(3)}
+        </h3>
+      );
+      i++;
+      continue;
+    }
+
+    // ### Sub-heading
+    if (line.startsWith("### ")) {
+      nodes.push(
+        <h4 key={i} className="text-xs font-semibold mt-3 mb-1" style={{ color: "var(--text-primary)" }}>
+          {line.slice(4)}
+        </h4>
+      );
+      i++;
+      continue;
+    }
+
+    // Unordered list
+    if (line.startsWith("- ")) {
+      const items: ReactNode[] = [];
+      while (i < lines.length && lines[i].startsWith("- ")) {
+        items.push(
+          <li key={i} className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            {inlineRender(lines[i].slice(2))}
+          </li>
+        );
+        i++;
+      }
+      nodes.push(
+        <ul key={`ul-${i}`} className="list-disc list-inside space-y-0.5 my-1">
+          {items}
+        </ul>
+      );
+      continue;
+    }
+
+    // Empty line
+    if (line.trim() === "") {
+      i++;
+      continue;
+    }
+
+    // Paragraph — collect consecutive non-special lines
+    const paraLines: string[] = [];
+    while (
+      i < lines.length &&
+      lines[i].trim() !== "" &&
+      !lines[i].startsWith("#") &&
+      !lines[i].startsWith("-") &&
+      !lines[i].startsWith("```") &&
+      !/^-{3,}$/.test(lines[i].trim())
+    ) {
+      paraLines.push(lines[i]);
+      i++;
+    }
+    if (paraLines.length) {
+      nodes.push(
+        <p key={`p-${i}`} className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          {inlineRender(paraLines.join(" "))}
+        </p>
+      );
+    }
+  }
+
+  return nodes;
+}
+
+export default function ChallengeDescription({ description, difficulty, tags, problemStatement }: Props) {
   return (
     <div
-      className="flex-1 overflow-y-auto p-4 space-y-4"
+      className="flex-1 overflow-y-auto p-4 space-y-3"
       style={{ background: "var(--bg-surface)" }}
     >
       <div className="flex items-start gap-2 flex-wrap">
@@ -38,17 +180,21 @@ export default function ChallengeDescription({ title, description, difficulty, t
         ))}
       </div>
 
-      <div>
-        <h2
-          className="text-xs font-semibold uppercase tracking-widest mb-2"
-          style={{ color: "var(--text-muted)" }}
-        >
-          Problem
-        </h2>
-        <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-          {description}
-        </p>
-      </div>
+      {problemStatement ? (
+        <div>{renderMarkdown(problemStatement)}</div>
+      ) : (
+        <div>
+          <h2
+            className="text-xs font-semibold uppercase tracking-widest mb-2"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Problem
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -15,6 +15,7 @@ export interface Challenge {
   files: ChallengeFile[];
   entryFile: string;
   tests?: string; // TypeScript test file content (describe/it/expect)
+  problemStatement?: string; // full markdown spec shown in the challenge panel
 }
 
 export interface TestResult {

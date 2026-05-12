@@ -102,6 +102,7 @@ export default function PlaygroundShell({
             description={challenge.description}
             difficulty={challenge.difficulty}
             tags={challenge.tags}
+            problemStatement={challenge.problemStatement}
           />
         </div>
 
