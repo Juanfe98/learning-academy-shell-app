@@ -34,7 +34,7 @@ export default function PlaygroundPreviewFrame({ srcdoc, onConsoleMessage }: Pro
 
   return (
     <div
-      className="flex flex-col flex-1 min-h-0"
+      className="flex flex-col h-full"
       style={{ background: "var(--bg-elevated)", borderBottom: "1px solid var(--border-subtle)" }}
     >
       <div
