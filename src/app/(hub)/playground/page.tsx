@@ -1,88 +1,116 @@
-import Link from "next/link";
-import { Code2 } from "lucide-react";
+import { Suspense } from "react";
+import { Code2, Layers, Zap, Trophy } from "lucide-react";
 import { CHALLENGE_REGISTRY } from "@/lib/challenges/registry";
-import { Badge } from "@/components/ui";
+import ChallengeFilterGrid, { type ChallengeListItem } from "@/components/hub/playground/ChallengeFilterGrid";
 
-const DIFFICULTY_VARIANT: Record<string, "success" | "warning" | "default"> = {
-  beginner: "success",
-  intermediate: "warning",
-  advanced: "default",
-};
+const challenges: ChallengeListItem[] = CHALLENGE_REGISTRY.map(
+  ({ slug, title, description, difficulty, environment, tags }) => ({
+    slug,
+    title,
+    description,
+    difficulty,
+    environment,
+    tags,
+  })
+);
+
+const beginnerCount = challenges.filter((c) => c.difficulty === "beginner").length;
+const advancedCount = challenges.filter((c) => c.difficulty === "advanced").length;
 
 export default function PlaygroundListPage() {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
-      <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <Code2 size={22} style={{ color: "var(--accent-primary)" }} />
-          <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
-            Coding Playground
-          </h1>
+    <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
+      {/* Hero header */}
+      <div
+        className="relative overflow-hidden rounded-2xl p-6"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--bg-surface) 65%)",
+          border: "1px solid var(--border-subtle)",
+        }}
+      >
+        {/* Ambient glow */}
+        <div
+          className="absolute -top-10 -right-10 w-56 h-56 rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="relative space-y-4">
+          {/* Title row */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-3">
+              <div
+                className="p-2 rounded-lg shrink-0"
+                style={{
+                  background: "rgba(99,102,241,0.15)",
+                  border: "1px solid rgba(99,102,241,0.25)",
+                }}
+              >
+                <Code2 size={18} style={{ color: "var(--accent-primary)" }} />
+              </div>
+              <h1
+                className="text-2xl font-bold tracking-tight"
+                style={{ color: "var(--text-primary)" }}
+              >
+                Coding Playground
+              </h1>
+            </div>
+            <p
+              className="text-sm ml-[52px]"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Hands-on React challenges with live preview and console.
+            </p>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex items-center gap-6 ml-[52px]">
+            <div className="flex items-center gap-1.5">
+              <Layers size={13} style={{ color: "var(--accent-primary)" }} />
+              <span
+                className="text-xs font-semibold tabular-nums"
+                style={{ color: "var(--accent-primary)" }}
+              >
+                {challenges.length}
+              </span>
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+                total
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Zap size={13} style={{ color: "var(--success)" }} />
+              <span
+                className="text-xs font-semibold tabular-nums"
+                style={{ color: "var(--success)" }}
+              >
+                {beginnerCount}
+              </span>
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+                beginner
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Trophy size={13} style={{ color: "var(--warning)" }} />
+              <span
+                className="text-xs font-semibold tabular-nums"
+                style={{ color: "var(--warning)" }}
+              >
+                {advancedCount}
+              </span>
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+                advanced
+              </span>
+            </div>
+          </div>
         </div>
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          Hands-on React challenges with live preview and console.
-        </p>
       </div>
 
-      <div className="grid gap-3">
-        {CHALLENGE_REGISTRY.map((challenge) => (
-          <Link
-            key={challenge.slug}
-            href={`/playground/${challenge.slug}`}
-            className="block p-4 rounded-xl transition-colors"
-            style={{
-              background: "var(--bg-elevated)",
-              border: "1px solid var(--border-subtle)",
-            }}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="space-y-1.5 flex-1 min-w-0">
-                <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
-                  {challenge.title}
-                </p>
-                <p
-                  className="text-xs leading-relaxed line-clamp-2"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {challenge.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5 pt-0.5">
-                  {challenge.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 rounded-full text-[11px] font-medium"
-                      style={{
-                        background: "rgba(99,102,241,0.1)",
-                        border: "1px solid rgba(99,102,241,0.2)",
-                        color: "var(--accent-secondary)",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                {challenge.environment !== "react-js" && (
-                  <span
-                    className="px-2 py-0.5 rounded-full text-[11px] font-semibold"
-                    style={{
-                      background: "rgba(99,102,241,0.15)",
-                      border: "1px solid rgba(99,102,241,0.3)",
-                      color: "var(--accent-primary)",
-                    }}
-                  >
-                    TS
-                  </span>
-                )}
-                <Badge variant={DIFFICULTY_VARIANT[challenge.difficulty]}>
-                  {challenge.difficulty}
-                </Badge>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <Suspense fallback={null}>
+        <ChallengeFilterGrid challenges={challenges} />
+      </Suspense>
     </div>
   );
 }

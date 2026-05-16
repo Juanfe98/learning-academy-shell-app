@@ -41,31 +41,52 @@ export default function TrackBrowser() {
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-8"
       >
-        <div className="flex items-center gap-2.5 mb-2">
+        <div
+          className="relative overflow-hidden rounded-2xl p-6"
+          style={{
+            background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--bg-surface) 65%)",
+            border: "1px solid var(--border-subtle)",
+          }}
+        >
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: "rgba(99,102,241,0.12)",
-              border: "1px solid rgba(99,102,241,0.3)",
-            }}
-          >
-            <BrainCircuit size={16} style={{ color: "var(--accent-primary)" }} aria-hidden />
+            className="absolute -top-10 -right-10 w-56 h-56 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)" }}
+          />
+          <div className="relative space-y-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-3">
+                <div
+                  className="p-2 rounded-lg shrink-0"
+                  style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.25)" }}
+                >
+                  <BrainCircuit size={18} style={{ color: "var(--accent-primary)" }} aria-hidden />
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-primary">Interview Prep</h1>
+              </div>
+              <p className="text-sm ml-[52px] text-secondary">
+                Pick a topic area and work through real interview challenges with live test execution.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-6 ml-[52px]">
+              <div className="flex items-center gap-1.5">
+                <BrainCircuit size={13} style={{ color: "var(--accent-primary)" }} aria-hidden />
+                <span className="text-xs font-semibold tabular-nums" style={{ color: "var(--accent-primary)" }}>
+                  {ALL_TRACKS.filter((t) => !t.comingSoon).length}
+                </span>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>live tracks</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold tabular-nums" style={{ color: "var(--accent-secondary)" }}>{totalChallenges}</span>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>challenges</span>
+              </div>
+              {mounted && totalCompleted > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-semibold tabular-nums" style={{ color: "var(--success)" }}>{totalCompleted}</span>
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>completed</span>
+                </div>
+              )}
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-primary tracking-tight">Interview Prep</h1>
-        </div>
-        <p className="text-secondary text-sm mb-3">
-          Pick a topic area and work through real interview challenges with live test execution.
-        </p>
-        <div className="flex items-center gap-4 text-xs text-muted">
-          <span>{ALL_TRACKS.filter((t) => !t.comingSoon).length} live tracks</span>
-          <span className="w-px h-3 bg-border-subtle" />
-          <span>{totalChallenges} total challenges</span>
-          {mounted && totalCompleted > 0 && (
-            <>
-              <span className="w-px h-3 bg-border-subtle" />
-              <span style={{ color: "var(--success)" }}>{totalCompleted} completed</span>
-            </>
-          )}
         </div>
       </motion.div>
 

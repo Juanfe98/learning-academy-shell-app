@@ -8,6 +8,8 @@ import expressBackend from "@/modules/express-backend/manifest";
 import nodejsMastery from "@/modules/nodejs-mastery/manifest";
 import nextjsMastery from "@/modules/nextjs-mastery/manifest";
 import indeedSrReactNextjs from "@/modules/indeed-senior-react-nextjs-11802/manifest";
+import disneyStaffEngineer from "@/modules/disney-staff-engineer/manifest";
+import godaddySeniorSdeAi from "@/modules/godaddy-senior-sde-ai/manifest";
 
 export const REGISTRY: AcademyManifest[] = [
   webFundamentals,
@@ -19,6 +21,8 @@ export const REGISTRY: AcademyManifest[] = [
   nodejsMastery,
   nextjsMastery,
   indeedSrReactNextjs,
+  disneyStaffEngineer,
+  godaddySeniorSdeAi,
 ];
 
 export function findAcademy(slug: string): AcademyManifest | undefined {

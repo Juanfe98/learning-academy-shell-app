@@ -32,7 +32,7 @@ export function buildNodeTestSrcdoc(bundledCode: string): string {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body><script>${NODE_TEST_RUNNER_SRC}</script><script>try{${bundledCode}}catch(e){window.parent.postMessage({type:"TEST_RESULTS",results:[{description:"Runtime error",pass:false,error:e&&e.message?e.message:String(e)}]},"*");}</script></body></html>`;
 }
 
-const PLAYGROUND_CONSOLE_SRC = `(function(){["log","warn","error","info"].forEach(function(m){var o=console[m];console[m]=function(){var a=Array.prototype.slice.call(arguments).map(function(x){try{return typeof x==="string"?x:JSON.stringify(x,null,2);}catch(_){return String(x);}});o.apply(console,arguments);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:m,args:a,timestamp:Date.now()},"*");};});window.addEventListener("error",function(e){window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:[e.error&&e.error.message?e.error.message:String(e.message)],timestamp:Date.now()},"*");});window.addEventListener("unhandledrejection",function(e){var msg=e.reason&&e.reason.message?e.reason.message:String(e.reason);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:["Unhandled rejection: "+msg],timestamp:Date.now()},"*");});})();`;
+const PLAYGROUND_CONSOLE_SRC = `(function(){function _ser(x){if(typeof x==="string")return x;if(x===undefined)return"undefined";if(x===null)return"null";if(x instanceof Set){var a=[];x.forEach(function(v){a.push(_ser(v));});return"Set("+x.size+") {"+a.join(", ")+"}";}if(x instanceof Map){var b=[];x.forEach(function(v,k){b.push(_ser(k)+" => "+_ser(v));});return"Map("+x.size+") {"+b.join(", ")+"}";}try{return JSON.stringify(x,null,2);}catch(_){return String(x);}}["log","warn","error","info"].forEach(function(m){var o=console[m];console[m]=function(){var a=Array.prototype.slice.call(arguments).map(_ser);o.apply(console,arguments);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:m,args:a,timestamp:Date.now()},"*");};});window.addEventListener("error",function(e){window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:[e.error&&e.error.message?e.error.message:String(e.message)],timestamp:Date.now()},"*");});window.addEventListener("unhandledrejection",function(e){var msg=e.reason&&e.reason.message?e.reason.message:String(e.reason);window.parent.postMessage({type:"PLAYGROUND_CONSOLE",method:"error",args:["Unhandled rejection: "+msg],timestamp:Date.now()},"*");});})();`;
 
 // buildBundle() in bundler.ts handles mount — no separate mount snippet needed.
 
@@ -84,16 +84,28 @@ ${transpiledCode}
 
 const CONSOLE_CAPTURE_SRC = `
 (function() {
+  function _ser(a) {
+    if (a === undefined) return "undefined";
+    if (a === null) return "null";
+    if (typeof a === "string") return a;
+    if (a instanceof Set) {
+      var items = [];
+      a.forEach(function(v) { items.push(_ser(v)); });
+      return "Set(" + a.size + ") {" + items.join(", ") + "}";
+    }
+    if (a instanceof Map) {
+      var entries = [];
+      a.forEach(function(v, k) { entries.push(_ser(k) + " => " + _ser(v)); });
+      return "Map(" + a.size + ") {" + entries.join(", ") + "}";
+    }
+    try { return typeof a === "object" ? JSON.stringify(a, null, 2) : String(a); }
+    catch(e) { return "[Circular]"; }
+  }
   var _orig = {};
   ["log","warn","error","info"].forEach(function(m) {
     _orig[m] = console[m].bind(console);
     console[m] = function() {
-      var args = Array.prototype.slice.call(arguments).map(function(a) {
-        if (a === undefined) return "undefined";
-        if (a === null) return "null";
-        try { return typeof a === "object" ? JSON.stringify(a, null, 2) : String(a); }
-        catch(e) { return "[Circular]"; }
-      });
+      var args = Array.prototype.slice.call(arguments).map(_ser);
       window.parent.postMessage({ type: "CONSOLE_OUTPUT", level: m, args: args }, "*");
       _orig[m].apply(console, arguments);
     };

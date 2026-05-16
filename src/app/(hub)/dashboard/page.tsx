@@ -10,6 +10,7 @@ import {
   Trophy,
   BookOpen,
   ChevronRight,
+  LayoutDashboard,
 } from "lucide-react";
 import { Badge, ProgressBar } from "@/components/ui";
 import { HUB_ACADEMIES } from "@/lib/hub-academies";
@@ -559,10 +560,32 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
-        <p className="text-sm text-secondary mt-1">
-          Your learning progress at a glance.
-        </p>
+        <div
+          className="relative overflow-hidden rounded-2xl p-6"
+          style={{
+            background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--bg-surface) 65%)",
+            border: "1px solid var(--border-subtle)",
+          }}
+        >
+          <div
+            className="absolute -top-10 -right-10 w-56 h-56 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)" }}
+          />
+          <div className="relative space-y-1.5">
+            <div className="flex items-center gap-3">
+              <div
+                className="p-2 rounded-lg shrink-0"
+                style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.25)" }}
+              >
+                <LayoutDashboard size={18} style={{ color: "var(--accent-primary)" }} />
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight text-primary">Dashboard</h1>
+            </div>
+            <p className="text-sm ml-[52px] text-secondary">
+              Your learning progress at a glance.
+            </p>
+          </div>
+        </div>
       </motion.div>
 
       {mounted && (
