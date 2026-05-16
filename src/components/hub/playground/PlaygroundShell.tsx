@@ -76,12 +76,18 @@ interface Props {
   onReset: () => void;
   onFileNavigate: (path: string) => void;
   onRunTests: () => void;
+  openTabs: string[];
+  onTabSelect: (path: string) => void;
+  onTabClose: (path: string) => void;
   CodeEditor: React.ComponentType<{
     filename: string;
     value: string;
     onChange: (value: string) => void;
     fileMap?: FileMap;
     onFileNavigate?: (path: string) => void;
+    openTabs: string[];
+    onTabSelect: (path: string) => void;
+    onTabClose: (path: string) => void;
   }>;
 }
 
@@ -105,6 +111,9 @@ export default function PlaygroundShell({
   onReset,
   onFileNavigate,
   onRunTests,
+  openTabs,
+  onTabSelect,
+  onTabClose,
   CodeEditor,
 }: Props) {
   const hasTests = !!challenge.tests;
@@ -177,6 +186,9 @@ export default function PlaygroundShell({
               onChange={(value) => onCodeChange(activeFile, value)}
               fileMap={fileMap}
               onFileNavigate={onFileNavigate}
+              openTabs={openTabs}
+              onTabSelect={onTabSelect}
+              onTabClose={onTabClose}
             />
           </div>
         </Panel>

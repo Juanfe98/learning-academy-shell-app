@@ -122,8 +122,9 @@ export function initMonacoDefaults(monaco: Monaco): void {
 export function getEditorOptions(): Record<string, unknown> {
   return {
     minimap: { enabled: false },
-    fontSize: 14,
-    fontFamily: "ui-monospace, monospace",
+    fontSize: 13,
+    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+    fontLigatures: true,
     lineNumbers: "on",
     folding: true,
     wordWrap: "off",
@@ -138,6 +139,12 @@ export function getEditorOptions(): Record<string, unknown> {
     overviewRulerLanes: 0,
     hideCursorInOverviewRuler: true,
     scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+    // Code Intelligence (Group 2)
+    stickyScroll: { enabled: true },
+    quickSuggestions: { other: true, comments: true, strings: true },
+    parameterHints: { enabled: true },
+    suggestOnTriggerCharacters: true,
+    acceptSuggestionOnEnter: "on",
   };
 }
 

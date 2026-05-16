@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Editor, { useMonaco } from "@monaco-editor/react";
 import type { editor as MonacoEditor, IDisposable, languages } from "monaco-editor";
 import type { Monaco } from "@monaco-editor/react";
 import { initMonacoDefaults, getEditorOptions, loadReactTypes } from "@/lib/editor/monaco-config";
 import type { FileMap } from "@/lib/challenges/file-tree";
+import EditorTabBar from "./EditorTabBar";
+import EditorBreadcrumbs from "./EditorBreadcrumbs";
+import EditorStatusBar, { getLanguageLabel } from "./EditorStatusBar";
 
 interface Props {
   filename: string;
@@ -13,6 +16,9 @@ interface Props {
   onChange: (value: string) => void;
   fileMap?: FileMap;
   onFileNavigate?: (path: string) => void;
+  openTabs: string[];
+  onTabSelect: (path: string) => void;
+  onTabClose: (path: string) => void;
 }
 
 const FILE_PREFIX = "file:///challenge/";
@@ -39,9 +45,14 @@ export default function MonacoPlaygroundEditor({
   onChange,
   fileMap = {},
   onFileNavigate,
+  openTabs,
+  onTabSelect,
+  onTabClose,
 }: Props) {
   const monaco = useMonaco();
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null);
+  const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 });
+  const [diagnostics, setDiagnostics] = useState({ errors: 0, warnings: 0 });
   const modelsRef = useRef<Map<string, MonacoEditor.ITextModel>>(new Map());
   const fileMapKeysRef = useRef<string>("");
   const disposablesRef = useRef<IDisposable[]>([]);
@@ -55,6 +66,8 @@ export default function MonacoPlaygroundEditor({
   onChangeRef.current = onChange;
   const onFileNavigateRef = useRef(onFileNavigate);
   onFileNavigateRef.current = onFileNavigate;
+
+  const language = useMemo(() => getLanguageLabel(filename), [filename]);
 
   // One-time Monaco initialization
   useEffect(() => {
@@ -141,6 +154,32 @@ export default function MonacoPlaygroundEditor({
       editor.onDidChangeModelContent(() => {
         onChangeRef.current(editor.getValue());
       })
+    );
+
+    // Cursor position → status bar
+    disposablesRef.current.push(
+      editor.onDidChangeCursorPosition((e) => {
+        setCursorPos({ line: e.position.lineNumber, col: e.position.column });
+      })
+    );
+
+    // Diagnostics → status bar
+    disposablesRef.current.push(
+      monacoInstance.editor.onDidChangeMarkers(() => {
+        const model = editor.getModel();
+        if (!model) return;
+        const markers = monacoInstance.editor.getModelMarkers({ resource: model.uri });
+        setDiagnostics({
+          errors:   markers.filter((m: MonacoEditor.IMarker) => m.severity === monacoInstance.MarkerSeverity.Error).length,
+          warnings: markers.filter((m: MonacoEditor.IMarker) => m.severity === monacoInstance.MarkerSeverity.Warning).length,
+        });
+      })
+    );
+
+    // Format on Ctrl+S / Cmd+S
+    editor.addCommand(
+      monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS,
+      () => { editor.getAction("editor.action.formatDocument")?.run(); }
     );
 
     // Go-to-definition cross-file handler
@@ -239,18 +278,17 @@ export default function MonacoPlaygroundEditor({
     };
   }, []);
 
+  const activeFile = "./" + filename;
+
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <div
-        className="px-3 py-1.5 shrink-0 text-[10px] font-semibold font-mono"
-        style={{
-          background: "var(--bg-surface)",
-          borderBottom: "1px solid var(--border-subtle)",
-          color: "var(--text-muted)",
-        }}
-      >
-        {filename.replace(/^\.\//, "")}
-      </div>
+      <EditorTabBar
+        openTabs={openTabs}
+        activeFile={activeFile}
+        onTabSelect={onTabSelect}
+        onTabClose={onTabClose}
+      />
+      <EditorBreadcrumbs filename={filename} />
       <div style={{ flex: 1, minHeight: 0 }}>
         <Editor
           height="100%"
@@ -275,6 +313,13 @@ export default function MonacoPlaygroundEditor({
           }
         />
       </div>
+      <EditorStatusBar
+        line={cursorPos.line}
+        col={cursorPos.col}
+        language={language}
+        errors={diagnostics.errors}
+        warnings={diagnostics.warnings}
+      />
     </div>
   );
 }

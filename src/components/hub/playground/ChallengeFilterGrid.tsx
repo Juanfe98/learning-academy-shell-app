@@ -6,6 +6,14 @@ import { Search, X, SearchX } from "lucide-react";
 import type { Challenge } from "@/lib/challenges/types";
 import ChallengeCard from "./ChallengeCard";
 
+// Preload Babel in background while user browses the list so the first
+// challenge click doesn't freeze the main thread during module evaluation.
+function useBabelPreload() {
+  useEffect(() => {
+    import("@babel/standalone").catch(() => {/* ignore — will retry on challenge load */});
+  }, []);
+}
+
 export type ChallengeListItem = Pick<
   Challenge,
   "slug" | "title" | "description" | "difficulty" | "environment" | "tags"
@@ -42,6 +50,7 @@ interface ChallengeFilterGridProps {
 }
 
 export default function ChallengeFilterGrid({ challenges }: ChallengeFilterGridProps) {
+  useBabelPreload();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
