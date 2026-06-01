@@ -7,6 +7,13 @@ let worker: Worker | null = null;
 let reqId = 0;
 const pending = new Map<number, Pending>();
 
+function rejectAllPending(reason: string) {
+  for (const { resolve } of pending.values()) {
+    resolve({ bundle: "", css: "", error: reason });
+  }
+  pending.clear();
+}
+
 function getWorker(): Worker {
   if (!worker) {
     worker = new Worker(
@@ -18,9 +25,10 @@ function getWorker(): Worker {
       const p = pending.get(id);
       if (!p) return;
       pending.delete(id);
-      p.resolve({ bundle, css, error });
+      p.resolve({ bundle: bundle ?? "", css: css ?? "", error });
     });
     worker.addEventListener("error", () => {
+      rejectAllPending("Bundler worker failed to initialize");
       worker = null;
     });
   }
@@ -32,10 +40,9 @@ export async function buildBundleInWorker(
   entryPath: string,
   environment: "react-js" | "react-ts" | "node-ts"
 ): Promise<BundleResult> {
-  // SSR / environments without Worker support — fall back to main thread
+  // SSR — no Worker available
   if (typeof Worker === "undefined") {
-    const { buildBundle } = await import("./bundler");
-    return buildBundle(fileMap, entryPath, environment);
+    return { bundle: "", css: "", error: "Bundler worker not available in this environment" };
   }
 
   return new Promise((resolve) => {
@@ -43,12 +50,13 @@ export async function buildBundleInWorker(
     pending.set(id, { resolve });
     try {
       getWorker().postMessage({ id, fileMap, entryPath, environment });
-    } catch {
+    } catch (err) {
       pending.delete(id);
-      // Worker unavailable — fall back to main thread
-      import("./bundler")
-        .then(({ buildBundle }) => buildBundle(fileMap, entryPath, environment))
-        .then(resolve);
+      resolve({
+        bundle: "",
+        css: "",
+        error: err instanceof Error ? err.message : "Failed to send message to bundler worker",
+      });
     }
   });
 }

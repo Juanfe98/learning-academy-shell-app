@@ -7,8 +7,6 @@ export function initMonacoDefaults(monaco: Monaco): void {
   if (initialized) return;
   initialized = true;
 
-  monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
-
   monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ES2020,
     module: monaco.languages.typescript.ModuleKind.CommonJS,

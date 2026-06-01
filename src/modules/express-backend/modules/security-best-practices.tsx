@@ -27,6 +27,9 @@ export const toc: TocItem[] = [
   { id: "owasp-top10", title: "OWASP Top 10 for Express", level: 2 },
   { id: "env-secrets", title: "Environment Variables & Secrets", level: 2 },
   { id: "dependency-security", title: "Dependency Security", level: 2 },
+  { id: "ssrf", title: "SSRF Protection", level: 2 },
+  { id: "prototype-pollution", title: "Prototype Pollution", level: 2 },
+  { id: "secret-rotation", title: "Secret and Key Rotation", level: 2 },
   { id: "https-hsts", title: "HTTPS & HSTS", level: 2 },
   { id: "error-leakage", title: "Error Message Leakage", level: 2 },
 ];
@@ -387,6 +390,51 @@ npm install && npm audit               # install and verify
 // express-session: set strong SESSION_SECRET, use Redis store
 // multer (file upload): limit file size, validate MIME type, scan for malware
 // express-validator / zod: always validate before processing`}</code></pre>
+
+      <h2 id="ssrf">SSRF Protection</h2>
+      <p>
+        Server-side request forgery happens when attackers make your backend call internal resources
+        such as cloud metadata endpoints, admin panels, Redis, or private Kubernetes services. Any
+        endpoint that accepts a URL — webhooks, image importers, PDF generators, link previews — needs
+        strict controls.
+      </p>
+      <pre><code>{`// Safer URL fetch pattern
+const allowedHosts = new Set(["api.stripe.com", "hooks.slack.com"]);
+const url = new URL(inputUrl);
+
+if (url.protocol !== "https:" || !allowedHosts.has(url.hostname)) {
+  throw new AppError(400, "URL_NOT_ALLOWED", "URL is not allowed");
+}
+
+// Also enforce DNS/IP checks, timeouts, max response size, and redirect limits.
+// Block private/link-local ranges: 127.0.0.0/8, 10.0.0.0/8, 172.16/12,
+// 192.168/16, ::1, fc00::/7, and cloud metadata IPs such as 169.254.169.254.`}</code></pre>
+
+      <h2 id="prototype-pollution">Prototype Pollution</h2>
+      <p>
+        Prototype pollution occurs when untrusted objects modify <code>Object.prototype</code> through keys
+        like <code>__proto__</code>, <code>constructor</code>, or <code>prototype</code>. It can lead to authorization
+        bypasses, crashes, or unexpected behavior in libraries that merge objects deeply.
+      </p>
+      <ul>
+        <li>Validate request bodies with strict schemas and reject unknown keys when appropriate.</li>
+        <li>Avoid unsafe deep merge utilities on untrusted data.</li>
+        <li>Keep dependencies patched because many pollution bugs are library-level issues.</li>
+      </ul>
+
+      <h2 id="secret-rotation">Secret and Key Rotation</h2>
+      <p>
+        Senior systems assume secrets will leak eventually. Support rotation without downtime by
+        accepting multiple verification keys while signing only with the newest key. This matters for
+        JWT secrets, webhook signing secrets, API keys, database passwords, and encryption keys.
+      </p>
+      <pre><code>{`// JWT key rotation shape
+const currentSigningKey = keyStore.current();
+const verificationKeys = keyStore.allActive();
+
+// New tokens use the current key with a kid header.
+// Verification chooses by kid and rejects expired/disabled keys.
+// Retire old keys after the maximum token lifetime has passed.`}</code></pre>
 
       <h2 id="https-hsts">HTTPS & HSTS</h2>
       <pre><code>{`// Force HTTPS redirect (should be done at load balancer/nginx level in production)
