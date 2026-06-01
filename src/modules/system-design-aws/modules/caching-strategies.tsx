@@ -1,8 +1,75 @@
+import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
 import { InterviewPlaybook, CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
+const cacheLayerStack = String.raw`flowchart LR
+    U["Client / Browser"] -->|request| BC{"Browser Cache"}
+    BC -->|hit ~0 ms| U
+    BC -->|miss| CDN{"CDN Edge"}
+    CDN -->|hit 10-50 ms| U
+    CDN -->|miss| APP["Application Service"]
+    APP --> AC{"App Cache (Redis)"}
+    AC -->|hit ~0.5 ms| APP
+    AC -->|miss| DB[("Database 5-100 ms")]
+    DB -->|populate| AC
+    APP -->|response| U`;
+
+const cacheAsideFlow = String.raw`sequenceDiagram
+    autonumber
+    participant APP as Application
+    participant CACHE as Redis
+    participant DB as Database
+    APP->>CACHE: GET user:42
+    alt Cache hit
+        CACHE-->>APP: cached value (~0.5 ms)
+    else Cache miss
+        CACHE-->>APP: nil
+        APP->>DB: SELECT user WHERE id = 42
+        DB-->>APP: row (5-100 ms)
+        APP->>CACHE: SETEX user:42 3600 {json}
+        CACHE-->>APP: OK
+    end`;
+
+const writePatterns = String.raw`flowchart TD
+    W["Write request"] --> Q{"Which pattern?"}
+    Q -->|Cache-aside| CA["Write DB, then DELETE cache key.<br/>Next read repopulates."]
+    Q -->|Write-through| WT["Write DB AND cache together.<br/>Cache stays warm, writes slower."]
+    Q -->|Write-behind| WB["Write cache now, queue DB write.<br/>Fastest writes, risk of data loss."]
+    CA --> DB[("Database")]
+    WT --> DB
+    WB -.async flush.-> DB`;
+
+const cacheStampede = String.raw`sequenceDiagram
+    participant REQ as 1000 Requests
+    participant CACHE as Redis
+    participant DB as Database
+    Note over CACHE: key product:99 just EXPIRED
+    REQ->>CACHE: GET product:99  (x1000)
+    CACHE-->>REQ: MISS  (x1000)
+    REQ->>DB: SELECT product 99  (x1000 concurrent)
+    Note over DB: 1000 identical queries hammer the DB
+    DB-->>REQ: rows
+    REQ->>CACHE: SETEX product:99  (x1000 redundant writes)`;
+
+const stampedeMutex = String.raw`sequenceDiagram
+    participant R1 as Request 1 (winner)
+    participant RN as Requests 2..1000
+    participant LOCK as Lock
+    participant DB as Database
+    participant CACHE as Redis
+    R1->>LOCK: acquire(product:99)
+    RN->>LOCK: acquire(product:99)
+    LOCK-->>RN: blocked / wait
+    R1->>DB: SELECT product 99 (ONE query)
+    DB-->>R1: row
+    R1->>CACHE: SETEX product:99
+    R1->>LOCK: release
+    LOCK-->>RN: proceed
+    RN->>CACHE: GET product:99 (hit, no DB call)`;
+
 export const toc: TocItem[] = [
   { id: "why-caching", title: "Why Caching Exists", level: 2 },
+  { id: "cache-layers", title: "The Cache Layer Stack", level: 2 },
   { id: "browser-caching", title: "Browser Caching: Cache-Control and ETag", level: 2 },
   { id: "cdn-caching", title: "CDN Caching", level: 2 },
   { id: "application-caching", title: "Application-Level Caching", level: 2 },
@@ -53,6 +120,20 @@ export default function CachingStrategies() {
           more users with the same hardware.
         </li>
       </ul>
+
+      <h2 id="cache-layers">The Cache Layer Stack</h2>
+      <p>
+        A request passes through multiple cache layers before it ever reaches the database. Each
+        layer that hits short-circuits the rest of the path &mdash; the closer the hit is to the
+        client, the cheaper the response. The mental model below is the one to draw on a whiteboard
+        when an interviewer asks &quot;where would you add caching?&quot;
+      </p>
+      <MermaidDiagram
+        chart={cacheLayerStack}
+        title="Where Caches Live on the Request Path"
+        caption="Each layer that hits returns early. A browser-cache hit costs ~0 ms; only a full miss all the way down pays the 5-100 ms database query."
+        minHeight={360}
+      />
 
       <h2 id="browser-caching">Browser Caching: Cache-Control and ETag</h2>
       <p>
@@ -181,6 +262,12 @@ async function updateUser(userId: string, data: Partial<User>) {
   await redis.del(\`user:\${userId}\`);
   return user;
 }`} />
+      <MermaidDiagram
+        chart={cacheAsideFlow}
+        title="Cache-Aside Read Path"
+        caption="The application owns the cache. A hit returns in ~0.5 ms; a miss reads the DB then back-fills the cache so the next read is a hit."
+        minHeight={380}
+      />
 
       <h2 id="redis-vs-memcached">Redis vs Memcached</h2>
       <table>
@@ -283,6 +370,17 @@ async function updateUser(userId: string, data: Partial<User>) {
       </ul>
 
       <h2 id="caching-patterns">Caching Patterns</h2>
+      <p>
+        The three write patterns differ in <em>when</em> the cache is updated relative to the
+        database. Pick by read/write ratio and how much write latency and staleness risk you can
+        accept.
+      </p>
+      <MermaidDiagram
+        chart={writePatterns}
+        title="Choosing a Write Pattern"
+        caption="Cache-aside invalidates on write; write-through writes both synchronously; write-behind acks fast and flushes the DB asynchronously (the only one that can lose data)."
+        minHeight={340}
+      />
       <p><strong>Cache-aside (Lazy Loading) &mdash; most common:</strong></p>
       <CodeBlock lang="typescript" code={`// Application manages cache explicitly
 // Read: check cache → miss → DB → populate cache
@@ -324,6 +422,23 @@ async function createProduct(data: any) {
         try to write it back to the cache simultaneously. This hammers the database and may cause
         it to time out.
       </p>
+      <MermaidDiagram
+        chart={cacheStampede}
+        title="The Stampede: One Expired Key, 1000 DB Queries"
+        caption="The instant the key expires, every concurrent request misses and stampedes the database with identical queries — then redundantly rewrites the same value."
+        minHeight={360}
+      />
+      <p>
+        The fix in every case is the same idea: <strong>only one request should recompute the
+        value</strong>, while the rest either wait for it or serve slightly stale data. A mutex lock
+        makes this explicit.
+      </p>
+      <MermaidDiagram
+        chart={stampedeMutex}
+        title="Mutex Lock: One Winner Recomputes"
+        caption="Request 1 acquires the lock and does the single DB query; the other 999 block, then read the freshly populated cache — one DB hit instead of a thousand."
+        minHeight={380}
+      />
       <CodeBlock lang="typescript" code={`// Problem: 1000 concurrent requests, cache expires
 // → All 1000 hit DB simultaneously
 
