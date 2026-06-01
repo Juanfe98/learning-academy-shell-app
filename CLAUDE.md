@@ -389,13 +389,13 @@ Minimum requirements per module:
 - Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values
 
 <!-- SPECKIT START -->
-Active feature: **Resizable Playground Panels** (`005-resizable-panels`)
+Active feature: **Playground Filter Grid** (`006-playground-filter-grid`)
 
-Implementation plan: `specs/005-resizable-panels/plan.md`
+Implementation plan: `specs/006-playground-filter-grid/plan.md`
 
 For technical decisions, component contracts, data model, and developer quickstart, read:
-- `specs/005-resizable-panels/research.md`
-- `specs/005-resizable-panels/data-model.md`
-- `specs/005-resizable-panels/contracts/ui-contracts.md`
-- `specs/005-resizable-panels/quickstart.md`
+- `specs/006-playground-filter-grid/research.md`
+- `specs/006-playground-filter-grid/data-model.md`
+- `specs/006-playground-filter-grid/contracts/ui-contracts.md`
+- `specs/006-playground-filter-grid/quickstart.md`
 <!-- SPECKIT END -->

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { Challenge, ConsoleEntry, TestResult } from "@/lib/challenges/types";
 import { buildSeedFileMap, type FileMap, type FileEntry } from "@/lib/challenges/file-tree";
-import { buildBundle } from "@/lib/challenges/bundler";
+import { buildBundleInWorker as buildBundle } from "@/lib/challenges/build-bundle-worker";
 import { buildPlaygroundSrcdoc, buildNodeTestSrcdoc } from "@/lib/interview/build-srcdoc";
 import PlaygroundShell from "@/components/hub/playground/PlaygroundShell";
 
@@ -26,6 +26,7 @@ export default function PlaygroundPage({ challenge }: Props) {
   const normalizedEntry = useMemo(() => "./" + challenge.entryFile, [challenge.entryFile]);
 
   const [activeFile, setActiveFile] = useState(normalizedEntry);
+  const [openTabs, setOpenTabs] = useState<string[]>(() => Object.keys(seedFileMap));
   const [fileMap, setFileMap] = useState<FileMap>(seedFileMap);
   const [folders, setFolders] = useState<string[]>([]);
   const [consoleEntries, setConsoleEntries] = useState<ConsoleEntry[]>([]);
@@ -106,6 +107,7 @@ export default function PlaygroundPage({ challenge }: Props) {
         ext === "js"  ? "js"  : "jsx";
       const entry: FileEntry = { content: "", language: lang, seed: false };
       setFileMap((prev) => ({ ...prev, [fullPath]: entry }));
+      setOpenTabs((prev) => prev.includes(fullPath) ? prev : [...prev, fullPath]);
       setActiveFile(fullPath);
     },
     []
@@ -126,6 +128,7 @@ export default function PlaygroundPage({ challenge }: Props) {
         scheduleRebuild(next);
         return next;
       });
+      setOpenTabs((prev) => prev.filter((p) => p !== path));
       if (activeFile === path) setActiveFile(normalizedEntry);
     },
     [activeFile, normalizedEntry, scheduleRebuild]
@@ -143,6 +146,7 @@ export default function PlaygroundPage({ challenge }: Props) {
         return next;
       });
       setFolders((prev) => prev.filter((f) => f !== folderPath && !f.startsWith(prefix)));
+      setOpenTabs((prev) => prev.filter((p) => p !== folderPath && !p.startsWith(prefix)));
       if (activeFile.startsWith(prefix)) setActiveFile(normalizedEntry);
     },
     [activeFile, normalizedEntry, scheduleRebuild]
@@ -152,10 +156,27 @@ export default function PlaygroundPage({ challenge }: Props) {
     setFileMap({ ...seedFileMap });
     setFolders([]);
     setActiveFile(normalizedEntry);
+    setOpenTabs(Object.keys(seedFileMap));
     setConsoleEntries([]);
     setTestResults(null);
     rebuildPreview(seedFileMap);
   }, [seedFileMap, normalizedEntry, rebuildPreview]);
+
+  const handleFileSelect = useCallback((path: string) => {
+    setActiveFile(path);
+    setOpenTabs((prev) => prev.includes(path) ? prev : [...prev, path]);
+  }, []);
+
+  const handleTabClose = useCallback((path: string) => {
+    setOpenTabs((prev) => {
+      const idx = prev.indexOf(path);
+      const next = prev.filter((p) => p !== path);
+      if (activeFile === path && next.length > 0) {
+        setActiveFile(next[Math.max(0, idx - 1)]);
+      }
+      return next;
+    });
+  }, [activeFile]);
 
   const handleConsoleMessage = useCallback((entry: ConsoleEntry) => {
     setConsoleEntries((prev) => [...prev.slice(-199), entry]);
@@ -198,7 +219,7 @@ export default function PlaygroundPage({ challenge }: Props) {
         srcdoc={srcdoc}
         testResults={testResults}
         testRunning={testRunning}
-        onFileSelect={setActiveFile}
+        onFileSelect={handleFileSelect}
         onCodeChange={handleCodeChange}
         onCreateFile={handleCreateFile}
         onCreateFolder={handleCreateFolder}
@@ -207,8 +228,11 @@ export default function PlaygroundPage({ challenge }: Props) {
         onConsoleMessage={handleConsoleMessage}
         onClearConsole={() => setConsoleEntries([])}
         onReset={handleReset}
-        onFileNavigate={setActiveFile}
+        onFileNavigate={handleFileSelect}
         onRunTests={handleRunTests}
+        openTabs={openTabs}
+        onTabSelect={handleFileSelect}
+        onTabClose={handleTabClose}
         CodeEditor={CodeEditor}
       />
     </>

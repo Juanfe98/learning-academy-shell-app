@@ -257,7 +257,7 @@ Wait for explicit user confirmation that the challenge is working before declari
 
 ## Known Patterns to Preserve
 
-- **Always populate `problemStatement`** — convert the full spec markdown into the field; the panel renderer supports `##`/`###` headings, `- lists`, ` ```code blocks``` `, `**bold**`, `` `inline code` ``, and `---` dividers. Escape backticks inside the template literal as `\``.
+- **Always populate `problemStatement`** — convert the full spec markdown into the field. The panel renderer supports: `#` title, `##`/`###` headings, `- ` lists, ` ```code blocks``` `, `**bold**`, `` `inline code` ``, and `---` dividers. Escape backticks inside the template literal as `\``. **Tables are NOT supported** — they render as raw text. Convert any spec tables to `- ` bullet lists instead.
 - **No `readOnly` unless the spec explicitly calls for locked files** — users should be able to edit all files by default
 - **Keep seed files syntactically valid** — broken TypeScript in seed files causes bundler errors before the user can even start
 - **`entryFile` has no `./` prefix** — e.g., `"App.tsx"` not `"./App.tsx"`

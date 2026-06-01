@@ -46,7 +46,7 @@ export default async function JobDetailPage({ params }: Props) {
       {/* Back */}
       <Link
         href="/jobs"
-        className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors cursor-pointer mb-8"
       >
         <ArrowLeft size={14} />
         Job Targets

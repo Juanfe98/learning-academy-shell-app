@@ -81,6 +81,21 @@ function renderMarkdown(text: string): ReactNode {
       continue;
     }
 
+    // # Title
+    if (line.startsWith("# ")) {
+      nodes.push(
+        <h2
+          key={i}
+          className="text-xs font-bold mt-2 mb-1"
+          style={{ color: "var(--text-primary)" }}
+        >
+          {line.slice(2)}
+        </h2>
+      );
+      i++;
+      continue;
+    }
+
     // ## Heading
     if (line.startsWith("## ")) {
       nodes.push(
@@ -151,6 +166,8 @@ function renderMarkdown(text: string): ReactNode {
           {inlineRender(paraLines.join(" "))}
         </p>
       );
+    } else {
+      i++; // unrecognized line — skip to prevent infinite loop
     }
   }
 

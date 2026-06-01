@@ -56,11 +56,13 @@ export async function buildBundle(
   const Babel = await import("@babel/standalone");
 
   const transpiled: Record<string, string> = {};
+  const cssPaths: string[] = [];
   let css = "";
 
   for (const [path, entry] of Object.entries(fileMap)) {
     if (entry.language === "css") {
       css += entry.content + "\n";
+      cssPaths.push(path);
       continue;
     }
     try {
@@ -91,6 +93,12 @@ export async function buildBundle(
   const normalizedEntry = entryPath.startsWith("./") ? entryPath : "./" + entryPath;
 
   let bundle = `var __m={};var __c={};${buildResolverFn()}${buildRequireFn()}\n`;
+
+  // CSS files are injected into <style> by the srcdoc builder.
+  // Register them as empty no-op modules so `import "./styles.css"` doesn't throw.
+  for (const cssPath of cssPaths) {
+    bundle += `__m[${JSON.stringify(cssPath)}]=function(module,exports,require){};\n`;
+  }
 
   for (const [path, code] of Object.entries(transpiled)) {
     bundle +=

@@ -61,6 +61,180 @@ export const MODULE_TYPE_LABELS: Record<ModuleType, string> = {
 
 export const JOB_TARGETS: JobTarget[] = [
   {
+    slug: "godaddy-senior-sde-ai",
+    academySlug: "godaddy-senior-sde-ai",
+    company: "GoDaddy",
+    role: "Senior Software Development Engineer — Care (AI)",
+    level: "Senior / Staff",
+    addedAt: "2026-05-14",
+    status: "active",
+    accentColor: "#1bdbad",
+    url: undefined,
+    techStack: [
+      "TypeScript", "Golang", "Node.js", "AWS",
+      "DynamoDB", "Lambda", "SQS", "CDK",
+      "Temporal", "Bedrock", "OpenSearch", "REST APIs",
+    ],
+    jdSummary:
+      "Senior SDE on GoDaddy's Care Team (AI) — design and build AI-powered solutions that enhance customer service. Requires 8+ years backend REST API development, expert TypeScript (Go preferred), DDD & Hexagonal Architecture, AWS (3+ years), NoSQL/RDBMS (3+ years). Key differentiators: Temporal workflow orchestration, LLM/RAG integration, fault-tolerant globally available systems. On-call rotation included.",
+    modules: [
+      {
+        id: "ddd-and-hexagonal-architecture",
+        title: "DDD & Hexagonal Architecture",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 80,
+        description:
+          "Domain Driven Design building blocks (entities, value objects, aggregates, domain events), bounded contexts, context mapping patterns, hexagonal architecture (ports & adapters), CQRS pattern, and repository pattern. Explicitly listed in the GoDaddy JD as required 'software craftsmanship' knowledge.",
+      },
+      {
+        id: "typescript-backend-engineering",
+        title: "TypeScript Backend Engineering",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 70,
+        description:
+          "Type-safe REST API design with Zod + OpenAPI, request pipeline middleware, structured error handling, composition root dependency injection pattern, testing pyramid (domain unit → application unit → API integration), Result type, and idempotency implementation.",
+      },
+      {
+        id: "golang-for-backend",
+        title: "Golang for Backend Engineers",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 75,
+        description:
+          "Go for TypeScript developers: implicit interfaces, error handling idioms (sentinel errors, typed errors, error wrapping), goroutines and channels (fan-out patterns, worker pools), context package, HTTP servers with chi, table-driven testing, and DDD patterns in Go.",
+      },
+      {
+        id: "aws-backend-platform",
+        title: "AWS Backend Platform Engineering",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 80,
+        description:
+          "Lambda patterns (cold start optimization, partial batch failure), API Gateway (HTTP vs REST API), DynamoDB single-table design (GSIs, access patterns, conditional writes), SQS + DLQ + EventBridge, CDK IaC, CloudWatch observability, IAM least privilege, Secrets Manager, and fault tolerance patterns.",
+      },
+      {
+        id: "ai-llm-integration-patterns",
+        title: "AI & LLM Integration Patterns",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 85,
+        description:
+          "LLM provider abstraction, streaming responses (SSE), RAG pipeline (chunking, embedding, hybrid search, reranking), AI agent architecture (ReAct pattern, tool use), prompt engineering for production, context window management, cost optimization (prompt caching), evaluation (LLM-as-judge), and Bedrock Guardrails.",
+      },
+      {
+        id: "temporal-workflow-engine",
+        title: "Temporal Workflow Engine",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 65,
+        description:
+          "Durable execution model, workflows vs activities (constraints and responsibilities), retry policies (four timeout types), signals and queries, Saga pattern with compensation, child workflows, Temporal for AI pipelines, Temporal vs SQS + Step Functions comparison, and testing with TestWorkflowEnvironment.",
+      },
+      {
+        id: "system-design-godaddy-ai-care",
+        title: "System Design: GoDaddy AI Care Platform",
+        type: "system-design",
+        priority: "high",
+        estimatedMinutes: 85,
+        description:
+          "Full system design: conversation ingest (WebSocket + REST + email), Temporal-orchestrated AI pipeline (classify → RAG retrieve → generate → route), OpenSearch knowledge base with hybrid search, confidence-based routing, DynamoDB single-table design for support entities, observability + AI quality metrics, and on-call incident management playbook.",
+      },
+      {
+        id: "interview-simulation",
+        title: "Interview Simulation: Senior SDE AI",
+        type: "challenge",
+        priority: "high",
+        estimatedMinutes: 90,
+        description:
+          "Four-round simulation with model answers: coding (idempotency, rate limiter, retry), architecture & DDD (ticket domain model, hexagonal ports), AI system design (RAG pipeline, Temporal AI pipeline justification), and leadership (code review scenario, production incident response, STAR story library).",
+      },
+    ],
+  },
+  {
+    slug: "disney-staff-engineer",
+    academySlug: "disney-staff-engineer",
+    company: "Disney",
+    role: "Staff Software Engineer — Frontend",
+    level: "Staff / Principal",
+    addedAt: "2026-05-14",
+    status: "interviewing",
+    accentColor: "#0063e5",
+    url: undefined,
+    techStack: [
+      "JavaScript", "TypeScript", "React", "Node.js",
+      "AWS", "GraphQL", "REST", "Swift", "Kotlin",
+    ],
+    jdSummary:
+      "Staff-level frontend engineering role at Disney. Lead projects across engineering and product teams, architect and design implementations, enforce code quality through TDD, mentor senior developers, and resolve complex architectural challenges. 7+ years experience required; expert knowledge in JavaScript, TypeScript, and React. Nice-to-haves: Node.js, AWS, Swift/Kotlin, high-availability deployments.",
+    modules: [
+      {
+        id: "react-architecture-at-scale",
+        title: "React Architecture at Scale",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 80,
+        description:
+          "Compound components, render props, micro-frontend architecture with Module Federation, state management decision framework (Zustand vs Redux vs Context), memoization strategy, virtualization, and Concurrent React features. Core to every Disney interview round.",
+      },
+      {
+        id: "typescript-for-architects",
+        title: "TypeScript for Architects",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 70,
+        description:
+          "Advanced TypeScript: discriminated unions for state machines, conditional types, mapped types, template literal types, branded/nominal types, type-safe event systems, and Zod-based API contract design. Expert JS/TS is an explicit must-have in the JD.",
+      },
+      {
+        id: "performance-and-scalability",
+        title: "Performance & High-Scale Engineering",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 75,
+        description:
+          "Core Web Vitals (LCP, CLS, INP) with fix strategies, bundle optimization, code splitting, Web Workers, memory management, CDN cache hierarchy, stale-while-revalidate, circuit breaker pattern, and graceful degradation. The JD requires 'highly scalable and performant' experience.",
+      },
+      {
+        id: "api-design-and-collaboration",
+        title: "API Design & Cross-Team Collaboration",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 65,
+        description:
+          "REST maturity model, RFC 7807 error standards, GraphQL schema-first design, cursor-based pagination, Backend for Frontend (BFF) pattern, API versioning strategies, Pact contract testing, and cross-team API collaboration process. JD explicitly requires proven API specification track record.",
+      },
+      {
+        id: "technical-leadership",
+        title: "Technical Leadership for Staff Engineers",
+        type: "concept",
+        priority: "high",
+        estimatedMinutes: 70,
+        description:
+          "Staff vs senior engineer scope, ADR format and when to write them, RFC process and consensus building, code review as leadership (high-signal comments, teaching principles), technical debt taxonomy, debt payoff ROI calculations, and Socratic mentoring of senior engineers.",
+      },
+      {
+        id: "system-design-disney-platform",
+        title: "System Design: Disney-Scale Web Platform",
+        type: "system-design",
+        priority: "high",
+        estimatedMinutes: 90,
+        description:
+          "Full system design: requirements gathering, high-level architecture, component system design, state management at scale, Disney Account SSO flow, token storage strategy, CDN cache hierarchy, real-time features (SSE vs WebSockets vs polling), cross-platform code sharing, and observability stack.",
+      },
+      {
+        id: "interview-simulation",
+        title: "Interview Simulation: Architect Level",
+        type: "challenge",
+        priority: "high",
+        estimatedMinutes: 90,
+        description:
+          "Full interview simulation across 5 rounds: live coding (CMS component registry, generic DataTable, request deduplication), architecture decisions (state migration, MFE boundaries), system design (ESPN live scoreboard at 50M users), leadership Q&A, and behavioral STAR stories with model answers.",
+      },
+    ],
+  },
+  {
     slug: "indeed-senior-react-nextjs-11802",
     academySlug: "indeed-senior-react-nextjs-11802",
     company: "Indeed",

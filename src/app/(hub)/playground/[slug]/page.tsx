@@ -7,8 +7,11 @@ interface Props {
 }
 
 export default async function Page({ params }: Props) {
+  console.log("Rendering the Playground Page");
   const { slug } = await params;
   const challenge = getChallengeBySlug(slug);
+  console.log("slug -> ", slug);
+  console.log("channel -> ", challenge);
   if (!challenge) notFound();
   return <PlaygroundPage key={challenge.slug} challenge={challenge} />;
 }

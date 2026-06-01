@@ -31,7 +31,19 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Answer each gate. Block if any answer is NO without justification in Complexity Tracking.
+
+| Gate | Answer | Notes |
+|------|--------|-------|
+| All new hub pages inside `src/app/(hub)/`? | YES / NO | |
+| If new library needed: user approval obtained before `pnpm add`? | YES / NO / N/A | |
+| `params` awaited before property access? | YES / NO / N/A | |
+| No Component function passed Server→Client as prop? | YES / NO / N/A | |
+| Persisted store reads guarded with `mounted` check? | YES / NO / N/A | |
+| `modules` accesses use optional chaining? | YES / NO / N/A | |
+| New academy added to both MOCK_ACADEMIES and REGISTRY? | YES / NO / N/A | |
+| Tailwind tokens defined in globals.css only (no config file)? | YES / NO / N/A | |
+| `pnpm build` will pass with zero TS errors? | YES / NO | |
 
 ## Project Structure
 

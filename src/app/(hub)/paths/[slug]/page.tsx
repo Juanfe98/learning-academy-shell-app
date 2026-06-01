@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Clock, Construction } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, Construction, SearchX } from "lucide-react";
 import { Badge } from "@/components/ui";
 import ModuleList from "@/components/hub/ModuleList";
 import PathProgressPanel from "@/components/hub/PathProgressPanel";
@@ -12,10 +12,10 @@ function AcademyNotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
       <div
-        className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6"
+        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
         style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
       >
-        🔍
+        <SearchX size={28} style={{ color: "var(--text-muted)" }} />
       </div>
       <h1 className="text-2xl font-bold text-primary mb-2">Academy not found</h1>
       <p className="text-secondary text-sm mb-8 max-w-xs">
