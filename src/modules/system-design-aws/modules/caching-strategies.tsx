@@ -1,4 +1,4 @@
-import { InterviewPlaybook } from "@/components/ui";
+import { InterviewPlaybook, CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -59,7 +59,7 @@ export default function CachingStrategies() {
         The browser has its own HTTP cache. The server controls browser caching behavior through
         response headers.
       </p>
-      <pre><code>{`# Key Cache-Control directives
+      <CodeBlock lang="bash" code={`# Key Cache-Control directives
 Cache-Control: public, max-age=86400
   # Public: can be cached by any cache (CDN, browser)
   # max-age=86400: fresh for 24 hours (in seconds)
@@ -84,7 +84,7 @@ ETag: "abc123def456"
 
 # Conditional GET: client sends If-None-Match header
 # If content unchanged → 304 Not Modified (no body, saves bandwidth)
-# If changed → 200 OK with new content and new ETag`}</code></pre>
+# If changed → 200 OK with new content and new ETag`} />
 
       <table>
         <thead>
@@ -134,7 +134,7 @@ ETag: "abc123def456"
         URL. You can add headers or query strings to the cache key if you need per-language or
         per-device responses.
       </p>
-      <pre><code>{`# CloudFront behavior configuration
+      <CodeBlock lang="bash" code={`# CloudFront behavior configuration
 Default TTL: 86400     # 1 day if no Cache-Control header
 Maximum TTL: 31536000  # 1 year
 Minimum TTL: 0         # Can serve from cache even if no-cache header
@@ -144,7 +144,7 @@ Minimum TTL: 0         # Can serve from cache even if no-cache header
 
 # CloudFront caches EVERYTHING unless you tell it not to
 # For API endpoints, set Cache-Control: no-store
-# OR configure CloudFront behavior to not cache /api/*`}</code></pre>
+# OR configure CloudFront behavior to not cache /api/*`} />
 
       <h2 id="application-caching">Application-Level Caching</h2>
       <p>
@@ -152,7 +152,7 @@ Minimum TTL: 0         # Can serve from cache even if no-cache header
         (databases, external APIs) in a fast in-memory store. This is the primary place where Redis
         or Memcached is used.
       </p>
-      <pre><code>{`// Application cache pattern (Node.js + Redis)
+      <CodeBlock lang="typescript" code={`// Application cache pattern (Node.js + Redis)
 import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
@@ -180,7 +180,7 @@ async function updateUser(userId: string, data: Partial<User>) {
   // Invalidate the cached version
   await redis.del(\`user:\${userId}\`);
   return user;
-}`}</code></pre>
+}`} />
 
       <h2 id="redis-vs-memcached">Redis vs Memcached</h2>
       <table>
@@ -284,7 +284,7 @@ async function updateUser(userId: string, data: Partial<User>) {
 
       <h2 id="caching-patterns">Caching Patterns</h2>
       <p><strong>Cache-aside (Lazy Loading) &mdash; most common:</strong></p>
-      <pre><code>{`// Application manages cache explicitly
+      <CodeBlock lang="typescript" code={`// Application manages cache explicitly
 // Read: check cache → miss → DB → populate cache
 // Write: write to DB → invalidate cache
 
@@ -300,22 +300,22 @@ async function getProduct(id: string) {
 async function updateProduct(id: string, data: any) {
   await db.products.update(id, data);
   await redis.del(\`product:\${id}\`);              // invalidate
-}`}</code></pre>
+}`} />
 
       <p><strong>Write-through &mdash; for write-heavy with frequent reads:</strong></p>
-      <pre><code>{`// Write to cache AND database simultaneously
+      <CodeBlock lang="typescript" code={`// Write to cache AND database simultaneously
 // Cache is always warm; no cache miss on first read after write
 async function createProduct(data: any) {
   const product = await db.products.create(data);
   await redis.setEx(\`product:\${product.id}\`, 300, JSON.stringify(product));
   return product;
 }
-// Downside: cache is populated even for items that may never be read again`}</code></pre>
+// Downside: cache is populated even for items that may never be read again`} />
 
       <p><strong>Write-behind (Write-back) &mdash; for write-heavy systems:</strong></p>
-      <pre><code>{`// Write to cache immediately, write to DB asynchronously
+      <CodeBlock lang="typescript" code={`// Write to cache immediately, write to DB asynchronously
 // Very fast writes but risk of data loss if cache crashes before DB write
-// Rarely appropriate for user data; sometimes used for counters/analytics`}</code></pre>
+// Rarely appropriate for user data; sometimes used for counters/analytics`} />
 
       <h2 id="cache-stampede">Cache Stampede and the Thundering Herd</h2>
       <p>
@@ -324,7 +324,7 @@ async function createProduct(data: any) {
         try to write it back to the cache simultaneously. This hammers the database and may cause
         it to time out.
       </p>
-      <pre><code>{`// Problem: 1000 concurrent requests, cache expires
+      <CodeBlock lang="typescript" code={`// Problem: 1000 concurrent requests, cache expires
 // → All 1000 hit DB simultaneously
 
 // Solution 1: Probabilistic early expiry
@@ -366,7 +366,7 @@ async function getWithLock(key: string, fetch: () => Promise<any>, ttl: number) 
   });
   lock.set(key, promise);
   return promise;
-}`}</code></pre>
+}`} />
 
       <h2 id="cache-warming">Cache Warming</h2>
       <p>
@@ -374,7 +374,7 @@ async function getWithLock(key: string, fetch: () => Promise<any>, ttl: number) 
         miss and hit the database simultaneously. Cache warming pre-populates the cache with frequently
         accessed data before traffic is sent to the service.
       </p>
-      <pre><code>{`// Cache warming script: run before traffic cutover
+      <CodeBlock lang="typescript" code={`// Cache warming script: run before traffic cutover
 async function warmCache() {
   // Get the top 1000 most viewed products from analytics
   const popularProducts = await analytics.getTopProducts(1000);
@@ -389,7 +389,7 @@ async function warmCache() {
     await sleep(100);  // rate limit DB calls
   }
   console.log('Cache warm complete');
-}`}</code></pre>
+}`} />
 
       <h2 id="real-examples">Real Examples</h2>
       <p><strong>Product catalog:</strong> Cache product data with 5-minute TTL. Invalidate on product updates. Use Redis hash for structured data.</p>

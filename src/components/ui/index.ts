@@ -7,3 +7,4 @@ export { default as ArticleTable } from "./ArticleTable";
 export { default as InterviewPlaybook } from "./InterviewPlaybook";
 export { default as InterviewChallenge } from "./InterviewChallenge";
 export { default as SolutionReveal } from "./SolutionReveal";
+export { default as CodeBlock } from "./CodeBlock";
