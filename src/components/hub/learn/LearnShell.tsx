@@ -64,7 +64,13 @@ function ContentSkeleton() {
 
 /* ── Table of contents ─────────────────────────────────────────────────── */
 
-function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: string }) {
+function TableOfContents({
+  items,
+  activeId,
+}: {
+  items: TocItem[];
+  activeId: string;
+}) {
   return (
     <div className="space-y-1">
       <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">
@@ -77,7 +83,10 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
           className="block text-xs leading-relaxed transition-colors duration-100 py-0.5 truncate"
           style={{
             paddingLeft: item.level === 3 ? "0.875rem" : "0",
-            color: activeId === item.id ? "var(--text-primary)" : "var(--text-muted)",
+            color:
+              activeId === item.id
+                ? "var(--text-primary)"
+                : "var(--text-muted)",
             fontWeight: activeId === item.id ? 500 : 400,
           }}
         >
@@ -121,18 +130,28 @@ function KeyboardHint({
           <span>
             Use{" "}
             {hasPrev && (
-              <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono mx-0.5"
-                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <kbd
+                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono mx-0.5"
+                style={{
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }}
+              >
                 ←
               </kbd>
             )}
             {hasNext && (
-              <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono mx-0.5"
-                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <kbd
+                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono mx-0.5"
+                style={{
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }}
+              >
                 →
               </kbd>
-            )}
-            {" "}to navigate modules
+            )}{" "}
+            to navigate modules
           </span>
           <button
             onClick={onDismiss}
@@ -169,8 +188,14 @@ export default function LearnShell({
     markedRef.current = true;
 
     const state = useProgressStore.getState();
-    const isFirstVisit = state.getModuleStatus(academy.slug, route.slug) === "not-started";
-    state.markModuleVisited(academy.slug, route.slug, route.title, route.estimatedMinutes ?? 0);
+    const isFirstVisit =
+      state.getModuleStatus(academy.slug, route.slug) === "not-started";
+    state.markModuleVisited(
+      academy.slug,
+      route.slug,
+      route.title,
+      route.estimatedMinutes ?? 0
+    );
 
     if (isFirstVisit) setShowToast(true);
   }, [academy.slug, route.slug]);
@@ -244,7 +269,7 @@ export default function LearnShell({
           </div>
 
           {/* Module header */}
-          <div className="px-8 pt-6 pb-0 max-w-3xl">
+          <div className="px-8 pt-6 pb-0 max-w-6xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {route.estimatedMinutes && (
                 <Badge variant="default">
@@ -269,12 +294,10 @@ export default function LearnShell({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="px-8 py-8 max-w-3xl flex-1"
+            className="px-8 py-8 max-w-6xl flex-1"
           >
             <ErrorBoundary>
-              <Suspense fallback={<ContentSkeleton />}>
-                {children}
-              </Suspense>
+              <Suspense fallback={<ContentSkeleton />}>{children}</Suspense>
             </ErrorBoundary>
           </motion.div>
 
@@ -283,7 +306,7 @@ export default function LearnShell({
             className="px-8 py-6 border-t"
             style={{ borderColor: "var(--border-subtle)" }}
           >
-            <div className="max-w-3xl flex items-center justify-between gap-4 flex-wrap">
+            <div className="max-w-6xl flex items-center justify-between gap-4 flex-wrap">
               {prevSlug ? (
                 <Link
                   href={`/learn/${academy.slug}/${prevSlug}`}
@@ -320,10 +343,16 @@ export default function LearnShell({
                   }}
                 >
                   <div className="min-w-0 text-right">
-                    <p className="text-[10px]" style={{ color: `${academy.accentColor}aa` }}>
+                    <p
+                      className="text-[10px]"
+                      style={{ color: `${academy.accentColor}aa` }}
+                    >
                       Next
                     </p>
-                    <p className="font-medium truncate" style={{ color: academy.accentColor }}>
+                    <p
+                      className="font-medium truncate"
+                      style={{ color: academy.accentColor }}
+                    >
                       {academy.routes.find((r) => r.slug === nextSlug)?.title}
                     </p>
                   </div>
@@ -339,7 +368,7 @@ export default function LearnShell({
             </div>
 
             {/* Keyboard hint */}
-            <div className="max-w-3xl mt-4">
+            <div className="max-w-6xl mt-4">
               <KeyboardHint
                 show={showKeyHint}
                 hasPrev={!!prevSlug}
@@ -359,10 +388,7 @@ export default function LearnShell({
       </div>
 
       {/* Toast */}
-      <ProgressToast
-        show={showToast}
-        onHide={() => setShowToast(false)}
-      />
+      <ProgressToast show={showToast} onHide={() => setShowToast(false)} />
     </>
   );
 }

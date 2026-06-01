@@ -72,7 +72,7 @@ export default async function PathOverviewPage({
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-10">
       {/* Back breadcrumb */}
       <Link
         href="/"
