@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -34,7 +34,7 @@ export default function UseEffectInDepth() {
         and something outside React, not performing one-off side effects.
       </p>
 
-      <pre><code>{`// Correct use: synchronizing with an external system (a WebSocket)
+      <CodeBlock code={`// Correct use: synchronizing with an external system (a WebSocket)
 function ChatRoom({ roomId }: { roomId: string }) {
   useEffect(() => {
     // Set up the external system with current props/state
@@ -50,7 +50,7 @@ function ChatRoom({ roomId }: { roomId: string }) {
 
 // When roomId changes: React runs the cleanup (disconnect from old room),
 // then runs the effect again (connect to new room).
-// When the component unmounts: React runs the cleanup (disconnect).`}</code></pre>
+// When the component unmounts: React runs the cleanup (disconnect).`} lang="text" />
 
       <p>
         This model — set up, then clean up — maps to every valid <code>useEffect</code> use
@@ -68,7 +68,7 @@ function ChatRoom({ roomId }: { roomId: string }) {
         enforce this contract mechanically.
       </p>
 
-      <pre><code>{`// Bug: roomId is read but not listed as a dependency
+      <CodeBlock code={`// Bug: roomId is read but not listed as a dependency
 function ChatRoom({ roomId }: { roomId: string }) {
   useEffect(() => {
     const connection = createConnection(roomId); // reads roomId
@@ -88,7 +88,7 @@ function ChatRoom({ roomId }: { roomId: string }) {
 }
 
 // If you find yourself wanting an empty dependency array but the effect
-// reads props or state, that is almost always a bug, not an optimization.`}</code></pre>
+// reads props or state, that is almost always a bug, not an optimization.`} lang="text" />
 
       <p>
         If a value changes every render but you only want it to trigger the effect on initial
@@ -106,7 +106,7 @@ function ChatRoom({ roomId }: { roomId: string }) {
         will use outdated values.
       </p>
 
-      <pre><code>{`// Classic stale closure: polling with an interval
+      <CodeBlock code={`// Classic stale closure: polling with an interval
 function LiveScore({ matchId }: { matchId: string }) {
   const [score, setScore] = useState(0);
   const [pollInterval, setPollInterval] = useState(5000);
@@ -144,7 +144,7 @@ function usePollEffect(callback: () => void, delay: number) {
     const id = setInterval(() => callbackRef.current(), delay);
     return () => clearInterval(id);
   }, [delay]); // interval only re-creates when delay changes
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="cleanup-functions">Cleanup Functions</h2>
 
@@ -155,7 +155,7 @@ function usePollEffect(callback: () => void, delay: number) {
         memory leaks, duplicate subscriptions, and stale callbacks firing after unmount.
       </p>
 
-      <pre><code>{`// Memory leak: event listener added on every render, never removed
+      <CodeBlock code={`// Memory leak: event listener added on every render, never removed
 function ResizablePanel() {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -191,7 +191,7 @@ useEffect(() => {
   });
 
   return () => { cancelled = true; };
-}, [userId]);`}</code></pre>
+}, [userId]);`} lang="text" />
 
       <h2 id="firing-order">Effect Firing Order</h2>
 
@@ -203,7 +203,7 @@ useEffect(() => {
         previous render&apos;s cleanup first, then runs the new effect.
       </p>
 
-      <pre><code>{`function SequenceDemo() {
+      <CodeBlock code={`function SequenceDemo() {
   const [count, setCount] = useState(0);
 
   // useLayoutEffect fires synchronously after DOM mutations, before paint.
@@ -229,7 +229,7 @@ useEffect(() => {
 // 4. useLayoutEffect cleanup (previous effect cleaned up)
 // 5. useEffect cleanup (previous effect cleaned up)
 // 2. useLayoutEffect (new effect)
-// 3. useEffect (new effect)`}</code></pre>
+// 3. useEffect (new effect)`} lang="text" />
 
       <h2 id="when-not-to-use-useeffect">When NOT to Use useEffect</h2>
 
@@ -251,7 +251,7 @@ useEffect(() => {
         render cycle for no reason. Compute the value inline during render instead.
       </p>
 
-      <pre><code>{`// WRONG: using useEffect to set derived state
+      <CodeBlock code={`// WRONG: using useEffect to set derived state
 function ProductList({ products, searchQuery }: Props) {
   const [filteredProducts, setFilteredProducts] = useState(products);
 
@@ -297,7 +297,7 @@ function Toggle({ onChange }: { onChange: (v: boolean) => void }) {
   }
 
   return <button onClick={handleClick}>Toggle</button>;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="strict-mode-double-invoke">React 18 Strict Mode Double-Invoke</h2>
 
@@ -309,7 +309,7 @@ function Toggle({ onChange }: { onChange: (v: boolean) => void }) {
         should not happen during setup.
       </p>
 
-      <pre><code>{`// This effect BREAKS under Strict Mode double-invoke:
+      <CodeBlock code={`// This effect BREAKS under Strict Mode double-invoke:
 useEffect(() => {
   const dialog = document.querySelector(".modal");
   dialog.showModal(); // called twice → error: dialog is already open
@@ -331,7 +331,7 @@ useEffect(() => {
 // connect → disconnect → connect  (ends in a connected state — correct)
 
 // The golden rule: if your effect's net result after
-// "run, cleanup, run" is different from "run" alone, you have a cleanup bug.`}</code></pre>
+// "run, cleanup, run" is different from "run" alone, you have a cleanup bug.`} lang="text" />
 
       <h2 id="interview-challenge">Interview Challenge: Search Form Race Conditions</h2>
 

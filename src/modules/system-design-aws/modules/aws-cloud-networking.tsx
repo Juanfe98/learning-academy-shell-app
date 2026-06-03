@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const vpcArchitectureDiagram = String.raw`flowchart TB
@@ -77,7 +78,7 @@ export default function AwsCloudNetworking() {
       <p>
         When you create subnets, you carve up the VPC CIDR into smaller ranges:
       </p>
-      <pre><code>{`VPC: 10.0.0.0/16  (65,536 addresses)
+      <CodeBlock code={`VPC: 10.0.0.0/16  (65,536 addresses)
 
 Public Subnet A (us-east-1a):  10.0.1.0/24  (256 addresses)
 Public Subnet B (us-east-1b):  10.0.2.0/24  (256 addresses)
@@ -86,7 +87,7 @@ Private Subnet A (us-east-1a): 10.0.10.0/24 (256 addresses)
 Private Subnet B (us-east-1b): 10.0.11.0/24 (256 addresses)
 
 DB Subnet A (us-east-1a):      10.0.20.0/24 (256 addresses)
-DB Subnet B (us-east-1b):      10.0.21.0/24 (256 addresses)`}</code></pre>
+DB Subnet B (us-east-1b):      10.0.21.0/24 (256 addresses)`} lang="text" />
       <p>
         Why split into subnets? Because subnet placement determines routing and firewall rules. You
         apply different security rules to your public subnet (where the load balancer lives) vs your
@@ -193,7 +194,7 @@ DB Subnet B (us-east-1b):      10.0.21.0/24 (256 addresses)`}</code></pre>
         associated with exactly one route table. The route table has rules that say: &quot;traffic
         destined for X should go to Y.&quot;
       </p>
-      <pre><code>{`# Public subnet route table
+      <CodeBlock code={`# Public subnet route table
 Destination      Target
 10.0.0.0/16     local          # VPC-internal traffic stays local
 0.0.0.0/0       igw-xxxxx      # Everything else goes to Internet Gateway
@@ -206,7 +207,7 @@ Destination      Target
 # Database subnet route table
 Destination      Target
 10.0.0.0/16     local          # Only local VPC traffic
-# No route to 0.0.0.0/0 — databases cannot reach internet`}</code></pre>
+# No route to 0.0.0.0/0 — databases cannot reach internet`} lang="bash" />
 
       <h2 id="security-groups">Security Groups</h2>
       <p>
@@ -222,7 +223,7 @@ Destination      Target
         <li><strong>Allow rules only:</strong> Everything not explicitly allowed is denied. No explicit deny rules.</li>
         <li><strong>Can reference other security groups:</strong> This is powerful and the right way to define rules in AWS.</li>
       </ul>
-      <pre><code>{`# ALB Security Group
+      <CodeBlock code={`# ALB Security Group
 Inbound:
   Port 443 from 0.0.0.0/0  (HTTPS from anywhere)
   Port 80 from 0.0.0.0/0   (HTTP, redirect to HTTPS)
@@ -240,7 +241,7 @@ Outbound:
 Inbound:
   Port 5432 from sg-api-id  (only from API servers)
 Outbound:
-  Nothing needed (stateful — responses auto-allowed)`}</code></pre>
+  Nothing needed (stateful — responses auto-allowed)`} lang="bash" />
       <p>
         Note how the API servers are restricted to receive traffic only from the ALB security group
         &mdash; not from <code>0.0.0.0/0</code>. This means even if someone discovers the private IP
@@ -315,7 +316,7 @@ Outbound:
         required. No open SSH port (port 22). You open a browser-based shell session directly to
         any EC2 instance via the AWS console or CLI, authenticated via IAM. Zero attack surface.
       </p>
-      <pre><code>{`# Start a Session Manager session (no SSH, no key pair needed)
+      <CodeBlock code={`# Start a Session Manager session (no SSH, no key pair needed)
 aws ssm start-session --target i-1234567890abcdef0
 
 # Or connect to an ECS container
@@ -324,7 +325,7 @@ aws ecs execute-command \
   --task task-id \
   --container my-container \
   --command "/bin/sh" \
-  --interactive`}</code></pre>
+  --interactive`} lang="bash" />
 
       <h2 id="vpc-endpoints">VPC Endpoints and PrivateLink</h2>
       <p>
@@ -341,13 +342,13 @@ aws ecs execute-command \
         data transfer costs (no NAT Gateway charges for S3/DynamoDB traffic), and better latency
         (shorter path within AWS network).
       </p>
-      <pre><code>{`# Create a Gateway endpoint for S3 (Terraform)
+      <CodeBlock code={`# Create a Gateway endpoint for S3 (Terraform)
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.main.id
   service_name = "com.amazonaws.us-east-1.s3"
   vpc_endpoint_type = "Gateway"
   route_table_ids = [aws_route_table.private.id]
-}`}</code></pre>
+}`} lang="hcl" />
 
       <h2 id="vpc-diagram">Production VPC Architecture</h2>
       <MermaidDiagram
@@ -356,13 +357,13 @@ resource "aws_vpc_endpoint" "s3" {
         caption="The common pattern is public subnets for ingress, private subnets for compute, and isolated data subnets for stateful services, duplicated across at least two availability zones."
         minHeight={640}
       />
-      <pre>{`
+      <CodeBlock code={`
 Key ideas:
 - Public subnets host internet-facing entry points such as ALB nodes and NAT gateways
 - Private subnets host application compute that should not accept direct internet traffic
 - Data subnets host stateful services with the smallest exposure possible
 - Duplicate each tier across availability zones so one AZ failure does not take the system down
-`}</pre>
+`} lang="text" />
 
       <h2 id="common-mistakes">Common Security Mistakes</h2>
       <ul>

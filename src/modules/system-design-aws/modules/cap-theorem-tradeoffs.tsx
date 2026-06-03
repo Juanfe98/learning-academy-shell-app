@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, ArticleTable, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const capTriangleDiagram = String.raw`flowchart TD
@@ -283,7 +283,7 @@ export default function CapTheoremTradeoffs() {
           </tbody>
         </table>
       </ArticleTable>
-      <pre><code>{`// ACID transaction example (PostgreSQL)
+      <CodeBlock code={`// ACID transaction example (PostgreSQL)
 BEGIN;
   UPDATE accounts SET balance = balance - 100 WHERE user_id = 'alice';
   UPDATE accounts SET balance = balance + 100 WHERE user_id = 'bob';
@@ -309,7 +309,7 @@ const result = await dynamodb.getItem({
 // When to use strong reads in DynamoDB:
 // - After a write, immediately reading the same item and needing the new value
 // - Inventory checks before fulfillment
-// - Auth token validation`}</code></pre>
+// - Auth token validation`} lang="typescript" />
 
       <h2 id="distributed-transactions">Distributed Transactions</h2>
       <p>
@@ -328,7 +328,7 @@ const result = await dynamodb.getItem({
         a sequence of local transactions, each publishing an event. If any step fails, compensating
         transactions roll back completed steps.
       </p>
-      <pre><code>{`// Saga pattern example: Place order across multiple services
+      <CodeBlock code={`// Saga pattern example: Place order across multiple services
 // Each service has a local transaction + compensating transaction
 
 // Happy path saga:
@@ -354,7 +354,7 @@ const result = await dynamodb.getItem({
 // - Compensating transactions must be idempotent (may run more than once)
 // - Intermediate states (PENDING) must be handled gracefully
 // - No isolation between sagas — concurrent sagas may interfere
-// - This is eventual consistency at the business logic level`}</code></pre>
+// - This is eventual consistency at the business logic level`} lang="text" />
 
       <h2 id="real-world-examples">Real-World Database Examples</h2>
       <ArticleTable caption="How popular databases position themselves on CAP" minWidth={760}>

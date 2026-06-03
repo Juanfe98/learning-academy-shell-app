@@ -1,4 +1,4 @@
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -44,7 +44,7 @@ export default function SqlVsNosql() {
         normalized &mdash; stored in the smallest logical units to avoid duplication &mdash; and
         relationships are expressed through foreign keys and joined at query time.
       </p>
-      <pre><code>{`-- Users table
+      <CodeBlock code={`-- Users table
 CREATE TABLE users (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email       TEXT NOT NULL UNIQUE,
@@ -67,7 +67,7 @@ FROM orders o
 JOIN users u ON u.id = o.user_id
 WHERE u.id = 'user-uuid-here'
   AND o.created_at > NOW() - INTERVAL '30 days'
-ORDER BY o.created_at DESC;`}</code></pre>
+ORDER BY o.created_at DESC;`} lang="dockerfile" />
       <p>
         <strong>Strengths:</strong> Flexible ad-hoc queries (SQL lets you answer questions you did
         not anticipate), strong consistency and transactions, well-understood schema enforcement,
@@ -114,7 +114,7 @@ ORDER BY o.created_at DESC;`}</code></pre>
           </tr>
         </tbody>
       </table>
-      <pre><code>{`-- ACID transaction example: transfer money
+      <CodeBlock code={`-- ACID transaction example: transfer money
 BEGIN;
   UPDATE accounts SET balance = balance - 100 WHERE id = 'alice';
   UPDATE accounts SET balance = balance + 100 WHERE id = 'bob';
@@ -127,7 +127,7 @@ BEGIN ISOLATION LEVEL SERIALIZABLE;
   SELECT balance FROM accounts WHERE id = 'alice' FOR UPDATE;
   -- ... business logic ...
   UPDATE accounts SET balance = ... WHERE id = 'alice';
-COMMIT;`}</code></pre>
+COMMIT;`} lang="sql" />
 
       <h2 id="nosql-categories">NoSQL Categories</h2>
       <p>
@@ -316,7 +316,7 @@ COMMIT;`}</code></pre>
         Indexes are the single most impactful performance optimization in relational databases. A
         missing index on a queried column can turn a 5ms query into a 5-second table scan.
       </p>
-      <pre><code>{`-- B-tree index (default): good for equality and range queries
+      <CodeBlock code={`-- B-tree index (default): good for equality and range queries
 CREATE INDEX idx_orders_user_id ON orders(user_id);
 CREATE INDEX idx_orders_created_at ON orders(created_at);
 
@@ -341,7 +341,7 @@ CREATE INDEX idx_orders_pending
 -- Check if index is being used
 EXPLAIN ANALYZE
   SELECT * FROM orders WHERE user_id = 'uuid' AND status = 'paid';
--- Look for "Index Scan" (good) vs "Seq Scan" (bad on large tables)`}</code></pre>
+-- Look for "Index Scan" (good) vs "Seq Scan" (bad on large tables)`} lang="sql" />
 
       <p>
         <strong>Common indexing mistakes:</strong>
@@ -359,7 +359,7 @@ EXPLAIN ANALYZE
         lazily. It happens when you execute 1 query to get a list, then N additional queries for
         each item in that list.
       </p>
-      <pre><code>{`// N+1 problem (Node.js / any language)
+      <CodeBlock code={`// N+1 problem (Node.js / any language)
 const orders = await db.query('SELECT * FROM orders LIMIT 100');
 // 1 query ↑
 
@@ -389,7 +389,7 @@ const usersById = Object.fromEntries(users.map(u => [u.id, u]));
 for (const order of orders) {
   order.user = usersById[order.userId];
 }
-// 2 queries → ~10ms`}</code></pre>
+// 2 queries → ~10ms`} lang="typescript" />
 
       <h2 id="when-sql">When SQL Wins</h2>
       <ul>
@@ -415,7 +415,7 @@ for (const order of orders) {
       </ul>
 
       <h2 id="decision-tree">Decision Tree</h2>
-      <pre>{`
+      <CodeBlock code={`
 Do you need full-text search?
   YES → Search engine (OpenSearch/Typesense) as primary or alongside DB
   NO → continue
@@ -437,7 +437,7 @@ Do you have truly massive scale (>50M writes/day, >100GB)?
 Is your data schema highly variable or evolving rapidly?
   YES → MongoDB / Document store
   NO → PostgreSQL (safe default for most applications)
-`}</pre>
+`} lang="text" />
 
       <h2 id="interview-playbook">Interview Playbook</h2>
       <InterviewPlaybook

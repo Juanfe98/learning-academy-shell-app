@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const envelopeEncryptionDiagram = String.raw`flowchart TD
@@ -102,7 +103,7 @@ export default function CloudSecurity() {
       </p>
 
       <h2 id="iam-policy-structure">IAM Policy JSON Structure</h2>
-      <pre><code>{`{
+      <CodeBlock code={`{
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -142,7 +143,7 @@ export default function CloudSecurity() {
       // NEVER: "Resource": "arn:aws:s3:::*"
     }
   ]
-}`}</code></pre>
+}`} lang="json" />
 
       <p>
         <strong>Assume role:</strong> ECS tasks assume their task role automatically. For cross-account
@@ -181,7 +182,7 @@ export default function CloudSecurity() {
           </tr>
         </tbody>
       </table>
-      <pre><code>{`// Reading secret from Secrets Manager in ECS task
+      <CodeBlock code={`// Reading secret from Secrets Manager in ECS task
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 const secretsManager = new SecretsManagerClient({ region: 'us-east-1' });
@@ -205,7 +206,7 @@ async function getDbCredentials() {
 
 // Automatic rotation: Secrets Manager can rotate DB credentials automatically
 // Lambda function updates both the secret value and the DB user password
-// Zero downtime rotation with gradual transition`}</code></pre>
+// Zero downtime rotation with gradual transition`} lang="typescript" />
 
       <h2 id="encryption-at-rest">Encryption at Rest</h2>
       <p>
@@ -219,7 +220,7 @@ async function getDbCredentials() {
         <li><strong>EBS:</strong> Enable account-wide default encryption so all new volumes are automatically encrypted.</li>
         <li><strong>EFS:</strong> Encrypt at creation; cannot encrypt existing file system.</li>
       </ul>
-      <pre><code>{`# Enable EBS default encryption for account (do this once)
+      <CodeBlock code={`# Enable EBS default encryption for account (do this once)
 aws ec2 enable-ebs-encryption-by-default
 
 # Verify
@@ -231,7 +232,7 @@ aws rds create-db-instance \
   --db-instance-identifier prod-db \
   --storage-encrypted \
   --kms-key-id arn:aws:kms:us-east-1:123:key/key-id \
-  ...`}</code></pre>
+  ...`} lang="bash" />
 
       <h2 id="encryption-in-transit">Encryption in Transit</h2>
       <p>
@@ -246,7 +247,7 @@ aws rds create-db-instance \
         <li>ECS &rarr; ElastiCache: TLS enabled on cluster</li>
         <li>ECS &rarr; S3: HTTPS-only (enforce via bucket policy)</li>
       </ul>
-      <pre><code>{`# Force HTTPS on ALB: redirect HTTP to HTTPS
+      <CodeBlock code={`# Force HTTPS on ALB: redirect HTTP to HTTPS
 # ALB listener on port 80:
 {
   "Type": "redirect",
@@ -270,7 +271,7 @@ aws rds create-db-instance \
 
 # RDS: require SSL connection
 # Add to PostgreSQL connection string
-DATABASE_URL=postgresql://user:pass@rds-host/db?sslmode=require`}</code></pre>
+DATABASE_URL=postgresql://user:pass@rds-host/db?sslmode=require`} lang="bash" />
 
       <h2 id="kms">AWS KMS and Envelope Encryption</h2>
       <p>
@@ -320,7 +321,7 @@ DATABASE_URL=postgresql://user:pass@rds-host/db?sslmode=require`}</code></pre>
         known bad IPs), credential theft (API calls from unusual locations), crypto mining,
         privilege escalation attempts. Enable in all regions.
       </p>
-      <pre><code>{`# Enable GuardDuty (do once)
+      <CodeBlock code={`# Enable GuardDuty (do once)
 aws guardduty create-detector --enable
 
 # Create CloudTrail multi-region trail
@@ -331,7 +332,7 @@ aws cloudtrail create-trail \
   --is-multi-region-trail \
   --enable-log-file-validation
 
-aws cloudtrail start-logging --name audit-trail`}</code></pre>
+aws cloudtrail start-logging --name audit-trail`} lang="bash" />
 
       <h2 id="security-checklist">Production Security Checklist</h2>
       <ul>

@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "why-resilience", title: "Why Resilience Patterns Matter", level: 2 },
@@ -45,7 +46,7 @@ export default function ResiliencePatterns() {
         The most basic resilience pattern: always set a timeout on any external call. No timeout
         means a thread waits indefinitely, consuming resources forever.
       </p>
-      <pre><code>{`// NEVER do this in production
+      <CodeBlock code={`// NEVER do this in production
 const data = await externalApi.getData(id);  // what if it never returns?
 
 // ALWAYS set timeouts
@@ -77,7 +78,7 @@ const result = await pool.query({
   values: [id],
   // PostgreSQL statement_timeout:
   // SET LOCAL statement_timeout = '5000';
-});`}</code></pre>
+});`} lang="typescript" />
       <p>
         <strong>Setting the right timeout:</strong> Too short and you get false failures on slow-but-healthy
         operations. Too long and you hold resources for stuck operations. Rule of thumb: set your timeout
@@ -92,7 +93,7 @@ const result = await pool.query({
         10,000 clients all retry simultaneously every second, they amplify the load on an already
         struggling service.
       </p>
-      <pre><code>{`// Exponential backoff with jitter
+      <CodeBlock code={`// Exponential backoff with jitter
 async function retryWithBackoff<T>(
   operation: () => Promise<T>,
   options: { maxRetries: number; baseDelayMs: number; maxDelayMs: number }
@@ -129,7 +130,7 @@ async function retryWithBackoff<T>(
 const result = await retryWithBackoff(
   () => aiProvider.parse(cvText),
   { maxRetries: 3, baseDelayMs: 1000, maxDelayMs: 10000 }
-);`}</code></pre>
+);`} lang="typescript" />
       <p>
         <strong>When NOT to retry:</strong> Never retry non-idempotent operations without idempotency
         keys. Retrying a payment charge without confirming the first attempt failed may double-charge
@@ -151,7 +152,7 @@ const result = await retryWithBackoff(
         <li><strong>Open:</strong> Too many failures detected. Circuit is &quot;tripped.&quot; Requests fail immediately without calling the downstream service (fast failure, no timeout wait).</li>
         <li><strong>Half-open:</strong> After a cooldown period, the circuit allows a test request. If it succeeds, circuit closes. If it fails, circuit opens again.</li>
       </ul>
-      <pre><code>{`// Simple circuit breaker implementation
+      <CodeBlock code={`// Simple circuit breaker implementation
 class CircuitBreaker {
   private failureCount = 0;
   private lastFailureTime: number | null = null;
@@ -208,7 +209,7 @@ async function parseCV(cvText: string) {
   }
 }
 
-// In production, use a library: opossum (Node.js), Hystrix (Java), Polly (.NET)`}</code></pre>
+// In production, use a library: opossum (Node.js), Hystrix (Java), Polly (.NET)`} lang="typescript" />
 
       <p>
         <strong>Why circuit breakers prevent cascading failures:</strong> Without a circuit breaker,
@@ -229,7 +230,7 @@ async function parseCV(cvText: string) {
         for others. Common implementation: separate connection pools for different downstream services,
         or separate thread pools for different API endpoints.
       </p>
-      <pre><code>{`// Bulkhead: separate connection pools per service
+      <CodeBlock code={`// Bulkhead: separate connection pools per service
 // Prevents one slow service from starving others
 const dbPool = new Pool({ max: 20 });           // 20 connections for DB
 const cachePool = createClient({ connectionTimeout: 1000 });
@@ -243,7 +244,7 @@ const aiPool = new Pool({ max: 5 });             // limited pool for AI calls
 resource "aws_lambda_function" "cv_parser" {
   reserved_concurrent_executions = 50  // max 50 concurrent AI calls
   // Other Lambdas are not affected even if cv_parser is at limit
-}`}</code></pre>
+}`} lang="hcl" />
 
       <h2 id="rate-limiting">Rate Limiting vs Throttling</h2>
       <p>
@@ -254,7 +255,7 @@ resource "aws_lambda_function" "cv_parser" {
         <strong>Throttling:</strong> Limits how fast a client consumes resources. Can be applied at
         the service level (how fast you process work) regardless of request rate.
       </p>
-      <pre><code>{`// Rate limiter with Redis (sliding window)
+      <CodeBlock code={`// Rate limiter with Redis (sliding window)
 async function checkRateLimit(identifier: string, limit: number, windowSeconds: number) {
   const now = Date.now();
   const windowStart = now - windowSeconds * 1000;
@@ -291,10 +292,10 @@ app.use(async (req, res, next) => {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
   next();
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="idempotency-keys">Idempotency Keys and Upsert Patterns</h2>
-      <pre><code>{`// Idempotency key: client generates unique key per operation
+      <CodeBlock code={`// Idempotency key: client generates unique key per operation
 // Server checks if it was already processed
 
 // Client side: generate idempotency key once, use for all retries
@@ -347,14 +348,14 @@ app.post('/api/payments', async (req, res) => {
   }
 
   res.json(payment);
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="deduplication">Deduplication</h2>
       <p>
         Message deduplication prevents processing the same message twice when a queue delivers it
         multiple times (at-least-once delivery guarantee).
       </p>
-      <pre><code>{`// Redis-based deduplication for queue consumers
+      <CodeBlock code={`// Redis-based deduplication for queue consumers
 async function processWithDedup(messageId: string, process: () => Promise<void>) {
   const dedupKey = \`processed:\${messageId}\`;
 
@@ -375,7 +376,7 @@ async function processWithDedup(messageId: string, process: () => Promise<void>)
     await redis.del(dedupKey);
     throw error;
   }
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="poison-messages">Poison Messages and DLQ</h2>
       <p>
@@ -383,7 +384,7 @@ async function processWithDedup(messageId: string, process: () => Promise<void>)
         business state). Without protection, it loops forever: receive, fail, become visible again,
         receive, fail... burning cost and blocking the queue.
       </p>
-      <pre><code>{`// Detection: SQS tracks approximate receive count
+      <CodeBlock code={`// Detection: SQS tracks approximate receive count
 // After maxReceiveCount, SQS moves to DLQ automatically
 
 // Monitoring DLQ
@@ -403,7 +404,7 @@ const alarm = new aws.cloudwatch.MetricAlarm({
 // Redriving from DLQ after fixing the root cause
 aws sqs start-message-move-task \
   --source-arn "arn:aws:sqs:us-east-1:123:cv-dlq" \
-  --destination-arn "arn:aws:sqs:us-east-1:123:cv-processing"`}</code></pre>
+  --destination-arn "arn:aws:sqs:us-east-1:123:cv-processing"`} lang="javascript" />
 
       <h2 id="real-examples">Patterns in Practice</h2>
       <table>

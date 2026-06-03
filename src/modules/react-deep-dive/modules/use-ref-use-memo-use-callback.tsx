@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "useref-escaping-render", title: "useRef: Escaping the Render Cycle", level: 2 },
@@ -33,7 +34,7 @@ export default function UseRefUseMemoUseCallback() {
         need to <em>persist</em> but should not <em>drive</em> rendering.
       </p>
 
-      <pre><code>{`// The ref object itself is stable across renders — same object every time.
+      <CodeBlock code={`// The ref object itself is stable across renders — same object every time.
 // Its .current property is mutable.
 const ref = useRef<number>(0);
 
@@ -43,7 +44,7 @@ ref.current = 42; // no re-render
 // Reading ref.current always gives the latest value — no stale closure.
 function handleClick() {
   console.log(ref.current); // always up to date
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h3 id="useref-dom-access">useRef for DOM Access</h3>
 
@@ -54,7 +55,7 @@ function handleClick() {
         not expose as props.
       </p>
 
-      <pre><code>{`function VideoPlayer({ src, isPlaying }: { src: string; isPlaying: boolean }) {
+      <CodeBlock code={`function VideoPlayer({ src, isPlaying }: { src: string; isPlaying: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Sync the DOM with the isPlaying prop imperatively.
@@ -78,7 +79,7 @@ function handleClick() {
 // React 19: ref is just a regular prop — no forwardRef needed
 function FancyInput({ ref, ...props }: React.ComponentProps<"input"> & { ref?: React.Ref<HTMLInputElement> }) {
   return <input ref={ref} className="fancy-input" {...props} />;
-}`}</code></pre>
+}`} lang="text" />
 
       <h3 id="useref-mutable-values">useRef for Mutable Values Without Re-renders</h3>
 
@@ -89,7 +90,7 @@ function FancyInput({ ref, ...props }: React.ComponentProps<"input"> & { ref?: R
         mounted, and holding a callback that effects need access to without re-creating those effects.
       </p>
 
-      <pre><code>{`// Track the previous value of a prop
+      <CodeBlock code={`// Track the previous value of a prop
 function UserStats({ userId }: { userId: string }) {
   const previousUserIdRef = useRef<string>(userId);
 
@@ -121,7 +122,7 @@ function DelayedSearch({ onSearch }: { onSearch: (q: string) => void }) {
   }, []);
 
   return <input onChange={e => handleChange(e.target.value)} />;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="usememo-what-it-does">useMemo: What It Actually Does</h2>
 
@@ -140,7 +141,7 @@ function DelayedSearch({ onSearch }: { onSearch: (q: string) => void }) {
         scenarios — not a default to apply everywhere.
       </p>
 
-      <pre><code>{`// Measuring the cost of useMemo on a trivial computation:
+      <CodeBlock code={`// Measuring the cost of useMemo on a trivial computation:
 // Without useMemo: 0.001ms to concatenate two strings
 // With useMemo:    0.003ms to compare deps + return cached value
 // Net: 3x slower. useMemo made this worse.
@@ -153,7 +154,7 @@ const fullName = useMemo(
 // 1. Retrieve the cached deps array
 // 2. Shallow-compare each dep to its previous value
 // 3a. If unchanged: return cached result (saves the computation)
-// 3b. If changed: run the factory, cache and return new result`}</code></pre>
+// 3b. If changed: run the factory, cache and return new result`} lang="tsx" />
 
       <h3 id="usememo-when-it-helps">When useMemo Genuinely Helps</h3>
 
@@ -163,7 +164,7 @@ const fullName = useMemo(
         aggregations — and (2) you need referential stability for downstream dependencies.
       </p>
 
-      <pre><code>{`// GOOD: expensive computation over a large dataset
+      <CodeBlock code={`// GOOD: expensive computation over a large dataset
 function Analytics({ events }: { events: AnalyticsEvent[] }) {
   // Sorting 10,000 events on every render without memoization
   // causes perceptible jank. useMemo here is warranted.
@@ -182,7 +183,7 @@ function Analytics({ events }: { events: AnalyticsEvent[] }) {
 
 // How to verify it's worth memoizing:
 // Use the React DevTools Profiler. Measure the render time with and without.
-// If the difference is imperceptible (sub-1ms), remove the useMemo.`}</code></pre>
+// If the difference is imperceptible (sub-1ms), remove the useMemo.`} lang="text" />
 
       <h3 id="usememo-referential-stability">Referential Stability for Dependencies</h3>
 
@@ -194,7 +195,7 @@ function Analytics({ events }: { events: AnalyticsEvent[] }) {
         re-run every render even when the data is the same.
       </p>
 
-      <pre><code>{`// Bug: options object is re-created on every render
+      <CodeBlock code={`// Bug: options object is re-created on every render
 function UserList({ userId }: { userId: string }) {
   // This object is a NEW reference every render.
   const queryOptions = { userId, page: 1, limit: 20 };
@@ -214,7 +215,7 @@ function UserList({ userId }: { userId: string }) {
   useEffect(() => {
     fetchUsers(queryOptions);
   }, [queryOptions]); // Only runs when userId changes ✓
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="usecallback">useCallback: Stabilizing Function References</h2>
 
@@ -230,7 +231,7 @@ function UserList({ userId }: { userId: string }) {
         is passed to a <code>React.memo</code>&apos;d child and you want to preserve the memoization.
       </p>
 
-      <pre><code>{`// useCallback for effect dependency stability
+      <CodeBlock code={`// useCallback for effect dependency stability
 function UserSearch({ onResultsChange }: { onResultsChange: (r: User[]) => void }) {
   const [query, setQuery] = useState("");
 
@@ -263,7 +264,7 @@ function Dashboard() {
   }, []); // Empty deps: setSelectedId is stable, analytics is external
 
   return <ExpensiveList onItemClick={handleItemClick} />;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="the-memoization-trap">The Memoization Trap</h2>
 
@@ -274,7 +275,7 @@ function Dashboard() {
         bundle size, adds runtime overhead, and creates a false sense of optimization.
       </p>
 
-      <pre><code>{`// Anti-pattern: memoizing everything reflexively
+      <CodeBlock code={`// Anti-pattern: memoizing everything reflexively
 function ProductCard({ product }: { product: Product }) {
   // These are all cheap — useMemo adds overhead, not removes it.
   const title = useMemo(() => product.name.toUpperCase(), [product.name]);
@@ -298,7 +299,7 @@ function ProductCard({ product }: { product: Product }) {
 // 1. Is this computation actually expensive? (Profile first)
 // 2. Is this function/value used as a dependency of an effect or a memo'd child?
 // 3. Is this causing a measurable performance problem?
-// If the answer to all three is no, do not memoize.`}</code></pre>
+// If the answer to all three is no, do not memoize.`} lang="text" />
 
       <h2 id="key-takeaways">Key Takeaways</h2>
 

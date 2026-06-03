@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const tlsHandshakeDiagram = String.raw`sequenceDiagram
@@ -108,7 +109,7 @@ export default function NetworkingFundamentals() {
         network changes. CloudFront supports HTTP/3 by default.
       </p>
 
-      <pre><code>{`# Check which HTTP version a server uses
+      <CodeBlock code={`# Check which HTTP version a server uses
 curl -I --http2 https://api.example.com
 # Look for: HTTP/2 200
 
@@ -116,7 +117,7 @@ curl -I --http2 https://api.example.com
 curl -v https://api.example.com 2>&1 | grep "HTTP/"
 
 # In Chrome DevTools: Network tab → Protocol column
-# Values: h2 (HTTP/2), h3 (HTTP/3), http/1.1`}</code></pre>
+# Values: h2 (HTTP/2), h3 (HTTP/3), http/1.1`} lang="bash" />
 
       <h2 id="https-tls">HTTPS and TLS</h2>
       <p>
@@ -390,7 +391,7 @@ curl -v https://api.example.com 2>&1 | grep "HTTP/"
         </tbody>
       </table>
 
-      <pre><code>{`# Inspect all headers from a request/response
+      <CodeBlock code={`# Inspect all headers from a request/response
 curl -D - https://api.example.com/health -o /dev/null
 
 # Send JSON with auth header
@@ -402,7 +403,7 @@ curl -X POST https://api.example.com/users \
 # Check CORS headers
 curl -H "Origin: https://app.example.com" \
   -H "Access-Control-Request-Method: GET" \
-  -X OPTIONS https://api.example.com/data`}</code></pre>
+  -X OPTIONS https://api.example.com/data`} lang="bash" />
 
       <h2 id="status-codes">Status Codes You Must Know</h2>
       <table>
@@ -522,7 +523,7 @@ curl -H "Origin: https://app.example.com" \
       </p>
 
       <h2 id="debugging">Debugging Networking Issues</h2>
-      <pre><code>{`# Full verbose request (shows handshake, headers, body)
+      <CodeBlock code={`# Full verbose request (shows handshake, headers, body)
 curl -v https://api.example.com/endpoint
 
 # Just the HTTP status code
@@ -549,7 +550,7 @@ ss -tnp | grep ESTAB   # established TCP connections
 
 # Test if port is open
 nc -zv api.example.com 443
-telnet api.example.com 443`}</code></pre>
+telnet api.example.com 443`} lang="bash" />
 
       <h2 id="interview-questions">Interview Questions</h2>
 

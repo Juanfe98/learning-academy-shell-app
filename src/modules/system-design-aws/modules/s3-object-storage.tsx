@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const directUploadDiagram = String.raw`sequenceDiagram
@@ -92,7 +93,7 @@ export default function S3ObjectStorage() {
         &quot;path&quot; within the bucket), metadata (Content-Type, user-defined headers), an
         optional version ID, and storage class.
       </p>
-      <pre><code>{`# Object key is just a string — the "/" is a convention, not a real path
+      <CodeBlock code={`# Object key is just a string — the "/" is a convention, not a real path
 # Key: "uploads/users/alice/cv-2024.pdf"
 # This is stored as a flat key, not a directory tree
 
@@ -108,7 +109,7 @@ aws s3 sync ./local-dir s3://my-bucket/prefix/    # sync directory
 aws s3 rm s3://my-bucket/uploads/old-file.pdf
 
 # Get object metadata
-aws s3api head-object --bucket my-bucket --key uploads/file.pdf`}</code></pre>
+aws s3api head-object --bucket my-bucket --key uploads/file.pdf`} lang="bash" />
 
       <h2 id="versioning-lifecycle">Versioning and Lifecycle Policies</h2>
       <p>
@@ -117,7 +118,7 @@ aws s3api head-object --bucket my-bucket --key uploads/file.pdf`}</code></pre>
         previous version. This protects against accidental deletion and overwrites &mdash; enable
         it for any bucket containing irreplaceable data.
       </p>
-      <pre><code>{`# Enable versioning
+      <CodeBlock code={`# Enable versioning
 aws s3api put-bucket-versioning \
   --bucket my-bucket \
   --versioning-configuration Status=Enabled
@@ -131,13 +132,13 @@ aws s3api list-object-versions \
 aws s3api copy-object \
   --bucket my-bucket \
   --copy-source my-bucket/uploads/file.pdf?versionId=abc123 \
-  --key uploads/file.pdf`}</code></pre>
+  --key uploads/file.pdf`} lang="bash" />
 
       <p>
         <strong>Lifecycle policies:</strong> Automatically manage objects over time. Transition old
         objects to cheaper storage classes or expire (delete) them.
       </p>
-      <pre><code>{`# Lifecycle policy (JSON configuration)
+      <CodeBlock code={`# Lifecycle policy (JSON configuration)
 {
   "Rules": [
     {
@@ -162,7 +163,7 @@ aws s3api copy-object \
       "NoncurrentVersionExpiration": { "NoncurrentDays": 30 }
     }
   ]
-}`}</code></pre>
+}`} lang="bash" />
 
       <h2 id="storage-classes">Storage Classes: Cost vs Access Speed</h2>
       <table>
@@ -253,7 +254,7 @@ aws s3api copy-object \
           cannot trust even AWS with the plaintext.
         </li>
       </ul>
-      <pre><code>{`# Enforce HTTPS only (bucket policy)
+      <CodeBlock code={`# Enforce HTTPS only (bucket policy)
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -277,7 +278,7 @@ aws s3api put-bucket-encryption \
         "KMSMasterKeyID": "arn:aws:kms:us-east-1:123:key/abc-def"
       }
     }]
-  }'`}</code></pre>
+  }'`} lang="bash" />
 
       <h2 id="access-control">Access Control: Bucket Policies vs IAM</h2>
       <p>
@@ -295,7 +296,7 @@ aws s3api put-bucket-encryption \
           CloudFront access, restricting to VPC-only, or requiring encryption.
         </li>
       </ul>
-      <pre><code>{`# Bucket policy: allow CloudFront OAC to read objects
+      <CodeBlock code={`# Bucket policy: allow CloudFront OAC to read objects
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -328,7 +329,7 @@ aws s3api put-bucket-encryption \
       "StringLike": { "s3:prefix": ["uploads/*"] }
     }
   }]
-}`}</code></pre>
+}`} lang="bash" />
 
       <h2 id="presigned-urls">Presigned URLs: Secure Temporary Access</h2>
       <p>
@@ -337,7 +338,7 @@ aws s3api put-bucket-encryption \
         and signs it with its IAM credentials. The URL can then be used by anyone to download
         (presigned GET) or upload (presigned PUT) a specific object.
       </p>
-      <pre><code>{`// Node.js: generate presigned URL for download
+      <CodeBlock code={`// Node.js: generate presigned URL for download
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -364,7 +365,7 @@ const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({
 }), { expiresIn: 300 });  // 5 minutes for upload
 
 // Return to client → client uploads directly to S3
-// Your backend never handles the file bytes`}</code></pre>
+// Your backend never handles the file bytes`} lang="typescript" />
 
       <h2 id="direct-upload">Direct Browser-to-S3 Upload Flow</h2>
       <p>
@@ -401,7 +402,7 @@ const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({
       </p>
 
       <h2 id="real-example">Real Example: CV Builder Upload Flow</h2>
-      <pre><code>{`// 1. Client requests upload URL
+      <CodeBlock code={`// 1. Client requests upload URL
 // POST /api/cvs/upload-url
 // Body: { filename: "my-cv.pdf", contentType: "application/pdf", fileSize: 245760 }
 
@@ -465,7 +466,7 @@ app.post('/api/cvs/confirm', authenticate, async (req, res) => {
   });
 
   res.json({ cvId: cv.id, status: 'processing' });
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

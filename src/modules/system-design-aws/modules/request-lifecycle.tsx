@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, ArticleTable, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const requestLifecycleSequence = String.raw`sequenceDiagram
@@ -138,14 +138,14 @@ export default function RequestLifecycle() {
         failover &mdash; if your primary server is unhealthy, Route 53 automatically returns the IP of
         your standby.
       </p>
-      <pre><code>{`# Debug DNS resolution
+      <CodeBlock code={`# Debug DNS resolution
 dig app.example.com
 dig app.example.com @8.8.8.8  # force Google's resolver
 
 # Check TTL of a record
 dig app.example.com | grep -A1 "ANSWER SECTION"
 # example output: app.example.com.  60  IN  A  52.12.34.56
-#                                   ^TTL in seconds`}</code></pre>
+#                                   ^TTL in seconds`} lang="bash" />
 
       <h3 id="tcp-connect">Step 2: TCP Connection</h3>
       <p>
@@ -533,7 +533,7 @@ dig app.example.com | grep -A1 "ANSWER SECTION"
         <code>time_starttransfer</code> with normal setup timings usually points to CDN miss,
         origin latency, application work, or database time.
       </p>
-      <pre><code>{`# Trace full request including DNS, TLS, TTFB
+      <CodeBlock code={`# Trace full request including DNS, TLS, TTFB
 curl -v --trace-time https://app.example.com/api/health
 
 # Get just timing breakdown
@@ -557,7 +557,7 @@ netstat -tlnp | grep 3000
 ss -tlnp | grep 3000
 
 # Check TLS certificate details
-openssl s_client -connect app.example.com:443 -servername app.example.com`}</code></pre>
+openssl s_client -connect app.example.com:443 -servername app.example.com`} lang="bash" />
 
       <h2 id="interview-questions">Interview Questions</h2>
 

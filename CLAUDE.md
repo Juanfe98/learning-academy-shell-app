@@ -177,8 +177,9 @@ export default function ModuleName() {
 - No `"use client"` — these are Server Components (pure static content)
 - `toc` IDs must exactly match the `id` attributes on heading elements
 - Use `className="article-content"` on the root `<div>` for prose styling
-- Use plain `<pre><code>{...}</code></pre>` for code blocks (backtick template literals work well)
-- Use `.tok-*` span classes only if you want VS Code Dark+ syntax highlighting
+- Use `<CodeBlock code={...} lang="..." />` for all code blocks — never `<pre><code>`
+- `lang` should match the language being shown (e.g. `"typescript"`, `"javascript"`, `"bash"`, `"json"`, `"html"`, `"css"`)
+- Optional `filename` prop adds a label in the header (e.g. `filename="server.ts"`)
 
 ---
 
@@ -260,7 +261,7 @@ All imports come from two places:
 
 ```tsx
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook, InterviewChallenge, SolutionReveal } from "@/components/ui";
+import { ArticleTable, InterviewPlaybook, InterviewChallenge, SolutionReveal, CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 ```
 
@@ -313,6 +314,22 @@ Supported diagram types: `flowchart TD/LR`, `sequenceDiagram`, `stateDiagram-v2`
 ```
 
 **When to use:** comparing two APIs, SSR vs SSG vs ISR decision matrix, method signatures, config options, error types, performance tradeoffs. Default assumption: every module should have at least 1 ArticleTable.
+
+#### `CodeBlock` — syntax-highlighted code, use for ALL code examples
+
+```tsx
+<CodeBlock
+  code={`function greet(name: string): string {
+  return \`Hello, \${name}\`;
+}`}
+  lang="typescript"
+  filename="greet.ts"
+/>
+```
+
+Props: `code: string` (the raw code), `lang?: string` (Shiki language id — `"typescript"`, `"javascript"`, `"bash"`, `"json"`, `"html"`, `"css"`, `"tsx"`, etc.), `filename?: string` (optional header label).
+
+**When to use:** every single code example in a module. Never use `<pre><code>` — always `<CodeBlock>`. `CodeBlock` is an async Server Component; module files are Server Components, so this is safe.
 
 #### `InterviewPlaybook` — structured answer guide for interview sections
 

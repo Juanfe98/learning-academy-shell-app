@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const queueModelDiagram = String.raw`flowchart TD
@@ -112,7 +112,7 @@ export default function QueuesBackgroundWorkers() {
         not immediately retry &mdash; it waits increasingly long intervals. This prevents a transient
         overload from being amplified by retry storms.
       </p>
-      <pre><code>{`// SQS consumer with exponential backoff retry logic
+      <CodeBlock code={`// SQS consumer with exponential backoff retry logic
 async function processMessage(message: SQSMessage) {
   const body = JSON.parse(message.Body);
 
@@ -146,7 +146,7 @@ async function processMessage(message: SQSMessage) {
     "deadLetterTargetArn": "arn:aws:sqs:us-east-1:123:cv-processing-dlq",
     "maxReceiveCount": "3"
   }
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="idempotency">Idempotency: Why It Matters in Queues</h2>
       <p>
@@ -159,7 +159,7 @@ async function processMessage(message: SQSMessage) {
         than once. This is not an edge case &mdash; it happens in normal operation. Every message
         handler must be designed to handle duplicate delivery safely.
       </p>
-      <pre><code>{`// NON-IDEMPOTENT: dangerous with duplicate messages
+      <CodeBlock code={`// NON-IDEMPOTENT: dangerous with duplicate messages
 async function processPayment(message) {
   const { paymentId, amount, userId } = message;
   await db.payments.create({ id: paymentId, amount, userId });
@@ -191,7 +191,7 @@ async function processPayment(message) {
   await chargeCard(userId, amount);
   await db.payments.update(paymentId, { status: 'completed' });
   await sendReceipt(userId, amount);
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="delivery-guarantees">At-Least-Once vs Exactly-Once</h2>
       <table>
@@ -276,7 +276,7 @@ async function processPayment(message) {
         (Simple Notification Service) is the AWS pub/sub service that enables this. One SNS topic
         can have multiple SQS queue subscriptions; each subscription receives every message.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 CV Upload event
       |
       v
@@ -297,8 +297,8 @@ Lambda  Lambda       Lambda
 Each worker receives every CV upload event independently.
 Adding a new consumer requires only subscribing to the SNS topic.
 No producer code change needed.
-`}</pre>
-      <pre><code>{`// Publish to SNS (producer only knows about SNS topic)
+`} lang="text" />
+      <CodeBlock code={`// Publish to SNS (producer only knows about SNS topic)
 await sns.publish({
   TopicArn: 'arn:aws:sns:us-east-1:123:cv-events',
   Message: JSON.stringify({
@@ -312,10 +312,10 @@ await sns.publish({
 // Each SQS queue subscriber receives an envelope with the SNS message
 // SNS adds metadata: TopicArn, Subject, MessageId
 // Consumer parses: JSON.parse(sqsMessage.Body).Message
-// Then: JSON.parse(snsBody) → your original payload`}</code></pre>
+// Then: JSON.parse(snsBody) → your original payload`} lang="text" />
 
       <h2 id="aws-sqs">AWS SQS: Standard and FIFO</h2>
-      <pre><code>{`// Create a queue with DLQ (AWS CLI)
+      <CodeBlock code={`// Create a queue with DLQ (AWS CLI)
 aws sqs create-queue \
   --queue-name cv-processing \
   --attributes '{
@@ -344,7 +344,7 @@ while true; do
     --max-number-of-messages 10 \
     --wait-time-seconds 20)
   # Process each message and delete on success
-done`}</code></pre>
+done`} lang="bash" />
 
       <h2 id="aws-sns">AWS SNS</h2>
       <p>
@@ -356,13 +356,13 @@ done`}</code></pre>
         can specify that it only wants messages where a specific attribute matches. This allows
         fine-grained routing without adding a router layer.
       </p>
-      <pre><code>{`// SNS subscription filter: CV parser only wants PDF uploads
+      <CodeBlock code={`// SNS subscription filter: CV parser only wants PDF uploads
 {
   "fileType": ["application/pdf", "application/msword"]
 }
 
 // Analytics queue wants ALL events
-// (no filter policy = receives everything)`}</code></pre>
+// (no filter policy = receives everything)`} lang="text" />
 
       <h2 id="aws-eventbridge">AWS EventBridge</h2>
       <p>
@@ -382,7 +382,7 @@ done`}</code></pre>
         automatically invokes your function with a batch of messages. Lambda handles scaling
         automatically: it increases concurrency as the queue depth grows.
       </p>
-      <pre><code>{`// Lambda SQS event handler
+      <CodeBlock code={`// Lambda SQS event handler
 export const handler = async (event: SQSEvent) => {
   const failures: SQSBatchItemFailure[] = [];
 
@@ -409,7 +409,7 @@ export const handler = async (event: SQSEvent) => {
   "BatchSize": 10,
   "FunctionResponseTypes": ["ReportBatchItemFailures"],  // partial retry
   "MaximumBatchingWindowInSeconds": 5  // wait up to 5s to fill batch
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="real-examples">Real-World Examples</h2>
       <table>
@@ -458,7 +458,7 @@ export const handler = async (event: SQSEvent) => {
       <p>
         Set up CloudWatch alarms on your DLQ:
       </p>
-      <pre><code>{`# CloudWatch alarm: alert when DLQ has messages
+      <CodeBlock code={`# CloudWatch alarm: alert when DLQ has messages
 aws cloudwatch put-metric-alarm \
   --alarm-name "cv-dlq-has-messages" \
   --alarm-description "CV processing DLQ has unprocessed messages" \
@@ -474,7 +474,7 @@ aws cloudwatch put-metric-alarm \
 
 # Also monitor queue depth growth (backlog)
 # ApproximateAgeOfOldestMessage: how long the oldest message has been waiting
-# If this grows → consumer is falling behind → needs more capacity`}</code></pre>
+# If this grows → consumer is falling behind → needs more capacity`} lang="bash" />
 
       <h2 id="interview-playbook">Interview Playbook</h2>
       <InterviewPlaybook

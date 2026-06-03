@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "what-is-container", title: "What Is a Container?", level: 2 },
@@ -81,7 +82,7 @@ export default function ContainersOrchestration() {
         A Docker image is a read-only blueprint for a container. It is built from a Dockerfile &mdash;
         a series of instructions that layer filesystem changes on top of a base image.
       </p>
-      <pre><code>{`# Production Dockerfile for a Node.js API
+      <CodeBlock code={`# Production Dockerfile for a Node.js API
 # Multi-stage build: keep production image small
 
 # Stage 1: build
@@ -114,7 +115,7 @@ CMD ["node", "dist/server.js"]
 
 # Build and run
 # docker build -t api:latest .
-# docker run -p 3000:3000 -e NODE_ENV=production api:latest`}</code></pre>
+# docker run -p 3000:3000 -e NODE_ENV=production api:latest`} lang="dockerfile" />
 
       <p>
         <strong>Image layers:</strong> Each instruction in a Dockerfile creates a layer. Layers
@@ -129,7 +130,7 @@ CMD ["node", "dist/server.js"]
         IAM (no separate credentials needed for ECS pulling images), supports automatic image
         scanning for vulnerabilities, and handles lifecycle policies to clean up old images.
       </p>
-      <pre><code>{`# Create ECR repository
+      <CodeBlock code={`# Create ECR repository
 aws ecr create-repository --repository-name api --region us-east-1
 
 # Build and push
@@ -159,7 +160,7 @@ aws ecr put-lifecycle-policy \
                      "countType": "imageCountMoreThan", "countNumber": 10 },
       "action": { "type": "expire" }
     }]
-  }'`}</code></pre>
+  }'`} lang="bash" />
 
       <h2 id="docker-networking">Container Networking and Volumes</h2>
       <p>
@@ -182,7 +183,7 @@ aws ecr put-lifecycle-policy \
       </ul>
 
       <h2 id="docker-compose">Docker Compose for Local Dev</h2>
-      <pre><code>{`# docker-compose.yml
+      <CodeBlock code={`# docker-compose.yml
 version: '3.8'
 services:
   api:
@@ -229,10 +230,10 @@ volumes:
 # docker compose up -d       # start all services detached
 # docker compose logs -f api # follow api logs
 # docker compose down        # stop and remove containers
-# docker compose down -v     # also remove volumes`}</code></pre>
+# docker compose down -v     # also remove volumes`} lang="yaml" />
 
       <h2 id="ecs-concepts">ECS: Clusters, Task Definitions, Services</h2>
-      <pre><code>{`// ECS hierarchy:
+      <CodeBlock code={`// ECS hierarchy:
 // Cluster → Services → Tasks → Containers
 
 // Task Definition: blueprint for what to run
@@ -278,7 +279,7 @@ volumes:
 }
 
 // Service: maintains desired count, integrates with ALB
-// Handles rolling deployments, auto-scaling, health checks`}</code></pre>
+// Handles rolling deployments, auto-scaling, health checks`} lang="text" />
 
       <h2 id="fargate-vs-ec2">Fargate vs EC2 Launch Type</h2>
       <table>
@@ -404,7 +405,7 @@ volumes:
       </table>
 
       <h2 id="ecs-deployment">Deploying a Node.js API to ECS Fargate</h2>
-      <pre><code>{`# End-to-end deployment steps (once infra is set up)
+      <CodeBlock code={`# End-to-end deployment steps (once infra is set up)
 
 # 1. Build and push image
 IMAGE_TAG=$(git rev-parse --short HEAD)
@@ -430,7 +431,7 @@ aws ecs wait services-stable \
   --cluster production \
   --services api-service
 
-echo "Deployment complete"`}</code></pre>
+echo "Deployment complete"`} lang="bash" />
 
       <h2 id="production-issues">Common Production Issues</h2>
       <ul>

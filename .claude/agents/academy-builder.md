@@ -83,7 +83,11 @@ src/modules/<academy-slug>/modules/<module-slug>.tsx
 
 ### Module File Template
 ```tsx
+import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { ArticleTable, InterviewPlaybook, InterviewChallenge, SolutionReveal, CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
+
+// MermaidDiagram chart strings defined as String.raw` constants BEFORE the component
 
 export const toc: TocItem[] = [
   { id: "section-id", title: "Section Title", level: 2 },
@@ -94,6 +98,7 @@ export default function ModuleName() {
   return (
     <div className="article-content">
       <h2 id="section-id">Section Title</h2>
+      <CodeBlock code={`const x = 1;`} lang="typescript" filename="example.ts" />
       {/* content */}
     </div>
   );
@@ -104,9 +109,69 @@ export default function ModuleName() {
 - NO `"use client"` directive — these are Server Components
 - TOC `id` values MUST exactly match the `id` attributes on heading elements
 - Root element MUST have `className="article-content"` for prose styling
-- Code blocks use `<pre><code>{...}</code></pre>` with backtick template literals
-- No external imports — pure static content components
-- Use `.tok-*` span classes for VS Code Dark+ syntax highlighting in code if desired
+- Code blocks MUST use `<CodeBlock code={...} lang="..." />` — NEVER `<pre><code>`
+- `lang` must be a valid Shiki language id: `"typescript"`, `"javascript"`, `"tsx"`, `"bash"`, `"json"`, `"html"`, `"css"`, `"yaml"`, etc.
+- Optional `filename` prop adds a header label (e.g. `filename="server.ts"`)
+- `CodeBlock` is an async Server Component — safe to use in module files (also Server Components)
+- `SolutionReveal` is a sibling of `InterviewChallenge`, NOT a child — never nest inside it
+
+### Diagrams — Visual-First Rule
+
+**The learner is a visual learner. Diagrams are not optional decoration — they are the primary teaching tool.** Every concept that involves a flow, sequence, lifecycle, hierarchy, state machine, or comparison MUST have a diagram before prose explanation.
+
+**Minimum per module: 3 MermaidDiagram usages.** Aim for more whenever the topic supports it.
+
+#### When to add a diagram (default: yes, unless clearly inapplicable)
+- Any lifecycle (component mount, request flow, build pipeline, auth handshake)
+- Any state machine (connection states, loading states, auth states)
+- Any data flow (how data moves through layers)
+- Any hierarchy (class inheritance, component tree, module dependency)
+- Any sequence of events between actors (browser ↔ server, client ↔ cache ↔ DB)
+- Any decision tree (when to use X vs Y)
+- Any "wrong vs right" architectural comparison — two side-by-side flowcharts
+- Any timeline (what fires first, second, third)
+
+#### How to write MermaidDiagram
+
+Define chart strings as `String.raw\`` constants **before** the component function — never inline in JSX:
+
+```tsx
+const lifecycleDiagram = String.raw`stateDiagram-v2
+  [*] --> Idle
+  Idle --> Loading : fetch()
+  Loading --> Success : resolve
+  Loading --> Error : reject
+  Error --> Idle : retry`;
+
+// In JSX:
+<MermaidDiagram
+  chart={lifecycleDiagram}
+  title="Request Lifecycle"
+  caption="Loading → Success is the happy path. Error → Idle enables retry without full reset."
+  minHeight={300}
+/>
+```
+
+**Props:**
+- `chart` — the Mermaid DSL string
+- `title` — short label shown above the diagram
+- `caption` — one sentence that tells the reader what to notice or take away
+- `minHeight` — set to match diagram complexity: ~250 for small, ~400 for medium, ~550 for large
+
+**Supported diagram types — use the right type for the concept:**
+
+| Type | Syntax | Best for |
+|---|---|---|
+| Flowchart | `flowchart TD` / `flowchart LR` | Decision trees, data flow, wrong vs right |
+| Sequence | `sequenceDiagram` | Request/response flows, multi-actor interactions |
+| State machine | `stateDiagram-v2` | Lifecycle states, connection states |
+| Class | `classDiagram` | OOP hierarchies, interface relationships |
+| ER | `erDiagram` | Data model relationships |
+
+**Mermaid syntax rules (avoid build errors):**
+- Node labels with spaces or special chars MUST use quotes: `A["Label with spaces"]`
+- Arrow labels use `-->|label|` or `-- label -->` syntax
+- `String.raw\`` prevents JS from interpreting backslashes — always use it
 
 ### Content Quality Standards
 - **Accurate**: Every code example must be syntactically correct and runnable
@@ -114,6 +179,7 @@ export default function ModuleName() {
 - **Explained**: Don't just show code — explain WHY it works that way
 - **Contextual**: Show where/when to use a pattern, not just how
 - **Honest about tradeoffs**: Acknowledge when multiple approaches exist and when to use each
+- **Visual-first**: If a concept can be drawn, draw it before explaining it in prose
 
 ---
 
@@ -164,12 +230,22 @@ Before declaring the academy complete, run through this checklist:
 - [ ] Common beginner mistakes are addressed
 - [ ] Best practices are clearly stated
 
+**Diagram Quality (visual-first — this is non-negotiable):**
+- [ ] Every module has ≥ 3 MermaidDiagram usages
+- [ ] Every lifecycle, state machine, and data flow has a diagram
+- [ ] Every "when to use X vs Y" decision has a flowchart
+- [ ] Every diagram has a meaningful `caption` that tells the reader what to notice
+- [ ] Chart strings use `String.raw\`` and are defined before the component function
+- [ ] Node labels with spaces use quotes: `A["Label"]`
+
 **Structural Quality:**
 - [ ] Learning progression is logical (no concept used before introduced)
 - [ ] Each module has a clear purpose and scope
 - [ ] TOC IDs match heading IDs exactly
 - [ ] No `"use client"` in module files
 - [ ] `article-content` class on root div
+- [ ] All code blocks use `<CodeBlock>` — no `<pre><code>` anywhere
+- [ ] `SolutionReveal` is a sibling of `InterviewChallenge`, not a child
 
 **Registration Quality:**
 - [ ] Academy added to both `MOCK_ACADEMIES` and `REGISTRY`

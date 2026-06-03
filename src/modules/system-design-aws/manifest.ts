@@ -43,17 +43,33 @@ const manifest: AcademyManifest = {
       component: () => import("./modules/aws-cloud-networking"),
     },
     {
-      slug: "traffic-entry-layer",
-      title: "DNS, CDN, Load Balancers & API Gateway",
+      slug: "dns-and-route53",
+      title: "DNS & Route 53",
       order: 4,
-      estimatedMinutes: 35,
-      tags: ["aws", "cdn", "load-balancer", "api-gateway", "route53"],
-      component: () => import("./modules/traffic-entry-layer"),
+      estimatedMinutes: 25,
+      tags: ["aws", "dns", "route53", "failover", "routing"],
+      component: () => import("./modules/dns-and-route53"),
+    },
+    {
+      slug: "cdn-and-cloudfront",
+      title: "CDN & CloudFront",
+      order: 5,
+      estimatedMinutes: 25,
+      tags: ["aws", "cdn", "cloudfront", "caching", "edge"],
+      component: () => import("./modules/cdn-and-cloudfront"),
+    },
+    {
+      slug: "load-balancers-and-api-gateway",
+      title: "Load Balancers, API Gateway & WAF",
+      order: 6,
+      estimatedMinutes: 30,
+      tags: ["aws", "load-balancer", "alb", "nlb", "api-gateway", "waf"],
+      component: () => import("./modules/load-balancers-and-api-gateway"),
     },
     {
       slug: "stateless-horizontal-scaling",
       title: "Stateless Services & Horizontal Scaling",
-      order: 5,
+      order: 7,
       estimatedMinutes: 30,
       tags: ["architecture", "scaling", "stateless", "ecs", "lambda"],
       component: () => import("./modules/stateless-horizontal-scaling"),
@@ -61,7 +77,7 @@ const manifest: AcademyManifest = {
     {
       slug: "sql-vs-nosql",
       title: "SQL vs NoSQL: Choosing the Right Database",
-      order: 6,
+      order: 8,
       estimatedMinutes: 40,
       tags: ["databases", "sql", "nosql", "dynamodb", "postgres"],
       component: () => import("./modules/sql-vs-nosql"),
@@ -69,7 +85,7 @@ const manifest: AcademyManifest = {
     {
       slug: "dynamodb-deep-dive",
       title: "DynamoDB Deep Dive",
-      order: 7,
+      order: 9,
       estimatedMinutes: 45,
       tags: ["aws", "dynamodb", "nosql", "databases"],
       component: () => import("./modules/dynamodb-deep-dive"),
@@ -77,7 +93,7 @@ const manifest: AcademyManifest = {
     {
       slug: "s3-object-storage",
       title: "S3 & Object Storage",
-      order: 8,
+      order: 10,
       estimatedMinutes: 30,
       tags: ["aws", "s3", "storage", "object-storage"],
       component: () => import("./modules/s3-object-storage"),
@@ -85,7 +101,7 @@ const manifest: AcademyManifest = {
     {
       slug: "caching-strategies",
       title: "Caching Strategies",
-      order: 9,
+      order: 11,
       estimatedMinutes: 35,
       tags: ["caching", "redis", "performance", "architecture"],
       component: () => import("./modules/caching-strategies"),
@@ -93,7 +109,7 @@ const manifest: AcademyManifest = {
     {
       slug: "performance-engineering",
       title: "Performance Engineering",
-      order: 10,
+      order: 12,
       estimatedMinutes: 35,
       tags: ["performance", "latency", "throughput", "optimization"],
       component: () => import("./modules/performance-engineering"),
@@ -101,7 +117,7 @@ const manifest: AcademyManifest = {
     {
       slug: "queues-background-workers",
       title: "Queues & Background Workers",
-      order: 11,
+      order: 13,
       estimatedMinutes: 35,
       tags: ["aws", "sqs", "queues", "async", "workers"],
       component: () => import("./modules/queues-background-workers"),
@@ -109,7 +125,7 @@ const manifest: AcademyManifest = {
     {
       slug: "event-driven-architecture",
       title: "Event-Driven Architecture",
-      order: 12,
+      order: 14,
       estimatedMinutes: 40,
       tags: ["events", "pub-sub", "kafka", "eventbridge", "architecture"],
       component: () => import("./modules/event-driven-architecture"),
@@ -117,7 +133,7 @@ const manifest: AcademyManifest = {
     {
       slug: "reliability-availability",
       title: "Reliability, Availability & Fault Tolerance",
-      order: 13,
+      order: 15,
       estimatedMinutes: 35,
       tags: ["reliability", "availability", "aws", "multi-az", "failover"],
       component: () => import("./modules/reliability-availability"),
@@ -125,7 +141,7 @@ const manifest: AcademyManifest = {
     {
       slug: "resilience-patterns",
       title: "Resilience Patterns: Retries, Circuit Breakers & Idempotency",
-      order: 14,
+      order: 16,
       estimatedMinutes: 35,
       tags: ["resilience", "circuit-breaker", "retries", "idempotency", "distributed-systems"],
       component: () => import("./modules/resilience-patterns"),
@@ -133,7 +149,7 @@ const manifest: AcademyManifest = {
     {
       slug: "auth-architecture",
       title: "Authentication & Authorization Architecture",
-      order: 15,
+      order: 17,
       estimatedMinutes: 40,
       tags: ["auth", "jwt", "oauth2", "cognito", "iam", "security"],
       component: () => import("./modules/auth-architecture"),
@@ -141,7 +157,7 @@ const manifest: AcademyManifest = {
     {
       slug: "cloud-security",
       title: "Cloud Security Fundamentals",
-      order: 16,
+      order: 18,
       estimatedMinutes: 35,
       tags: ["security", "aws", "iam", "encryption", "secrets"],
       component: () => import("./modules/cloud-security"),
@@ -149,7 +165,7 @@ const manifest: AcademyManifest = {
     {
       slug: "observability",
       title: "Observability: Logs, Metrics & Traces",
-      order: 17,
+      order: 19,
       estimatedMinutes: 35,
       tags: ["observability", "logs", "metrics", "traces", "cloudwatch"],
       component: () => import("./modules/observability"),
@@ -157,7 +173,7 @@ const manifest: AcademyManifest = {
     {
       slug: "incident-response",
       title: "Incident Response & Production Debugging",
-      order: 18,
+      order: 20,
       estimatedMinutes: 30,
       tags: ["incidents", "debugging", "production", "runbooks", "postmortem"],
       component: () => import("./modules/incident-response"),
@@ -165,7 +181,7 @@ const manifest: AcademyManifest = {
     {
       slug: "cicd-deployment",
       title: "CI/CD & Deployment Strategies",
-      order: 19,
+      order: 21,
       estimatedMinutes: 35,
       tags: ["ci-cd", "deployment", "docker", "github-actions", "aws"],
       component: () => import("./modules/cicd-deployment"),
@@ -173,7 +189,7 @@ const manifest: AcademyManifest = {
     {
       slug: "containers-orchestration",
       title: "Docker, ECS & Container Orchestration",
-      order: 20,
+      order: 22,
       estimatedMinutes: 40,
       tags: ["docker", "containers", "ecs", "kubernetes", "lambda"],
       component: () => import("./modules/containers-orchestration"),
@@ -181,7 +197,7 @@ const manifest: AcademyManifest = {
     {
       slug: "infrastructure-as-code",
       title: "Infrastructure as Code",
-      order: 21,
+      order: 23,
       estimatedMinutes: 35,
       tags: ["iac", "terraform", "cdk", "cloudformation", "pulumi"],
       component: () => import("./modules/infrastructure-as-code"),
@@ -189,7 +205,7 @@ const manifest: AcademyManifest = {
     {
       slug: "latency-numbers",
       title: "Latency Numbers & Back-of-Envelope Math",
-      order: 22,
+      order: 24,
       estimatedMinutes: 25,
       tags: ["performance", "estimation", "interviews", "numbers"],
       component: () => import("./modules/latency-numbers"),
@@ -197,7 +213,7 @@ const manifest: AcademyManifest = {
     {
       slug: "cap-theorem-tradeoffs",
       title: "CAP Theorem, Consistency & Tradeoffs",
-      order: 23,
+      order: 25,
       estimatedMinutes: 30,
       tags: ["distributed-systems", "cap-theorem", "consistency", "tradeoffs"],
       component: () => import("./modules/cap-theorem-tradeoffs"),
@@ -205,7 +221,7 @@ const manifest: AcademyManifest = {
     {
       slug: "aws-service-map",
       title: "AWS Service Map",
-      order: 24,
+      order: 26,
       estimatedMinutes: 40,
       tags: ["aws", "overview", "services", "architecture"],
       component: () => import("./modules/aws-service-map"),
@@ -213,7 +229,7 @@ const manifest: AcademyManifest = {
     {
       slug: "aws-complete-architecture",
       title: "Designing a Complete AWS Architecture",
-      order: 25,
+      order: 27,
       estimatedMinutes: 45,
       tags: ["aws", "architecture", "system-design", "production"],
       component: () => import("./modules/aws-complete-architecture"),
@@ -221,7 +237,7 @@ const manifest: AcademyManifest = {
     {
       slug: "interview-framework",
       title: "System Design Interview Framework",
-      order: 26,
+      order: 28,
       estimatedMinutes: 30,
       tags: ["interviews", "system-design", "framework", "communication"],
       component: () => import("./modules/interview-framework"),
@@ -229,7 +245,7 @@ const manifest: AcademyManifest = {
     {
       slug: "system-design-practice",
       title: "System Design Practice Problems",
-      order: 27,
+      order: 29,
       estimatedMinutes: 60,
       tags: ["interviews", "practice", "system-design", "architecture"],
       component: () => import("./modules/system-design-practice"),
@@ -237,7 +253,7 @@ const manifest: AcademyManifest = {
     {
       slug: "capstone-cv-builder",
       title: "Capstone: Production System Design Document",
-      order: 28,
+      order: 30,
       estimatedMinutes: 50,
       tags: ["capstone", "system-design", "aws", "production", "interviews"],
       component: () => import("./modules/capstone-cv-builder"),
@@ -248,7 +264,9 @@ const manifest: AcademyManifest = {
     "request-lifecycle",
     "networking-fundamentals",
     "aws-cloud-networking",
-    "traffic-entry-layer",
+    "dns-and-route53",
+    "cdn-and-cloudfront",
+    "load-balancers-and-api-gateway",
     "stateless-horizontal-scaling",
     "sql-vs-nosql",
     "dynamodb-deep-dive",
@@ -284,7 +302,9 @@ const manifest: AcademyManifest = {
         "request-lifecycle",
         "networking-fundamentals",
         "aws-cloud-networking",
-        "traffic-entry-layer",
+        "dns-and-route53",
+        "cdn-and-cloudfront",
+        "load-balancers-and-api-gateway",
         "stateless-horizontal-scaling",
       ],
     },

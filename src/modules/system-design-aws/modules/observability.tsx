@@ -1,4 +1,4 @@
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -70,7 +70,7 @@ export default function Observability() {
         Plain text logs are nearly unqueryable at scale. Structured logging emits JSON (or other
         parseable format), making logs filterable, queryable, and processable programmatically.
       </p>
-      <pre><code>{`// BAD: plain text log
+      <CodeBlock code={`// BAD: plain text log
 console.log('User alice uploaded CV cv123, size 245760, status success');
 // Impossible to query by status or size without regex
 
@@ -112,7 +112,7 @@ logger.info('CV uploaded', {
 fields @timestamp, userId, durationMs, @message
 | filter level = "error" and service = "cv-api"
 | sort @timestamp desc
-| limit 100`}</code></pre>
+| limit 100`} lang="typescript" />
 
       <p><strong>Essential log fields:</strong></p>
       <ul>
@@ -132,7 +132,7 @@ fields @timestamp, userId, durationMs, @message
         entries for that request together across all services. Without it, correlating logs across
         services requires hunting through timestamps.
       </p>
-      <pre><code>{`// Middleware: generate or propagate correlation ID
+      <CodeBlock code={`// Middleware: generate or propagate correlation ID
 import { v4 as uuid } from 'uuid';
 import { AsyncLocalStorage } from 'async_hooks';
 
@@ -167,7 +167,7 @@ await sqs.sendMessage({
 
 // Worker logs with the original request's correlation ID
 const { cvId, correlationId } = JSON.parse(message.body);
-logger.info('Processing CV', { cvId, requestId: correlationId });`}</code></pre>
+logger.info('Processing CV', { cvId, requestId: correlationId });`} lang="typescript" />
 
       <h2 id="metrics">Metrics: What to Measure</h2>
       <p>
@@ -190,7 +190,7 @@ logger.info('Processing CV', { cvId, requestId: correlationId });`}</code></pre>
         <li>SQS: ApproximateAgeOfOldestMessage (queue depth growth), NumberOfMessagesFailed</li>
         <li>Redis: CacheHits, CacheMisses, Evictions, CurrConnections</li>
       </ul>
-      <pre><code>{`// Custom metric: emit from application code
+      <CodeBlock code={`// Custom metric: emit from application code
 import { CloudWatchClient, PutMetricDataCommand } from '@aws-sdk/client-cloudwatch';
 
 const cloudwatch = new CloudWatchClient({ region: 'us-east-1' });
@@ -213,7 +213,7 @@ async function emitMetric(name: string, value: number, unit: string = 'Count') {
 // Emit custom metrics
 await emitMetric('CVParsingDuration', processingTimeMs, 'Milliseconds');
 await emitMetric('CVParseSuccess', 1, 'Count');
-await emitMetric('AIProviderErrors', 1, 'Count');`}</code></pre>
+await emitMetric('AIProviderErrors', 1, 'Count');`} lang="typescript" />
 
       <h2 id="percentile-alerting">Alerts: Static Thresholds vs Anomaly Detection</h2>
       <p>
@@ -225,7 +225,7 @@ await emitMetric('AIProviderErrors', 1, 'Count');`}</code></pre>
         and day-of-week variations) and alerts when behavior deviates significantly. Better for
         metrics with seasonal patterns (higher traffic on weekday mornings).
       </p>
-      <pre><code>{`# CloudWatch alarm: alert on high error rate
+      <CodeBlock code={`# CloudWatch alarm: alert on high error rate
 aws cloudwatch put-metric-alarm \
   --alarm-name "api-error-rate-high" \
   --alarm-description "API error rate exceeds 1%" \
@@ -248,7 +248,7 @@ aws cloudwatch put-metric-alarm \
   --threshold 1 \
   --comparison-operator GreaterThanThreshold \
   --period 300 \
-  --evaluation-periods 2`}</code></pre>
+  --evaluation-periods 2`} lang="bash" />
 
       <h2 id="sli-slo-sla">SLI, SLO, and SLA</h2>
       <table>
@@ -295,7 +295,7 @@ aws cloudwatch put-metric-alarm \
         spans. Each span represents one operation (HTTP call, DB query, cache lookup) with a start
         time, duration, and metadata.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 Trace: req-abc123 (total: 250ms)
 ├── API handler (250ms)
 │   ├── JWT verify (1ms)
@@ -310,8 +310,8 @@ Trace: req-abc123 (total: 250ms)
 → Bottleneck clearly visible: AI service took 180ms of 250ms total
 → Without tracing: "API is slow" — no idea why
 → With tracing: "AI provider call is the bottleneck"
-`}</pre>
-      <pre><code>{`// AWS X-Ray with OpenTelemetry
+`} lang="text" />
+      <CodeBlock code={`// AWS X-Ray with OpenTelemetry
 import { NodeTracerProvider } from '@opentelemetry/node';
 import { XRayIdGenerator } from '@aws-xray-sdk-node';
 
@@ -344,7 +344,7 @@ async function processCV(cvId: string) {
   } finally {
     span.end();
   }
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="aws-cloudwatch">AWS CloudWatch: Logs, Metrics, Alarms, Insights</h2>
       <p>
@@ -360,7 +360,7 @@ async function processCV(cvId: string) {
         <li><strong>Container Insights:</strong> Enhanced monitoring for ECS/EKS (container-level metrics).</li>
         <li><strong>Application Signals:</strong> Automatic SLO monitoring for services instrumented with OpenTelemetry.</li>
       </ul>
-      <pre><code>{`# CloudWatch Logs Insights: find errors for a specific user
+      <CodeBlock code={`# CloudWatch Logs Insights: find errors for a specific user
 fields @timestamp, userId, @message, error.message
 | filter level = "error" and userId = "user-alice"
 | sort @timestamp desc
@@ -376,7 +376,7 @@ fields @timestamp, path, durationMs
 fields @timestamp
 | filter level = "error"
 | stats count() as errorCount by bin(5m)
-| sort @timestamp asc`}</code></pre>
+| sort @timestamp asc`} lang="bash" />
 
       <h2 id="other-tools">Datadog, Grafana, Prometheus</h2>
       <p>
@@ -398,7 +398,7 @@ fields @timestamp
 
       <h2 id="debugging-playbook">Debugging Playbooks: 500 Spike and High Latency</h2>
       <p><strong>Playbook: API 500 error rate spike</strong></p>
-      <pre>{`
+      <CodeBlock code={`
 1. DETECT: CloudWatch alarm fires → API 5xx count elevated
 
 2. SCOPE: How widespread?
@@ -428,10 +428,10 @@ fields @timestamp
 6. RESOLVE: Verify metrics return to baseline
 
 7. POSTMORTEM: Document timeline, root cause, action items
-`}</pre>
+`} lang="text" />
 
       <p><strong>Playbook: High latency investigation</strong></p>
-      <pre>{`
+      <CodeBlock code={`
 1. DETECT: p99 latency alert fires
 
 2. SCOPE: Which endpoint? All or subset?
@@ -453,7 +453,7 @@ fields @timestamp
    - Rate limiting? Throttling?
 
 7. FIX: Add index, fix N+1, add caching, circuit breaker for slow dependency
-`}</pre>
+`} lang="text" />
 
       <h2 id="interview-playbook">Interview Playbook</h2>
       <InterviewPlaybook

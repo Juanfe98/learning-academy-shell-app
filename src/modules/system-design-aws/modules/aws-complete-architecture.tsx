@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, ArticleTable, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const highLevelDiagram = String.raw`flowchart TD
@@ -151,7 +151,7 @@ export default function AwsCompleteArchitecture() {
         serves these files from 400+ edge locations globally, meaning users in São Paulo get the same
         fast load time as users in Virginia.
       </p>
-      <pre><code>{`// S3 bucket for SPA hosting
+      <CodeBlock code={`// S3 bucket for SPA hosting
 resource "aws_s3_bucket" "frontend" {
   bucket = "cv-builder-frontend-prod-\${account_id}"
 }
@@ -176,7 +176,7 @@ resource "aws_cloudfront_distribution" "main" {
 // Deployment: GitHub Actions runs 'pnpm build', uploads to S3, invalidates CloudFront cache
 // aws s3 sync dist/ s3://cv-builder-frontend-prod/
 // aws cloudfront create-invalidation --distribution-id XXXXX --paths "/*"
-// This takes ~30s — zero-downtime because old files are replaced atomically`}</code></pre>
+// This takes ~30s — zero-downtime because old files are replaced atomically`} lang="hcl" />
       <p>
         <strong>Why not Amplify?</strong> AWS Amplify is a higher-level service that wraps
         S3 + CloudFront with a managed CI/CD pipeline. It is a valid choice for teams that want
@@ -188,7 +188,7 @@ resource "aws_cloudfront_distribution" "main" {
       <p>
         <strong>Choice: Cognito User Pool + JWT</strong>
       </p>
-      <pre><code>{`// Cognito User Pool handles:
+      <CodeBlock code={`// Cognito User Pool handles:
 // - Sign up (email + password, or social: Google, Apple)
 // - Sign in → returns access token + refresh token + ID token
 // - Token refresh (automatic in Amplify Auth SDK)
@@ -226,7 +226,7 @@ app.use(async (req, res, next) => {
   } catch {
     res.status(401).json({ error: 'Invalid token' });
   }
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="api-layer">API Layer (ECS Fargate + ALB)</h2>
       <p>
@@ -245,7 +245,7 @@ app.use(async (req, res, next) => {
         ALB charges $0.008 per LCU-hour (typically much cheaper at moderate volume). ALB also has
         lower operational complexity for an ECS backend.
       </p>
-      <pre><code>{`// ECS Fargate task configuration
+      <CodeBlock code={`// ECS Fargate task configuration
 {
   cpu: 512,           // 0.5 vCPU
   memory: 1024,       // 1 GB RAM
@@ -278,7 +278,7 @@ app.use(async (req, res, next) => {
     retries: 3,
     startPeriod: 60,  // Grace period for initial startup
   }
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="database">Database (DynamoDB)</h2>
       <p>
@@ -295,7 +295,7 @@ app.use(async (req, res, next) => {
         multi-AZ standby, a connection pool (PgBouncer or RDS Proxy), and manual scaling decisions
         as data grows. For this access pattern, it adds operational complexity without benefit.
       </p>
-      <pre><code>{`// DynamoDB single-table design
+      <CodeBlock code={`// DynamoDB single-table design
 Table: cv-builder-prod
 PK                    SK                    Attributes
 USER#u-123            PROFILE               { name, email, plan, createdAt }
@@ -321,10 +321,10 @@ CV#cv-456             EXPORT#exp-789        { status, template, downloadKey, exp
 
 // Billing: PAY_PER_REQUEST (on-demand)
 // At 100k DAU × 20 requests × avg 3 DynamoDB ops = 6M ops/day
-// At $1.25/million reads → ~$7.50/day for reads → $225/month → negligible`}</code></pre>
+// At $1.25/million reads → ~$7.50/day for reads → $225/month → negligible`} lang="text" />
 
       <h2 id="file-storage">File Storage (S3)</h2>
-      <pre><code>{`// Two S3 buckets with different access patterns
+      <CodeBlock code={`// Two S3 buckets with different access patterns
 
 // Bucket 1: Uploads (user-submitted files)
 cv-builder-uploads-prod-{accountId}
@@ -364,7 +364,7 @@ const { url } = await s3Client.getSignedUrlPromise('getObject', {
 // Both buckets: BlockPublicAccess enabled, no public policy
 // Uploads bucket: only the API's IAM role can write (s3:PutObject)
 // Exports bucket: Lambda worker writes, API reads
-// All objects: SSE-KMS encryption at rest`}</code></pre>
+// All objects: SSE-KMS encryption at rest`} lang="typescript" />
 
       <h2 id="async-processing">Async Processing (SQS + Lambda)</h2>
       <MermaidDiagram
@@ -373,7 +373,7 @@ const { url } = await s3Client.getSignedUrlPromise('getObject', {
         caption="Presigned URL upload bypasses the API. SQS decouples the API from the slow AI parsing step."
         minHeight={500}
       />
-      <pre><code>{`// Lambda worker configuration
+      <CodeBlock code={`// Lambda worker configuration
 {
   runtime: 'nodejs20.x',
   timeout: 900,          // 15 minutes max — AI parsing can take 30s
@@ -434,10 +434,10 @@ export const handler = async (event) => {
 // CloudWatch alarm on DLQ depth > 0
 // SNS notification → on-call engineer
 // Runbook: inspect DLQ messages, identify root cause (corrupt file? AI provider issue?)
-// Replay DLQ once resolved: aws sqs receive-message --queue-url DLQ_URL | replay to main queue`}</code></pre>
+// Replay DLQ once resolved: aws sqs receive-message --queue-url DLQ_URL | replay to main queue`} lang="typescript" />
 
       <h2 id="ai-integration">AI Provider Integration</h2>
-      <pre><code>{`// AI provider integration with resilience patterns
+      <CodeBlock code={`// AI provider integration with resilience patterns
 
 async function callAIWithRetry(fileContent, options) {
   const { maxRetries = 3 } = options;
@@ -477,10 +477,10 @@ async function callAIWithRetry(fileContent, options) {
 // Cost optimization:
 // Cache AI responses for identical file hashes
 // Store file SHA-256 in DynamoDB; if same hash exists, copy existing parse result
-// This handles users uploading the same CV multiple times`}</code></pre>
+// This handles users uploading the same CV multiple times`} lang="typescript" />
 
       <h2 id="caching">Caching Strategy (Redis + CloudFront)</h2>
-      <pre><code>{`// Two-layer caching:
+      <CodeBlock code={`// Two-layer caching:
 
 // Layer 1: CloudFront (edge cache for static and semi-static API responses)
 // Cache the /api/cvs list response per user for 30 seconds:
@@ -523,10 +523,10 @@ async function updateSection(cvId, sectionName, content) {
 
 // ElastiCache Redis cluster:
 // t3.micro (1 GB): $0.017/hour = ~$12/month — sufficient for 100k DAU with selective caching
-// Upgrade to r6g.large if Redis becomes a bottleneck`}</code></pre>
+// Upgrade to r6g.large if Redis becomes a bottleneck`} lang="typescript" />
 
       <h2 id="security">Security Architecture</h2>
-      <pre><code>{`// Security layers:
+      <CodeBlock code={`// Security layers:
 
 // 1. Network isolation (VPC)
 // - ALB: public subnet (has internet access)
@@ -569,10 +569,10 @@ async function updateSection(cvId, sectionName, content) {
 // 5. WAF rules on CloudFront
 // - AWS Managed Rule Groups: Core rule set (XSS, SQLi, known bad IPs)
 // - Rate limit: 100 requests/5-min per IP for login endpoints
-// - Rate limit: 1000 requests/5-min per IP for API endpoints`}</code></pre>
+// - Rate limit: 1000 requests/5-min per IP for API endpoints`} lang="text" />
 
       <h2 id="observability">Observability</h2>
-      <pre><code>{`// Structured logging (all ECS and Lambda services):
+      <CodeBlock code={`// Structured logging (all ECS and Lambda services):
 const logger = winston.createLogger({
   format: winston.format.json(),
   transports: [new winston.transports.Console()],  // CloudWatch picks this up
@@ -615,10 +615,10 @@ await cloudwatch.putMetricData({
     { MetricName: 'CVParseLatencySeconds', Value: parseTimeSeconds, Unit: 'Seconds' },
     { MetricName: 'PDFExports', Value: 1, Unit: 'Count' },
   ]
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="cicd">CI/CD Pipeline</h2>
-      <pre><code>{`# .github/workflows/deploy.yml
+      <CodeBlock code={`# .github/workflows/deploy.yml
 name: Deploy
 
 on:
@@ -669,7 +669,7 @@ jobs:
     steps:
       - run: pnpm build:frontend
       - run: aws s3 sync dist/ s3://cv-builder-frontend-prod/ --delete
-      - run: aws cloudfront create-invalidation --distribution-id $CF_ID --paths "/*"`}</code></pre>
+      - run: aws cloudfront create-invalidation --distribution-id $CF_ID --paths "/*"`} lang="bash" />
 
       <h2 id="cost">Cost Estimate</h2>
       <ArticleTable caption="Monthly cost estimate at 100k DAU (us-east-1)" minWidth={680}>

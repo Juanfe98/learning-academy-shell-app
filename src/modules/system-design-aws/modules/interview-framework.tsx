@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { InterviewPlaybook, ArticleTable } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook, ArticleTable } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const interviewFlowDiagram = String.raw`flowchart TD
@@ -85,7 +85,7 @@ export default function InterviewFramework() {
       <p>
         <strong>Questions to ask:</strong>
       </p>
-      <pre><code>{`// Clarification question templates
+      <CodeBlock code={`// Clarification question templates
 
 // Scale questions
 "What is the expected number of daily active users at launch? At peak?"
@@ -109,7 +109,7 @@ export default function InterviewFramework() {
 "What is the team size operating this? How many engineers on-call?"
 "Are there compliance requirements? GDPR? PCI-DSS?"
 
-// The goal: define a well-scoped problem before drawing anything`}</code></pre>
+// The goal: define a well-scoped problem before drawing anything`} lang="text" />
       <p>
         After 5 minutes of clarification, you should know: the rough scale, the 2&ndash;3 core
         user flows, the latency and availability targets, and what is explicitly out of scope.
@@ -121,7 +121,7 @@ export default function InterviewFramework() {
       <p>
         Write down (or say aloud) the two types of requirements before proposing any solution:
       </p>
-      <pre><code>{`// Requirements structure
+      <CodeBlock code={`// Requirements structure
 
 // FUNCTIONAL REQUIREMENTS — what the system must do
 // Keep to 3–5 core capabilities. Be specific.
@@ -145,14 +145,14 @@ Non-Functional Requirements:
 - Real-time collaboration
 - Mobile native apps
 - Payment processing
-- CV template marketplace`}</code></pre>
+- CV template marketplace`} lang="text" />
 
       <h2 id="step3-estimation">Step 3 &mdash; Capacity Estimation (5 min)</h2>
       <p>
         Quick back-of-envelope math to size the system. You do not need precision &mdash; you need
         to understand the order of magnitude and identify where the bottlenecks will be.
       </p>
-      <pre><code>{`// Capacity estimation template — talk through this out loud
+      <CodeBlock code={`// Capacity estimation template — talk through this out loud
 
 // Traffic
 DAU = 100,000
@@ -182,14 +182,14 @@ Read bandwidth = 60 × 10 KB = 600 KB/s = ~5 Mbps
 // Conclusion from estimation:
 // - Scale is very small — simple architecture first, no premature optimization
 // - Storage and bandwidth are trivial — cost is dominated by compute and AI calls
-// - CV parsing is async — AI call latency (1–30s) must not block the user request`}</code></pre>
+// - CV parsing is async — AI call latency (1–30s) must not block the user request`} lang="text" />
 
       <h2 id="step4-api">Step 4 &mdash; API Design (5 min)</h2>
       <p>
         Define the key API endpoints. This grounds the architecture in real contracts and surfaces
         ambiguities early. You do not need to define every endpoint &mdash; focus on the core flows.
       </p>
-      <pre><code>{`// API design — define the contract before drawing infrastructure
+      <CodeBlock code={`// API design — define the contract before drawing infrastructure
 
 // REST API conventions:
 // POST /resource       → create
@@ -237,14 +237,14 @@ POST /api/auth/refresh   → refresh access token
 // - Return job IDs for async operations, never block the response
 // - Use consistent error format: { error: { code, message, details } }
 // - Always version the API: /api/v1/ for breaking changes
-// - Pagination on list endpoints: { data: [], nextCursor: string }`}</code></pre>
+// - Pagination on list endpoints: { data: [], nextCursor: string }`} lang="text" />
 
       <h2 id="step5-data-model">Step 5 &mdash; Data Model (5 min)</h2>
       <p>
         Define the key entities and their relationships. For SQL, think about tables and foreign
         keys. For DynamoDB, think about access patterns first.
       </p>
-      <pre><code>{`// Data model — entities and access patterns
+      <CodeBlock code={`// Data model — entities and access patterns
 
 // DynamoDB single-table design:
 // Access patterns drive the key design:
@@ -275,7 +275,7 @@ CV#cv-456       EXPORT#exp-111      { status, template, downloadUrl, expiresAt }
 // S3 key structure:
 // uploads/{userId}/{cvId}/original.pdf   ← uploaded file
 // exports/{userId}/{cvId}/{exportId}.pdf ← generated PDF
-// presigned-upload URL → browser uploads directly to S3 (never hits your API)`}</code></pre>
+// presigned-upload URL → browser uploads directly to S3 (never hits your API)`} lang="text" />
 
       <h2 id="step6-architecture">Step 6 &mdash; High-Level Architecture (10 min)</h2>
       <p>
@@ -285,7 +285,7 @@ CV#cv-456       EXPORT#exp-111      { status, template, downloadUrl, expiresAt }
       <p>
         The standard components for a web application:
       </p>
-      <pre><code>{`// High-level architecture — talk through each component
+      <CodeBlock code={`// High-level architecture — talk through each component
 
 Browser/Mobile
   ↓
@@ -325,7 +325,7 @@ CI/CD: GitHub Actions → ECR → ECS rolling deploy
 // 7. Worker downloads file from S3
 // 8. Worker calls AI provider to parse CV
 // 9. Worker stores parsed sections in DynamoDB (status: ready)
-// 10. User polls GET /api/cvs/:cvId or receives WebSocket notification`}</code></pre>
+// 10. User polls GET /api/cvs/:cvId or receives WebSocket notification`} lang="text" />
 
       <h2 id="step7-deep-dives">Step 7 &mdash; Deep Dives (15 min)</h2>
       <p>
@@ -386,7 +386,7 @@ CI/CD: GitHub Actions → ECR → ECS rolling deploy
         End by naming the explicit tradeoffs you accepted. This is where senior engineers separate
         themselves &mdash; juniors design without acknowledging tradeoffs, seniors design with them.
       </p>
-      <pre><code>{`// Tradeoff summary — say something like this:
+      <CodeBlock code={`// Tradeoff summary — say something like this:
 
 "Let me call out the key design decisions and their tradeoffs:
 
@@ -412,7 +412,7 @@ CI/CD: GitHub Actions → ECR → ECS rolling deploy
    Chose: Async queue-based processing
    Because: AI calls take 2–30 seconds; keeping them in the request path would mean timeouts and poor UX
    Tradeoff: More moving parts, harder to debug, eventual consistency on status.
-   Revisit: If AI provider had sub-100ms streaming, we could explore server-sent events for real-time."`}</code></pre>
+   Revisit: If AI provider had sub-100ms streaming, we could explore server-sent events for real-time."`} lang="text" />
 
       <h2 id="senior-phrases">Senior-Level Phrases to Use</h2>
       <ul>

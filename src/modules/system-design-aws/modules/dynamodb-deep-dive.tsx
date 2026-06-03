@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "what-makes-dynamodb-different", title: "What Makes DynamoDB Different", level: 2 },
@@ -59,7 +60,7 @@ export default function DynamodbDeepDive() {
       </ul>
 
       <h2 id="core-concepts">Core Concepts: Tables, Items, Attributes</h2>
-      <pre><code>{`// DynamoDB terminology vs SQL terminology
+      <CodeBlock code={`// DynamoDB terminology vs SQL terminology
 SQL Term        DynamoDB Term
 -----------     -------------
 Table       →   Table
@@ -89,7 +90,7 @@ Primary Key →   Partition Key (+ optional Sort Key)
   "status": "shipped",
   "items": ["item-1", "item-2"]
 }
-// Both items coexist in the same table — this is single-table design`}</code></pre>
+// Both items coexist in the same table — this is single-table design`} lang="text" />
 
       <h2 id="primary-keys">Primary Keys: Partition Key and Sort Key</h2>
       <p>
@@ -106,7 +107,7 @@ Primary Key →   Partition Key (+ optional Sort Key)
         uniquely identify the item. Multiple items can share the same partition key as long as their
         sort keys differ. This is the foundation of all non-trivial DynamoDB design.
       </p>
-      <pre><code>{`// Partition Key (PK) determines physical partition
+      <CodeBlock code={`// Partition Key (PK) determines physical partition
 // All items with the same PK are on the same partition server
 // → efficient to query all items with a PK
 
@@ -129,7 +130,7 @@ PK: "USER#alice"    SK: "PROFILE"
     ":end": "ORDER#2024-01-31"
   }
 }
-// Single efficient query → all results from one partition`}</code></pre>
+// Single efficient query → all results from one partition`} lang="text" />
 
       <h2 id="access-patterns-first">Access Patterns First, Design Second</h2>
       <p>
@@ -171,7 +172,7 @@ PK: "USER#alice"    SK: "PROFILE"
         <li>5GB size limit per partition key value</li>
         <li>Up to 5 LSIs per table</li>
       </ul>
-      <pre><code>{`// Base table: orders
+      <CodeBlock code={`// Base table: orders
 // PK: "USER#userId"  SK: "ORDER#orderId"
 
 // GSI: query orders by status across all users
@@ -191,7 +192,7 @@ const result = await dynamodb.query({
     ":s": "PENDING",
     ":date": "2024-01-01"
   }
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="query-vs-scan">Query vs Scan</h2>
       <p>
@@ -203,7 +204,7 @@ const result = await dynamodb.query({
         for parallel scans). Reads the entire table regardless of how many items you need. Very
         expensive at scale. Avoid in production code.
       </p>
-      <pre><code>{`// GOOD: Query (reads only relevant items)
+      <CodeBlock code={`// GOOD: Query (reads only relevant items)
 const result = await dynamodb.query({
   TableName: "table",
   KeyConditionExpression: "PK = :pk AND begins_with(SK, :prefix)",
@@ -221,7 +222,7 @@ const result = await dynamodb.scan({
   ExpressionAttributeValues: { ":id": "alice" }
 });
 // Reads EVERY item in the table, then filters — O(table size)
-// At 1 million items: you pay to read 1M items to get maybe 50`}</code></pre>
+// At 1 million items: you pay to read 1M items to get maybe 50`} lang="typescript" />
       <p>
         If you find yourself writing Scans, it is a signal that your table design does not support
         your access patterns. Add a GSI instead.
@@ -234,7 +235,7 @@ const result = await dynamodb.scan({
         of traffic goes to a single partition key, overwhelming that partition&apos;s capacity
         even if the total table capacity is sufficient.
       </p>
-      <pre><code>{`// HOT PARTITION: using a fixed, popular value as PK
+      <CodeBlock code={`// HOT PARTITION: using a fixed, popular value as PK
 // Bad: all requests go to the same partition
 {
   "PK": "GLOBAL",     // All users write here
@@ -262,7 +263,7 @@ const shard = Math.floor(Math.random() * 10);  // 0-9
   "PK": "USER#user-id-xyz",  // distributed by user
   "SK": "EVENT#2024-01-15T10:00:00Z"
 }
-// User writes are naturally distributed across thousands of partitions`}</code></pre>
+// User writes are naturally distributed across thousands of partitions`} lang="typescript" />
 
       <h2 id="capacity-modes">Provisioned vs On-Demand Capacity</h2>
       <table>
@@ -318,7 +319,7 @@ const shard = Math.floor(Math.random() * 10);  // 0-9
         you might read a slightly stale value (milliseconds behind). Strongly consistent reads always
         return the most recent write but cost 2&times; as many RCUs.
       </p>
-      <pre><code>{`// Eventually consistent read (default) — 1 RCU per 4KB
+      <CodeBlock code={`// Eventually consistent read (default) — 1 RCU per 4KB
 const result = await dynamodb.getItem({
   TableName: "table",
   Key: { PK: "USER#alice", SK: "PROFILE" }
@@ -332,7 +333,7 @@ const result = await dynamodb.getItem({
 });
 
 // GSIs never support strongly consistent reads
-// LSIs do (and they share base table capacity)`}</code></pre>
+// LSIs do (and they share base table capacity)`} lang="typescript" />
 
       <h2 id="streams-ttl">DynamoDB Streams and TTL</h2>
       <p>
@@ -347,7 +348,7 @@ const result = await dynamodb.getItem({
         48 hours). Free &mdash; no WCU consumed. Useful for: sessions, temporary data, cache entries,
         audit logs with retention windows.
       </p>
-      <pre><code>{`// TTL: add expiresAt attribute (Unix timestamp)
+      <CodeBlock code={`// TTL: add expiresAt attribute (Unix timestamp)
 {
   "PK": "SESSION#token-xyz",
   "SK": "SESSION",
@@ -367,7 +368,7 @@ const result = await dynamodb.getItem({
       "userId": { "S": "USER#alice" }
     }
   }
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="single-table-design">Single-Table Design</h2>
       <p>
@@ -379,7 +380,7 @@ const result = await dynamodb.getItem({
         The strategy uses generic PK/SK attribute names and prefixes (like <code>USER#</code>,
         <code>ORDER#</code>) to distinguish entity types within the same table.
       </p>
-      <pre><code>{`// Single-table with multiple entity types
+      <CodeBlock code={`// Single-table with multiple entity types
 // Table: "app" with PK (partition key) and SK (sort key)
 
 // User entity
@@ -401,7 +402,7 @@ Query: PK = "USER#alice"
 // Access pattern: get order details + all items (single query!)
 Query: PK = "ORDER#order-1"
 → Returns DETAILS, ITEM#sku-abc, ITEM#sku-def
-→ All entities needed for "order detail" page in ONE query`}</code></pre>
+→ All entities needed for "order detail" page in ONE query`} lang="text" />
 
       <h2 id="real-example">Real Example: Expense-Sharing App</h2>
       <p>
@@ -415,7 +416,7 @@ Query: PK = "ORDER#order-1"
         <li>Get all expenses in a group (sorted by date)</li>
         <li>Get expenses where a specific user is a participant</li>
       </ol>
-      <pre><code>{`// Table design: "expenses-app"
+      <CodeBlock code={`// Table design: "expenses-app"
 // PK: partition key | SK: sort key
 
 // 1. User profile
@@ -446,7 +447,7 @@ Query: PK = "ORDER#order-1"
 
 // Query: get all expenses for Alice
 GSI Query: GSI1PK = "USER_EXPENSE#alice", GSI1SK > "2024-01-01"
-`}</code></pre>
+`} lang="text" />
 
       <h2 id="anti-patterns">Anti-Patterns</h2>
       <ul>

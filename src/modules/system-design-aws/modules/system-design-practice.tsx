@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable } from "@/components/ui";
+import { CodeBlock, ArticleTable } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const urlShortenerDiagram = String.raw`flowchart LR
@@ -105,7 +105,7 @@ export default function SystemDesignPractice() {
       <p><strong>Assume:</strong> 100M links, 10B redirects/month, 7-character random codes, no analytics for MVP.</p>
 
       <p><strong>Capacity estimation:</strong></p>
-      <pre><code>{`// QPS
+      <CodeBlock code={`// QPS
 Write (new links): 100M / month / 30 / 86,400 ≈ 40 writes/s
 Read (redirects): 10B / month / 30 / 86,400 ≈ 3,900 reads/s
 Read:Write ratio = 100:1 → heavily read-dominated → caching critical
@@ -116,10 +116,10 @@ Link record ≈ 500 bytes (short code + long URL + metadata)
 
 // Bandwidth (redirects)
 Redirect response = 200 bytes (301 response headers)
-3,900 req/s × 200 bytes = 780 KB/s → negligible`}</code></pre>
+3,900 req/s × 200 bytes = 780 KB/s → negligible`} lang="text" />
 
       <p><strong>API design:</strong></p>
-      <pre><code>{`// Create short link
+      <CodeBlock code={`// Create short link
 POST /api/links
 Request: { url: string, expiresAt?: string }
 Response: { shortCode: "Xk3a9", shortUrl: "https://bit.ly/Xk3a9" }
@@ -134,10 +134,10 @@ Response: 301 Moved Permanently, Location: https://original-long-url.com/...
 //   → Problem: if you update the long URL, old browsers use cached 301
 // 302 (temporary): browser always hits the server
 //   → Allows analytics tracking and URL updates
-//   → Higher server load at scale`}</code></pre>
+//   → Higher server load at scale`} lang="text" />
 
       <p><strong>Data model:</strong></p>
-      <pre><code>{`// DynamoDB table
+      <CodeBlock code={`// DynamoDB table
 PK          SK      Attributes
 CODE#Xk3a9  LINK    { longUrl, createdAt, expiresAt, ownerId }
 USER#u-123  CODE#Xk3a9  { createdAt }  // to list user's links
@@ -154,7 +154,7 @@ function generateShortCode() {
 
 // Collision handling:
 // On DynamoDB put, use ConditionExpression: attribute_not_exists(PK)
-// If fails (collision), generate a new code and retry (extremely rare)`}</code></pre>
+// If fails (collision), generate a new code and retry (extremely rare)`} lang="text" />
 
       <MermaidDiagram
         chart={urlShortenerDiagram}
@@ -179,7 +179,7 @@ function generateShortCode() {
       <p><strong>Assume:</strong> 10k uploads/day, processing takes 5–30 seconds per file, max file size 50MB.</p>
 
       <p><strong>Architecture:</strong></p>
-      <pre><code>{`// Upload flow:
+      <CodeBlock code={`// Upload flow:
 // 1. Client requests presigned S3 upload URL
 POST /api/files/upload-url
 Request: { filename: string, contentType: string, size: number }
@@ -213,7 +213,7 @@ Response: {
 
 // Download:
 POST /api/files/:fileId/download-url
-Response: { downloadUrl: string }  // presigned S3 GET URL, expires in 15 minutes`}</code></pre>
+Response: { downloadUrl: string }  // presigned S3 GET URL, expires in 15 minutes`} lang="text" />
 
       <p><strong>Key design decisions:</strong></p>
       <ul>
@@ -239,7 +239,7 @@ Response: { downloadUrl: string }  // presigned S3 GET URL, expires in 15 minute
       />
 
       <p><strong>Key design decisions:</strong></p>
-      <pre><code>{`// Notification preference check (in worker, not router):
+      <CodeBlock code={`// Notification preference check (in worker, not router):
 // 1. Worker picks up message from SQS
 // 2. Reads user preferences from DynamoDB (or Redis cache)
 // 3. If user opted out of this channel: discard message
@@ -268,7 +268,7 @@ Response: { downloadUrl: string }  // presigned S3 GET URL, expires in 15 minute
 // Dead letter queue handling:
 // After 3 failures, message goes to DLQ
 // Alert engineering team: specific notification type may have provider issues
-// Allow replay from DLQ once the issue is resolved`}</code></pre>
+// Allow replay from DLQ once the issue is resolved`} lang="text" />
 
       <h2 id="real-time-chat">Problem 4: Real-Time Chat</h2>
       <p>
@@ -284,7 +284,7 @@ Response: { downloadUrl: string }  // presigned S3 GET URL, expires in 15 minute
         minHeight={320}
       />
 
-      <pre><code>{`// WebSocket connection management
+      <CodeBlock code={`// WebSocket connection management
 // API Gateway WebSocket API manages connections natively
 // Each connection has a unique connectionId
 
@@ -317,7 +317,7 @@ GET /api/rooms/:roomId/messages?before=timestamp&limit=50
 // + API Gateway WebSocket: no server management, scales to millions of connections
 // - Higher cost per message than a persistent WebSocket server (ECS)
 // - Lambda cold starts can cause connection delays (use Provisioned Concurrency)
-// - API Gateway has 10-minute idle connection timeout (send keep-alive pings)`}</code></pre>
+// - API Gateway has 10-minute idle connection timeout (send keep-alive pings)`} lang="text" />
 
       <h2 id="news-feed">Problem 5: News Feed / Social Timeline</h2>
       <p>
@@ -327,7 +327,7 @@ GET /api/rooms/:roomId/messages?before=timestamp&limit=50
       <p><strong>Assume:</strong> 500M users, average 500 followers, 5% of users post per day.</p>
 
       <p><strong>Two approaches &mdash; fan-out on write vs fan-out on read:</strong></p>
-      <pre><code>{`// APPROACH 1: Fan-out on Write (Push model)
+      <CodeBlock code={`// APPROACH 1: Fan-out on Write (Push model)
 // When Alice posts, immediately write to all her followers' feed tables
 //
 // Pros:
@@ -364,7 +364,7 @@ GET /api/rooms/:roomId/messages?before=timestamp&limit=50
 // ZADD feed:bob-123 <timestamp> <postId>
 // ZREVRANGE feed:bob-123 0 19  → last 20 posts in user's feed
 // On new post: write to Redis feeds of followers (fan-out on write to cache)
-// Persist posts to DynamoDB for durability and history beyond cache`}</code></pre>
+// Persist posts to DynamoDB for durability and history beyond cache`} lang="text" />
 
       <h2 id="payment-workflow">Problem 6: Payment Processing Workflow</h2>
       <p>
@@ -372,7 +372,7 @@ GET /api/rooms/:roomId/messages?before=timestamp&limit=50
         Users place orders, payments are charged, inventory is reserved, and orders are confirmed.
         Must handle failures gracefully and never double-charge.
       </p>
-      <pre><code>{`// Payment processing — correctness critical
+      <CodeBlock code={`// Payment processing — correctness critical
 // Cannot use eventual consistency for money
 
 // Core invariants:
@@ -417,7 +417,7 @@ Response: { orderId, status: "pending" }
 
 // Observability for payments:
 // Alert on: payment failure rate > 2%, refund rate spike, fraud score threshold
-// Every payment attempt logged with: orderId, amount, outcome, stripeResponse`}</code></pre>
+// Every payment attempt logged with: orderId, amount, outcome, stripeResponse`} lang="text" />
 
       <h2 id="group-expense">Problem 7: Group Expense Splitting App</h2>
       <p>
@@ -425,7 +425,7 @@ Response: { orderId, status: "pending" }
         add expenses, assign who paid and who owes what, and the system calculates and simplifies
         debts between all members.
       </p>
-      <pre><code>{`// Core data model
+      <CodeBlock code={`// Core data model
 // DynamoDB single-table design
 PK                  SK                  Attributes
 GROUP#g-123         METADATA            { name, createdAt, createdBy }
@@ -464,7 +464,7 @@ expense.splits = [
 POST /api/groups/:groupId/settlements
 Request: { payerId: string, receiverId: string, amount: number }
 // Records the settlement, reduces debt. Does NOT process payment.
-// Integration with Venmo/PayPal: link out to external payment, then record`}</code></pre>
+// Integration with Venmo/PayPal: link out to external payment, then record`} lang="text" />
 
       <h2 id="rate-limiter">Problem 8: Rate Limiter Service</h2>
       <p>
@@ -516,7 +516,7 @@ Request: { payerId: string, receiverId: string, amount: number }
           </tbody>
         </table>
       </ArticleTable>
-      <pre><code>{`// Implementation using Redis (token bucket with sliding window counter)
+      <CodeBlock code={`// Implementation using Redis (token bucket with sliding window counter)
 
 // Redis data structure:
 // Key: rate_limit:{userId}:{endpoint}:{windowMinute}
@@ -567,7 +567,7 @@ async function checkRateLimit(userId, endpoint, limit, windowSeconds) {
 
 // Distributed rate limiting across multiple API servers:
 // All servers share a Redis cluster → counts are globally consistent
-// Atomicity: use Redis INCR which is atomic — no race conditions`}</code></pre>
+// Atomicity: use Redis INCR which is atomic — no race conditions`} lang="typescript" />
     </div>
   );
 }

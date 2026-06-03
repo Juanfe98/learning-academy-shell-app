@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const btreeDiagram = String.raw`flowchart TB
@@ -58,7 +59,7 @@ export default function PerformanceEngineering() {
         <strong>Never report only the average.</strong> The average latency is almost useless because
         it hides the outliers that actually affect users.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 Request latencies (ms): 5, 6, 5, 7, 6, 5, 8, 6, 7, 500
 
 Average: (5+6+5+7+6+5+8+6+7+500) / 10 = 55.5ms
@@ -70,7 +71,7 @@ p99:          ~500ms   → 99% of users see ≤500ms (that last request is terri
 
 The one 500ms request drags the average to 55.5ms but most users see 6ms.
 At 1M requests/day, p99 = 10,000 users/day experiencing 500ms+ latency.
-`}</pre>
+`} lang="text" />
       <p>
         <strong>Which percentile to optimize?</strong> It depends on your SLO and business model.
         For interactive user-facing APIs, optimize p99. For background jobs, p95 is usually
@@ -124,7 +125,7 @@ At 1M requests/day, p99 = 10,000 users/day experiencing 500ms+ latency.
           </tr>
         </tbody>
       </table>
-      <pre><code>{`# Profile CPU usage on Node.js process
+      <CodeBlock code={`# Profile CPU usage on Node.js process
 node --prof app.js
 node --prof-process isolate-*.log
 
@@ -140,7 +141,7 @@ htop  # interactive
 # CPU utilization per task
 # Memory utilization per task
 # Network bytes in/out
-# These point to CPU vs IO vs memory bottleneck`}</code></pre>
+# These point to CPU vs IO vs memory bottleneck`} lang="bash" />
 
       <h2 id="connection-pooling">Connection Pooling</h2>
       <p>
@@ -149,7 +150,7 @@ htop  # interactive
         Connection pooling maintains a pool of pre-opened connections that requests can borrow and
         return.
       </p>
-      <pre><code>{`// Node.js PostgreSQL connection pool (node-postgres)
+      <CodeBlock code={`// Node.js PostgreSQL connection pool (node-postgres)
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -166,7 +167,7 @@ const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
 // Connection pool sizing rule of thumb:
 // max_connections = (num_cores * 2) + num_disk_spindles
 // For web apps, 10-20 connections per service instance
-// Use RDS Proxy for serverless (Lambda can't maintain persistent pools)`}</code></pre>
+// Use RDS Proxy for serverless (Lambda can't maintain persistent pools)`} lang="typescript" />
 
       <p>
         <strong>AWS RDS Proxy:</strong> Sits between your application and RDS. Maintains a warm pool
@@ -186,7 +187,7 @@ const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
         caption="The index keeps keys sorted so the database can discard huge parts of the search space at each branch instead of scanning every row."
         minHeight={520}
       />
-      <pre>{`Lookup for "alice@example.com":
+      <CodeBlock code={`Lookup for "alice@example.com":
   1. Start at root
   2. "alice@" < "m@" → go left
   3. "alice@" > "a@" → go right child
@@ -194,8 +195,8 @@ const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
 
 O(log n) = ~20 comparisons for 1 million rows
 vs full table scan = 1,000,000 comparisons
-`}</pre>
-      <pre><code>{`-- Composite index: column order is critical
+`} lang="text" />
+      <CodeBlock code={`-- Composite index: column order is critical
 -- This serves: WHERE user_id = ?
 --           and WHERE user_id = ? AND status = ?
 -- But NOT WHERE status = ? alone
@@ -217,7 +218,7 @@ EXPLAIN ANALYZE
 
 -- Index bloat: indexes grow with updates/deletes
 -- Rebuild periodically:
-REINDEX INDEX CONCURRENTLY idx_orders_user_status;`}</code></pre>
+REINDEX INDEX CONCURRENTLY idx_orders_user_status;`} lang="sql" />
 
       <h2 id="pagination">Pagination: Offset vs Cursor</h2>
       <p>
@@ -225,16 +226,16 @@ REINDEX INDEX CONCURRENTLY idx_orders_user_status;`}</code></pre>
         two main approaches, and one of them breaks at scale.
       </p>
       <p><strong>Offset pagination (DO NOT use for large tables in production):</strong></p>
-      <pre><code>{`// OFFSET pagination
+      <CodeBlock code={`// OFFSET pagination
 SELECT * FROM products ORDER BY created_at DESC LIMIT 20 OFFSET 1000;
 // Problem: database must read 1020 rows and discard the first 1000
 // At OFFSET 100000 → reads 100020 rows → 5000ms query
 
 // O(OFFSET) performance → pages load slower and slower as users go deeper
-// Also inconsistent: if items are inserted between pages, items are skipped or duplicated`}</code></pre>
+// Also inconsistent: if items are inserted between pages, items are skipped or duplicated`} lang="sql" />
 
       <p><strong>Cursor pagination (always use for production):</strong></p>
-      <pre><code>{`// CURSOR pagination: start from a known position
+      <CodeBlock code={`// CURSOR pagination: start from a known position
 // First page:
 SELECT * FROM products ORDER BY created_at DESC, id DESC LIMIT 20;
 // → returns items with last item cursor: { created_at: "2024-01-15", id: "abc123" }
@@ -255,7 +256,7 @@ LIMIT 20;
 }
 
 // Cursor is base64-encoded JSON — client passes it as query parameter
-// &cursor=eyJjcmVhdGVkQXQiOiIyMDI0LTAxLTE1IiwiaWQiOiJhYmMxMjMifQ==`}</code></pre>
+// &cursor=eyJjcmVhdGVkQXQiOiIyMDI0LTAxLTE1IiwiaWQiOiJhYmMxMjMifQ==`} lang="sql" />
 
       <h2 id="payload-optimization">Payload Optimization: Compression and Over-fetching</h2>
       <p>
@@ -264,7 +265,7 @@ LIMIT 20;
       <p><strong>Compression:</strong> gzip reduces JSON payloads by 60&ndash;80%. brotli (used by
         modern browsers) reduces by 70&ndash;90%. Enable at the load balancer or application level.
       </p>
-      <pre><code>{`// Express.js: enable compression
+      <CodeBlock code={`// Express.js: enable compression
 import compression from 'compression';
 app.use(compression({
   level: 6,        // compression level 0-9 (6 = good balance)
@@ -273,7 +274,7 @@ app.use(compression({
 
 // Check if a response is compressed
 curl -H "Accept-Encoding: gzip" -I https://api.example.com/products
-# Look for: Content-Encoding: gzip`}</code></pre>
+# Look for: Content-Encoding: gzip`} lang="javascript" />
 
       <p><strong>Over-fetching:</strong> Returning 50 fields when the client needs 5. Each unnecessary
         field increases payload size, serialization time, and memory usage. Solutions: specific SELECT
@@ -282,7 +283,7 @@ curl -H "Accept-Encoding: gzip" -I https://api.example.com/products
       </p>
 
       <h2 id="batching">Batching: N+1 and DataLoader Pattern</h2>
-      <pre><code>{`// DataLoader pattern: batch and cache lookups
+      <CodeBlock code={`// DataLoader pattern: batch and cache lookups
 import DataLoader from 'dataloader';
 
 const userLoader = new DataLoader(async (userIds: readonly string[]) => {
@@ -303,7 +304,7 @@ const [alice, bob, carol] = await Promise.all([
   userLoader.load('user-bob'),
   userLoader.load('user-carol')
 ]);
-// → 1 SQL query: WHERE id IN ('user-alice', 'user-bob', 'user-carol')`}</code></pre>
+// → 1 SQL query: WHERE id IN ('user-alice', 'user-bob', 'user-carol')`} lang="typescript" />
 
       <h2 id="async-processing">Async Processing for Heavy Work</h2>
       <p>
@@ -311,7 +312,7 @@ const [alice, bob, carol] = await Promise.all([
         images, ML inference, search index updates. These belong in background workers, not in the
         request path.
       </p>
-      <pre><code>{`// DON'T: Block the HTTP response waiting for heavy work
+      <CodeBlock code={`// DON'T: Block the HTTP response waiting for heavy work
 app.post('/api/upload-cv', async (req, res) => {
   const cv = await saveFile(req.file);
   await parseCV(cv);       // ← 5-30 seconds
@@ -330,7 +331,7 @@ app.post('/api/upload-cv', async (req, res) => {
   });
   res.status(202).json({ cvId: cv.id, status: 'processing' });
   // Response in ~200ms → client polls /api/cvs/:id for status
-});`}</code></pre>
+});`} lang="text" />
 
       <h2 id="cdn-optimization">CDN and Edge Optimization</h2>
       <ul>
@@ -343,7 +344,7 @@ app.post('/api/upload-cv', async (req, res) => {
       </ul>
 
       <h2 id="debugging-framework">Debugging Framework: How to Investigate Slow Endpoints</h2>
-      <pre>{`
+      <CodeBlock code={`
 Step 1: Establish the scope
   - Is it slow for all users or specific ones?
   - Is it slow for all endpoints or specific ones?
@@ -376,8 +377,8 @@ Step 7: Fix and verify
   - One change at a time
   - Measure before and after
   - Deploy to staging with production-scale data
-`}</pre>
-      <pre><code>{`-- PostgreSQL: find slowest queries
+`} lang="text" />
+      <CodeBlock code={`-- PostgreSQL: find slowest queries
 SELECT query, calls, mean_exec_time, total_exec_time,
        rows, 100.0 * shared_blks_hit /
              NULLIF(shared_blks_hit + shared_blks_read, 0) AS hit_percent
@@ -389,7 +390,7 @@ LIMIT 20;
 SELECT pid, now() - pg_stat_activity.query_start AS duration, query
 FROM pg_stat_activity
 WHERE state = 'active' AND query_start < NOW() - INTERVAL '5 seconds'
-ORDER BY duration DESC;`}</code></pre>
+ORDER BY duration DESC;`} lang="dockerfile" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

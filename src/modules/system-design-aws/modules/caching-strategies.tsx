@@ -1,6 +1,8 @@
+import ExcalidrawViewer from "@/components/diagrams/ExcalidrawViewer";
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
 import { InterviewPlaybook, CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
+import fullCachingDiagram from "@/modules/system-design-aws/diagrams/full-caching.json";
 
 const cacheLayerStack = String.raw`flowchart LR
     U["Client / Browser"] -->|request| BC{"Browser Cache"}
@@ -67,17 +69,97 @@ const stampedeMutex = String.raw`sequenceDiagram
     LOCK-->>RN: proceed
     RN->>CACHE: GET product:99 (hit, no DB call)`;
 
+const evictionDecision = String.raw`flowchart TD
+    W["SET key"] --> M{"maxmemory<br/>reached?"}
+    M -->|No| OK["Store key"]
+    M -->|Yes| P{"maxmemory-policy"}
+    P -->|noeviction| ERR["Reject write (OOM error)"]
+    P -->|allkeys-lru| L["Evict least-recently-used<br/>across all keys"]
+    P -->|allkeys-lfu| F["Evict least-frequently-used"]
+    P -->|volatile-ttl| T["Evict key nearest expiry<br/>(keys with a TTL only)"]
+    L --> OK
+    F --> OK
+    T --> OK`;
+
+const cacheRace = String.raw`sequenceDiagram
+    autonumber
+    participant RD as Reader (cache miss)
+    participant W as Writer (update)
+    participant CACHE as Redis
+    participant DB as Database
+    RD->>DB: read → gets v1 (old)
+    W->>DB: write v2 (new)
+    W->>CACHE: DEL key
+    RD->>CACHE: SET key = v1
+    Note over CACHE: cache now pinned to STALE v1 until TTL`;
+
+const penetration = String.raw`flowchart LR
+    A["GET key:does-not-exist"] --> C{"In cache?"}
+    C -->|miss, every time| DB[("Database")]
+    DB -->|returns null| N["null is never cached"]
+    N -.same request repeats.-> A
+    G["Guard: negative cache<br/>or bloom filter"] -.short-circuits.-> C`;
+
+const avalanche = String.raw`flowchart TD
+    K["10,000 keys warmed at startup<br/>all with TTL = 3600s"] --> E["All expire in the same second"]
+    E --> S["10,000 simultaneous misses"]
+    S --> DB[("Database spike → overload")]
+    FIX["Fix: TTL = base + random jitter"] -.spreads expiry.-> E`;
+
+const hotKey = String.raw`flowchart LR
+    C1["App node 1"] --> S["Redis shard B<br/>celebrity:1"]
+    C2["App node 2"] --> S
+    C3["App node 3"] --> S
+    C4["App node N"] --> S
+    S --> HOT["Shard B saturated<br/>(CPU + network)"]
+    SA["Redis shard A — idle"]
+    SC["Redis shard C — idle"]`;
+
+const multiTier = String.raw`flowchart LR
+    REQ["Request"] --> L1{"L1: in-process<br/>local memory"}
+    L1 -->|hit ~50 ns| REQ
+    L1 -->|miss| L2{"L2: Redis<br/>shared"}
+    L2 -->|hit ~0.5 ms| L1
+    L2 -->|miss| DB[("Database 5-100 ms")]
+    DB -->|populate| L2`;
+
 export const toc: TocItem[] = [
   { id: "why-caching", title: "Why Caching Exists", level: 2 },
   { id: "cache-layers", title: "The Cache Layer Stack", level: 2 },
-  { id: "browser-caching", title: "Browser Caching: Cache-Control and ETag", level: 2 },
+  {
+    id: "browser-caching",
+    title: "Browser Caching: Cache-Control and ETag",
+    level: 2,
+  },
   { id: "cdn-caching", title: "CDN Caching", level: 2 },
   { id: "application-caching", title: "Application-Level Caching", level: 2 },
   { id: "redis-vs-memcached", title: "Redis vs Memcached", level: 2 },
   { id: "ttl-design", title: "TTL Design", level: 2 },
-  { id: "cache-invalidation", title: "Cache Invalidation: The Hard Problem", level: 2 },
+  {
+    id: "eviction-policies",
+    title: "Eviction Policies: When the Cache Is Full",
+    level: 2,
+  },
+  {
+    id: "cache-invalidation",
+    title: "Cache Invalidation: The Hard Problem",
+    level: 2,
+  },
   { id: "caching-patterns", title: "Caching Patterns", level: 2 },
-  { id: "cache-stampede", title: "Cache Stampede and the Thundering Herd", level: 2 },
+  {
+    id: "cache-consistency",
+    title: "Cache Consistency: The Read/Write Race",
+    level: 2,
+  },
+  {
+    id: "cache-stampede",
+    title: "Cache Stampede and the Thundering Herd",
+    level: 2,
+  },
+  { id: "cache-penetration", title: "Cache Penetration", level: 2 },
+  { id: "cache-avalanche", title: "Cache Avalanche", level: 2 },
+  { id: "hot-key", title: "Hot Keys and Hot Partitions", level: 2 },
+  { id: "multi-tier", title: "Multi-Tier Caching (L1 + L2)", level: 2 },
   { id: "cache-warming", title: "Cache Warming", level: 2 },
   { id: "real-examples", title: "Real Examples", level: 2 },
   { id: "when-not-to-cache", title: "When NOT to Cache", level: 2 },
@@ -90,43 +172,52 @@ export default function CachingStrategies() {
   return (
     <div className="article-content">
       <p>
-        Caching is the highest-leverage performance optimization in distributed systems. A cache hit
-        can reduce a 100ms database query to a 0.5ms memory read &mdash; a 200&times; improvement.
-        At scale, it is the difference between a database that handles your traffic and one that
-        collapses under it. But caching is also where some of the most subtle bugs in distributed
-        systems live: stale data, cache stampedes, inconsistency between cache and database, and
-        silent data corruption.
+        Caching is the highest-leverage performance optimization in distributed
+        systems. A cache hit can reduce a 100ms database query to a 0.5ms memory
+        read &mdash; a 200&times; improvement. At scale, it is the difference
+        between a database that handles your traffic and one that collapses
+        under it. But caching is also where some of the most subtle bugs in
+        distributed systems live: stale data, cache stampedes, inconsistency
+        between cache and database, and silent data corruption.
       </p>
+      <ExcalidrawViewer
+        data={fullCachingDiagram}
+        title="Production Architecture Mental Model"
+        caption="Solid arrows = synchronous request path. Dashed amber arrow = async offload to queue. Double-headed arrows = cache and DB are read and written by the app layer."
+        height={520}
+      />
 
       <h2 id="why-caching">Why Caching Exists</h2>
       <p>
-        <strong>Analogy:</strong> You are writing a report that requires looking up a reference book.
-        After the first lookup, you keep the book open on your desk (cache) rather than returning it
-        to the shelf (database) after every paragraph. The desk has limited space, so you eventually
-        put older books away &mdash; but the books you use most stay close.
+        <strong>Analogy:</strong> You are writing a report that requires looking
+        up a reference book. After the first lookup, you keep the book open on
+        your desk (cache) rather than returning it to the shelf (database) after
+        every paragraph. The desk has limited space, so you eventually put older
+        books away &mdash; but the books you use most stay close.
       </p>
-      <p>
-        Two primary reasons to cache:
-      </p>
+      <p>Two primary reasons to cache:</p>
       <ul>
         <li>
-          <strong>Latency:</strong> Memory reads (~100ns) are orders of magnitude faster than disk
-          reads (~10ms) or network database queries (~5&ndash;100ms). Serving data from a Redis
-          cache is 10&ndash;200&times; faster than a database query.
+          <strong>Latency:</strong> Memory reads (~100ns) are orders of
+          magnitude faster than disk reads (~10ms) or network database queries
+          (~5&ndash;100ms). Serving data from a Redis cache is
+          10&ndash;200&times; faster than a database query.
         </li>
         <li>
-          <strong>Cost and capacity:</strong> Reducing database load extends the database&apos;s
-          effective capacity. Serving 95% of reads from cache means your database handles 20&times;
-          more users with the same hardware.
+          <strong>Cost and capacity:</strong> Reducing database load extends the
+          database&apos;s effective capacity. Serving 95% of reads from cache
+          means your database handles 20&times; more users with the same
+          hardware.
         </li>
       </ul>
 
       <h2 id="cache-layers">The Cache Layer Stack</h2>
       <p>
-        A request passes through multiple cache layers before it ever reaches the database. Each
-        layer that hits short-circuits the rest of the path &mdash; the closer the hit is to the
-        client, the cheaper the response. The mental model below is the one to draw on a whiteboard
-        when an interviewer asks &quot;where would you add caching?&quot;
+        A request passes through multiple cache layers before it ever reaches
+        the database. Each layer that hits short-circuits the rest of the path
+        &mdash; the closer the hit is to the client, the cheaper the response.
+        The mental model below is the one to draw on a whiteboard when an
+        interviewer asks &quot;where would you add caching?&quot;
       </p>
       <MermaidDiagram
         chart={cacheLayerStack}
@@ -137,10 +228,12 @@ export default function CachingStrategies() {
 
       <h2 id="browser-caching">Browser Caching: Cache-Control and ETag</h2>
       <p>
-        The browser has its own HTTP cache. The server controls browser caching behavior through
-        response headers.
+        The browser has its own HTTP cache. The server controls browser caching
+        behavior through response headers.
       </p>
-      <CodeBlock lang="bash" code={`# Key Cache-Control directives
+      <CodeBlock
+        lang="bash"
+        code={`# Key Cache-Control directives
 Cache-Control: public, max-age=86400
   # Public: can be cached by any cache (CDN, browser)
   # max-age=86400: fresh for 24 hours (in seconds)
@@ -165,7 +258,8 @@ ETag: "abc123def456"
 
 # Conditional GET: client sends If-None-Match header
 # If content unchanged → 304 Not Modified (no body, saves bandwidth)
-# If changed → 200 OK with new content and new ETag`} />
+# If changed → 200 OK with new content and new ETag`}
+      />
 
       <table>
         <thead>
@@ -178,27 +272,39 @@ ETag: "abc123def456"
         <tbody>
           <tr>
             <td>HTML pages</td>
-            <td><code>no-cache</code> or <code>max-age=60</code></td>
+            <td>
+              <code>no-cache</code> or <code>max-age=60</code>
+            </td>
             <td>Users need fresh HTML after deploy</td>
           </tr>
           <tr>
-            <td>Hashed JS/CSS (<code>main.abc.js</code>)</td>
-            <td><code>public, max-age=31536000, immutable</code></td>
+            <td>
+              Hashed JS/CSS (<code>main.abc.js</code>)
+            </td>
+            <td>
+              <code>public, max-age=31536000, immutable</code>
+            </td>
             <td>Hash changes with content; cache forever</td>
           </tr>
           <tr>
             <td>Images (with version in URL)</td>
-            <td><code>public, max-age=604800</code></td>
+            <td>
+              <code>public, max-age=604800</code>
+            </td>
             <td>1 week; update URL to force refresh</td>
           </tr>
           <tr>
             <td>API responses (public data)</td>
-            <td><code>public, max-age=60, stale-while-revalidate=300</code></td>
+            <td>
+              <code>public, max-age=60, stale-while-revalidate=300</code>
+            </td>
             <td>Cache briefly; revalidate in background</td>
           </tr>
           <tr>
             <td>API responses (user-specific)</td>
-            <td><code>private, no-cache</code> or <code>no-store</code></td>
+            <td>
+              <code>private, no-cache</code> or <code>no-store</code>
+            </td>
             <td>Never share between users</td>
           </tr>
         </tbody>
@@ -206,16 +312,19 @@ ETag: "abc123def456"
 
       <h2 id="cdn-caching">CDN Caching</h2>
       <p>
-        CDN caches (CloudFront) operate between the client and your origin server. They cache based
-        on the URL (and optionally headers, cookies, query strings) and serve responses from edge
-        nodes globally. A cache hit at the CDN level means your origin never receives the request.
+        CDN caches (CloudFront) operate between the client and your origin
+        server. They cache based on the URL (and optionally headers, cookies,
+        query strings) and serve responses from edge nodes globally. A cache hit
+        at the CDN level means your origin never receives the request.
       </p>
       <p>
-        <strong>CloudFront cache key:</strong> By default, CloudFront&apos;s cache key is just the
-        URL. You can add headers or query strings to the cache key if you need per-language or
-        per-device responses.
+        <strong>CloudFront cache key:</strong> By default, CloudFront&apos;s
+        cache key is just the URL. You can add headers or query strings to the
+        cache key if you need per-language or per-device responses.
       </p>
-      <CodeBlock lang="bash" code={`# CloudFront behavior configuration
+      <CodeBlock
+        lang="bash"
+        code={`# CloudFront behavior configuration
 Default TTL: 86400     # 1 day if no Cache-Control header
 Maximum TTL: 31536000  # 1 year
 Minimum TTL: 0         # Can serve from cache even if no-cache header
@@ -225,15 +334,18 @@ Minimum TTL: 0         # Can serve from cache even if no-cache header
 
 # CloudFront caches EVERYTHING unless you tell it not to
 # For API endpoints, set Cache-Control: no-store
-# OR configure CloudFront behavior to not cache /api/*`} />
+# OR configure CloudFront behavior to not cache /api/*`}
+      />
 
       <h2 id="application-caching">Application-Level Caching</h2>
       <p>
-        Application-level caching is where your backend service caches data from downstream services
-        (databases, external APIs) in a fast in-memory store. This is the primary place where Redis
-        or Memcached is used.
+        Application-level caching is where your backend service caches data from
+        downstream services (databases, external APIs) in a fast in-memory
+        store. This is the primary place where Redis or Memcached is used.
       </p>
-      <CodeBlock lang="typescript" code={`// Application cache pattern (Node.js + Redis)
+      <CodeBlock
+        lang="typescript"
+        code={`// Application cache pattern (Node.js + Redis)
 import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
@@ -261,7 +373,8 @@ async function updateUser(userId: string, data: Partial<User>) {
   // Invalidate the cached version
   await redis.del(\`user:\${userId}\`);
   return user;
-}`} />
+}`}
+      />
       <MermaidDiagram
         chart={cacheAsideFlow}
         title="Cache-Aside Read Path"
@@ -306,7 +419,10 @@ async function updateUser(userId: string, data: Partial<User>) {
           </tr>
           <tr>
             <td>Use cases</td>
-            <td>Everything: caching, sessions, queues, pub/sub, rate limiting, leaderboards</td>
+            <td>
+              Everything: caching, sessions, queues, pub/sub, rate limiting,
+              leaderboards
+            </td>
             <td>Simple caching only</td>
           </tr>
           <tr>
@@ -317,63 +433,190 @@ async function updateUser(userId: string, data: Partial<User>) {
         </tbody>
       </table>
       <p>
-        <strong>Choose Redis in virtually all cases.</strong> Memcached&apos;s only advantage is
-        slightly simpler architecture for pure caching workloads. Redis&apos;s richer data structures
-        and additional features make it worth the marginal overhead. In interviews, say Redis unless
+        <strong>Choose Redis in virtually all cases.</strong> Memcached&apos;s
+        only advantage is slightly simpler architecture for pure caching
+        workloads. Redis&apos;s richer data structures and additional features
+        make it worth the marginal overhead. In interviews, say Redis unless
         there is a specific reason for Memcached.
       </p>
 
       <h2 id="ttl-design">TTL Design</h2>
       <p>
-        TTL (Time to Live) determines how long a cached value remains valid before being considered
-        stale. Choosing the right TTL requires balancing freshness vs. cache effectiveness.
+        TTL (Time to Live) determines how long a cached value remains valid
+        before being considered stale. Choosing the right TTL requires balancing
+        freshness vs. cache effectiveness.
       </p>
       <ul>
-        <li><strong>User profile:</strong> 15&ndash;60 minutes. Users rarely change profile data; stale for a few minutes is acceptable.</li>
-        <li><strong>Product catalog:</strong> 5&ndash;15 minutes. Products change infrequently; slight staleness is acceptable.</li>
-        <li><strong>Stock/inventory count:</strong> 30&ndash;60 seconds or no cache. Stale inventory counts lead to overselling.</li>
-        <li><strong>Session data:</strong> Match session expiry (typically 1&ndash;24 hours).</li>
-        <li><strong>API rate limit counter:</strong> Exactly the rate window (e.g., 60 seconds).</li>
-        <li><strong>Dashboard metrics/aggregates:</strong> 1&ndash;5 minutes. Metrics can be slightly stale.</li>
+        <li>
+          <strong>User profile:</strong> 15&ndash;60 minutes. Users rarely
+          change profile data; stale for a few minutes is acceptable.
+        </li>
+        <li>
+          <strong>Product catalog:</strong> 5&ndash;15 minutes. Products change
+          infrequently; slight staleness is acceptable.
+        </li>
+        <li>
+          <strong>Stock/inventory count:</strong> 30&ndash;60 seconds or no
+          cache. Stale inventory counts lead to overselling.
+        </li>
+        <li>
+          <strong>Session data:</strong> Match session expiry (typically
+          1&ndash;24 hours).
+        </li>
+        <li>
+          <strong>API rate limit counter:</strong> Exactly the rate window
+          (e.g., 60 seconds).
+        </li>
+        <li>
+          <strong>Dashboard metrics/aggregates:</strong> 1&ndash;5 minutes.
+          Metrics can be slightly stale.
+        </li>
       </ul>
       <p>
-        <strong>Jitter:</strong> If you cache 10,000 items all with a TTL of 3600 seconds and they
-        all expire at the same time, you get a thundering herd to the database. Add random jitter:
-        <code>TTL = 3600 + random(0, 300)</code> to spread expiration over a window.
+        <strong>Jitter:</strong> If you cache 10,000 items all with a TTL of
+        3600 seconds and they all expire at the same time, you get a thundering
+        herd to the database. Add random jitter:
+        <code>TTL = 3600 + random(0, 300)</code> to spread expiration over a
+        window.
+      </p>
+
+      <h2 id="eviction-policies">Eviction Policies: When the Cache Is Full</h2>
+      <p>
+        TTL controls when a key becomes <em>stale</em>. Eviction controls what
+        happens when the cache runs out of <em>memory</em> before keys expire. A
+        Redis instance has a fixed
+        <code>maxmemory</code> ceiling. Once it is hit, every new write forces
+        Redis to either reject the write or evict an existing key &mdash; and
+        the eviction policy decides which key dies. Getting this wrong means
+        either dropped writes (<code>noeviction</code> OOM errors) or silently
+        evicting data you needed.
+      </p>
+      <MermaidDiagram
+        chart={evictionDecision}
+        title="The Eviction Decision on Every Write"
+        caption="When maxmemory is reached, the configured maxmemory-policy chooses a victim. noeviction rejects the write instead of evicting."
+        minHeight={420}
+      />
+      <table>
+        <thead>
+          <tr>
+            <th>Policy</th>
+            <th>Evicts</th>
+            <th>Use when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>noeviction</code>
+            </td>
+            <td>Nothing &mdash; writes fail with an error</td>
+            <td>
+              Redis is a database of record, not a cache (you must not lose
+              data)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>allkeys-lru</code>
+            </td>
+            <td>Least-recently-used key, any key</td>
+            <td>General-purpose cache &mdash; the safe default</td>
+          </tr>
+          <tr>
+            <td>
+              <code>allkeys-lfu</code>
+            </td>
+            <td>Least-frequently-used key, any key</td>
+            <td>
+              Skewed access (a few hot keys, long tail); resists scan pollution
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>volatile-lru</code> / <code>volatile-lfu</code>
+            </td>
+            <td>LRU/LFU among keys that have a TTL set</td>
+            <td>Mixed workload: persistent keys plus disposable cached keys</td>
+          </tr>
+          <tr>
+            <td>
+              <code>volatile-ttl</code>
+            </td>
+            <td>Key with the nearest expiry (TTL set only)</td>
+            <td>You want soon-to-expire keys cleared first</td>
+          </tr>
+          <tr>
+            <td>
+              <code>allkeys-random</code> / <code>volatile-random</code>
+            </td>
+            <td>A random key</td>
+            <td>Uniform access with no meaningful recency/frequency signal</td>
+          </tr>
+        </tbody>
+      </table>
+      <CodeBlock
+        lang="bash"
+        code={`# redis.conf
+maxmemory 4gb
+maxmemory-policy allkeys-lru
+
+# LRU and LFU in Redis are APPROXIMATE, not exact.
+# Redis samples N keys and evicts the best candidate among them
+# (tracking exact LRU/LFU order for millions of keys would waste memory).
+maxmemory-samples 5   # higher = more accurate eviction, more CPU`}
+      />
+      <p>
+        <strong>LRU vs LFU &mdash; the distinction interviewers probe:</strong>{" "}
+        LRU evicts the key touched longest ago. Its weakness is{" "}
+        <em>cache pollution</em>: a one-off batch job that scans a million rows
+        touches a million keys, evicting your genuinely hot data even though the
+        scan keys are never read again. LFU evicts by access <em>frequency</em>,
+        so a single scan does not displace keys that are read constantly &mdash;
+        better for long-tail popularity distributions. Default to{" "}
+        <code>allkeys-lru</code>; switch to <code>allkeys-lfu</code> when access
+        is heavily skewed or scans pollute the cache.
       </p>
 
       <h2 id="cache-invalidation">Cache Invalidation: The Hard Problem</h2>
       <p>
-        Phil Karlton famously said: &quot;There are only two hard things in Computer Science: cache
-        invalidation and naming things.&quot; Cache invalidation is hard because cached data becomes
-        stale when the underlying data changes, and notifying caches reliably in distributed systems
-        is complex.
+        Phil Karlton famously said: &quot;There are only two hard things in
+        Computer Science: cache invalidation and naming things.&quot; Cache
+        invalidation is hard because cached data becomes stale when the
+        underlying data changes, and notifying caches reliably in distributed
+        systems is complex.
       </p>
-      <p><strong>Invalidation strategies:</strong></p>
+      <p>
+        <strong>Invalidation strategies:</strong>
+      </p>
       <ul>
         <li>
-          <strong>Time-based expiry (TTL):</strong> Simplest approach. Accept that data may be stale
-          for up to TTL seconds. Right for most non-critical data.
+          <strong>Time-based expiry (TTL):</strong> Simplest approach. Accept
+          that data may be stale for up to TTL seconds. Right for most
+          non-critical data.
         </li>
         <li>
-          <strong>Write-through invalidation:</strong> When you write to the database, also delete
-          the cache key. Next read will miss and repopulate. Simple but can lead to thundering herds.
+          <strong>Write-through invalidation:</strong> When you write to the
+          database, also delete the cache key. Next read will miss and
+          repopulate. Simple but can lead to thundering herds.
         </li>
         <li>
-          <strong>Write-through update:</strong> When you write to the database, also update the cache.
-          Keeps cache warm but requires keeping them in sync, which is error-prone.
+          <strong>Write-through update:</strong> When you write to the database,
+          also update the cache. Keeps cache warm but requires keeping them in
+          sync, which is error-prone.
         </li>
         <li>
-          <strong>Event-driven invalidation:</strong> Database changes emit events (DynamoDB Streams,
-          Postgres NOTIFY, change data capture). Consumers update/invalidate caches. Decoupled but more complex.
+          <strong>Event-driven invalidation:</strong> Database changes emit
+          events (DynamoDB Streams, Postgres NOTIFY, change data capture).
+          Consumers update/invalidate caches. Decoupled but more complex.
         </li>
       </ul>
 
       <h2 id="caching-patterns">Caching Patterns</h2>
       <p>
-        The three write patterns differ in <em>when</em> the cache is updated relative to the
-        database. Pick by read/write ratio and how much write latency and staleness risk you can
-        accept.
+        The three write patterns differ in <em>when</em> the cache is updated
+        relative to the database. Pick by read/write ratio and how much write
+        latency and staleness risk you can accept.
       </p>
       <MermaidDiagram
         chart={writePatterns}
@@ -381,8 +624,12 @@ async function updateUser(userId: string, data: Partial<User>) {
         caption="Cache-aside invalidates on write; write-through writes both synchronously; write-behind acks fast and flushes the DB asynchronously (the only one that can lose data)."
         minHeight={340}
       />
-      <p><strong>Cache-aside (Lazy Loading) &mdash; most common:</strong></p>
-      <CodeBlock lang="typescript" code={`// Application manages cache explicitly
+      <p>
+        <strong>Cache-aside (Lazy Loading) &mdash; most common:</strong>
+      </p>
+      <CodeBlock
+        lang="typescript"
+        code={`// Application manages cache explicitly
 // Read: check cache → miss → DB → populate cache
 // Write: write to DB → invalidate cache
 
@@ -398,29 +645,137 @@ async function getProduct(id: string) {
 async function updateProduct(id: string, data: any) {
   await db.products.update(id, data);
   await redis.del(\`product:\${id}\`);              // invalidate
-}`} />
+}`}
+      />
 
-      <p><strong>Write-through &mdash; for write-heavy with frequent reads:</strong></p>
-      <CodeBlock lang="typescript" code={`// Write to cache AND database simultaneously
+      <p>
+        <strong>
+          Write-through &mdash; for write-heavy with frequent reads:
+        </strong>
+      </p>
+      <CodeBlock
+        lang="typescript"
+        code={`// Write to cache AND database simultaneously
 // Cache is always warm; no cache miss on first read after write
 async function createProduct(data: any) {
   const product = await db.products.create(data);
   await redis.setEx(\`product:\${product.id}\`, 300, JSON.stringify(product));
   return product;
 }
-// Downside: cache is populated even for items that may never be read again`} />
+// Downside: cache is populated even for items that may never be read again`}
+      />
 
-      <p><strong>Write-behind (Write-back) &mdash; for write-heavy systems:</strong></p>
-      <CodeBlock lang="typescript" code={`// Write to cache immediately, write to DB asynchronously
+      <p>
+        <strong>
+          Write-behind (Write-back) &mdash; for write-heavy systems:
+        </strong>
+      </p>
+      <CodeBlock
+        lang="typescript"
+        code={`// Write to cache immediately, write to DB asynchronously
 // Very fast writes but risk of data loss if cache crashes before DB write
-// Rarely appropriate for user data; sometimes used for counters/analytics`} />
+// Rarely appropriate for user data; sometimes used for counters/analytics`}
+      />
+
+      <p>
+        <strong>Read-through &mdash; the cache layer owns the DB fetch:</strong>
+      </p>
+      <p>
+        Cache-aside puts the orchestration in your application code.
+        Read-through inverts that: a loader function lives <em>inside</em> the
+        cache layer, so the application just asks the cache and the cache
+        fetches from the database and populates itself on a miss. This
+        centralizes the caching logic in one place &mdash; the pattern behind
+        in-process loading caches (Caffeine, Guava), DataLoader, and
+        read-through CDNs.
+      </p>
+      <CodeBlock
+        lang="typescript"
+        code={`// Read-through: the cache, not the app, knows how to load on miss.
+const cache = createLoadingCache({
+  ttl: 300,
+  loader: async (key: string) => db.products.findById(key), // called on miss
+});
+
+// Application code stays trivial — no manual get / set / populate dance:
+const product = await cache.get(\`product:\${id}\`);`}
+      />
+
+      <p>
+        <strong>
+          Refresh-ahead &mdash; reload hot keys before they expire:
+        </strong>
+      </p>
+      <p>
+        Refresh-ahead proactively reloads frequently-accessed keys{" "}
+        <em>before</em> their TTL expires, so reads almost never block on a
+        miss. It trades extra background database load for lower tail latency on
+        hot data. It only pays off when the predicted keys are actually re-read
+        &mdash; refreshing keys that no-one requests again is wasted work.
+      </p>
+
+      <h2 id="cache-consistency">Cache Consistency: The Read/Write Race</h2>
+      <p>
+        Cache-aside has a subtle concurrency bug that survives code review
+        constantly. A reader that misses the cache and a writer that updates the
+        database can interleave so that the reader writes its <em>stale</em>{" "}
+        value into the cache <em>after</em> the writer invalidated it. The cache
+        is then pinned to old data until the TTL expires &mdash; or forever, if
+        there is no TTL.
+      </p>
+      <MermaidDiagram
+        chart={cacheRace}
+        title="The Stale Set-Back Race"
+        caption="The reader read v1 before the write, but populates the cache after the writer's DEL. The cache ends up holding v1 even though the database holds v2."
+        minHeight={360}
+      />
+      <p>
+        <strong>Mitigations, weakest to strongest:</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Always set a TTL.</strong> Even without solving the race, a
+          TTL caps how long stale data can live. This is the cheap backstop
+          every cache should have.
+        </li>
+        <li>
+          <strong>Delete, do not update, on write.</strong> Writing the new
+          value into the cache on update widens the race window and can write
+          stale data; deleting forces the next read to repopulate from the
+          source of truth.
+        </li>
+        <li>
+          <strong>Delayed double-delete.</strong> Delete, write the DB, wait out
+          in-flight readers, then delete again to kill any stale set-back.
+          Pragmatic and widely used.
+        </li>
+        <li>
+          <strong>Versioning / CAS.</strong> Store a version alongside the value
+          and reject a cache write whose version is older than what is present.
+          Strongest, but more machinery.
+        </li>
+      </ul>
+      <CodeBlock
+        lang="typescript"
+        code={`// Delayed double-delete: closes the stale set-back window
+async function updateUser(id: string, data: Partial<User>) {
+  await redis.del(\`user:\${id}\`);          // 1. invalidate up front
+  const user = await db.users.update(id, data); // 2. write source of truth
+
+  // 3. a slow reader that read the OLD row may still SET it back here.
+  //    Wait out that in-flight window, then delete again.
+  setTimeout(() => redis.del(\`user:\${id}\`), 500);
+
+  return user;
+}`}
+      />
 
       <h2 id="cache-stampede">Cache Stampede and the Thundering Herd</h2>
       <p>
-        A cache stampede occurs when a cached value expires and many concurrent requests all
-        simultaneously miss the cache, all rush to compute the value from the database, and all
-        try to write it back to the cache simultaneously. This hammers the database and may cause
-        it to time out.
+        A cache stampede occurs when a cached value expires and many concurrent
+        requests all simultaneously miss the cache, all rush to compute the
+        value from the database, and all try to write it back to the cache
+        simultaneously. This hammers the database and may cause it to time out.
       </p>
       <MermaidDiagram
         chart={cacheStampede}
@@ -429,9 +784,10 @@ async function createProduct(data: any) {
         minHeight={360}
       />
       <p>
-        The fix in every case is the same idea: <strong>only one request should recompute the
-        value</strong>, while the rest either wait for it or serve slightly stale data. A mutex lock
-        makes this explicit.
+        The fix in every case is the same idea:{" "}
+        <strong>only one request should recompute the value</strong>, while the
+        rest either wait for it or serve slightly stale data. A mutex lock makes
+        this explicit.
       </p>
       <MermaidDiagram
         chart={stampedeMutex}
@@ -439,7 +795,9 @@ async function createProduct(data: any) {
         caption="Request 1 acquires the lock and does the single DB query; the other 999 block, then read the freshly populated cache — one DB hit instead of a thousand."
         minHeight={380}
       />
-      <CodeBlock lang="typescript" code={`// Problem: 1000 concurrent requests, cache expires
+      <CodeBlock
+        lang="typescript"
+        code={`// Problem: 1000 concurrent requests, cache expires
 // → All 1000 hit DB simultaneously
 
 // Solution 1: Probabilistic early expiry
@@ -481,15 +839,287 @@ async function getWithLock(key: string, fetch: () => Promise<any>, ttl: number) 
   });
   lock.set(key, promise);
   return promise;
-}`} />
+}`}
+      />
+
+      <h2 id="cache-penetration">Cache Penetration</h2>
+      <p>
+        Cache penetration is when requests target keys that{" "}
+        <strong>do not exist</strong> in the cache <em>or</em> the database.
+        Every such request misses the cache, falls through to the database,
+        finds nothing, and caches nothing &mdash; so the next identical request
+        repeats the full round trip. An attacker enumerating random IDs (
+        <code>user:99999999</code>) can use this to bypass the cache entirely
+        and hammer the database.
+      </p>
+      <MermaidDiagram
+        chart={penetration}
+        title="Penetration: Missing Keys Bypass the Cache"
+        caption="A key that exists in neither cache nor DB is never cached, so every request reaches the database. A negative cache or bloom filter short-circuits it."
+        minHeight={320}
+      />
+      <p>
+        <strong>Fixes:</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Negative caching:</strong> cache the &quot;not found&quot;
+          result with a short TTL so repeated lookups for a missing key hit the
+          cache instead of the database.
+        </li>
+        <li>
+          <strong>Bloom filter:</strong> a compact probabilistic set of all
+          valid keys. If the filter says a key is definitely absent, reject it
+          before touching cache or database. No false negatives, only false
+          positives.
+        </li>
+        <li>
+          <strong>Input validation:</strong> reject malformed or out-of-range
+          IDs at the edge.
+        </li>
+      </ul>
+      <CodeBlock
+        lang="typescript"
+        code={`async function getUser(id: string) {
+  const cached = await redis.get(\`user:\${id}\`);
+  if (cached === 'NULL') return null;            // negative-cache hit
+  if (cached) return JSON.parse(cached);
+
+  const user = await db.users.findById(id);
+  if (!user) {
+    // Cache the miss with a SHORT TTL so attackers can't keep penetrating,
+    // but stale-negative windows stay small if the row is later created.
+    await redis.setEx(\`user:\${id}\`, 60, 'NULL');
+    return null;
+  }
+  await redis.setEx(\`user:\${id}\`, 3600, JSON.stringify(user));
+  return user;
+}`}
+      />
+
+      <h2 id="cache-avalanche">Cache Avalanche</h2>
+      <p>
+        A cache avalanche is the large-scale cousin of the stampede. A stampede
+        is <em>one</em> hot key expiring under concurrent load. An avalanche is{" "}
+        <em>many</em> keys expiring at nearly the same instant &mdash; or an
+        entire cache node restarting cold &mdash; so a huge fraction of traffic
+        misses simultaneously and the database falls off a cliff.
+      </p>
+      <MermaidDiagram
+        chart={avalanche}
+        title="Avalanche: Mass Simultaneous Expiry"
+        caption="Keys warmed together with an identical TTL expire together. Random jitter on the TTL spreads expiry across a window and flattens the spike."
+        minHeight={360}
+      />
+      <p>
+        <strong>Fixes:</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>TTL jitter</strong> (see TTL Design):{" "}
+          <code>TTL = base + random(0, window)</code> so keys do not expire in
+          lockstep.
+        </li>
+        <li>
+          <strong>Staggered warming</strong> on cold start instead of loading
+          everything with one TTL.
+        </li>
+        <li>
+          <strong>Multi-tier / replicated cache</strong> so a single node
+          restart does not drop the whole working set.
+        </li>
+        <li>
+          <strong>Circuit breaker</strong> on the database to shed load and
+          serve stale-or-degraded responses while the cache refills.
+        </li>
+      </ul>
+
+      <p>
+        <strong>
+          Stampede vs Penetration vs Avalanche &mdash; commonly confused,
+          disambiguate them:
+        </strong>
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Failure mode</th>
+            <th>Trigger</th>
+            <th>Primary fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Stampede</strong>
+            </td>
+            <td>One hot key expires; many concurrent requests recompute it</td>
+            <td>
+              Mutex/lock, probabilistic early refresh, stale-while-revalidate
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Penetration</strong>
+            </td>
+            <td>Requests for keys absent from both cache and DB</td>
+            <td>Negative caching, bloom filter, input validation</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Avalanche</strong>
+            </td>
+            <td>Many keys expire at once, or a cache node restarts cold</td>
+            <td>
+              TTL jitter, staggered warming, replicated cache, circuit breaker
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="hot-key">Hot Keys and Hot Partitions</h2>
+      <p>
+        A sharded Redis (Redis Cluster) distributes keys across shards by
+        hashing the key. Normally this balances load evenly. But when a{" "}
+        <em>single</em> key goes viral &mdash; a celebrity user, a flash-sale
+        item, a trending post &mdash; <strong>all</strong> traffic for that key
+        hashes to <strong>one</strong> shard. That shard saturates its CPU and
+        network while the other shards sit idle. Nothing is stale and nothing is
+        wrong with the key; the problem is
+        <em>concentration</em>.
+      </p>
+      <MermaidDiagram
+        chart={hotKey}
+        title="One Viral Key, One Overloaded Shard"
+        caption="Every app node requesting celebrity:1 lands on the same shard. Adding shards does not help — the key cannot be split across them."
+        minHeight={340}
+      />
+      <p>
+        <strong>Fixes:</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Local L1 cache</strong> in each app node (see Multi-Tier
+          below). Reads of the hot key are absorbed in-process and only refill
+          from Redis on a local miss. Usually the most effective fix &mdash; it
+          removes the network hop entirely for the hottest data.
+        </li>
+        <li>
+          <strong>Key replication / sharding the value:</strong> store copies as
+          <code>celebrity:1#1</code> &hellip; <code>celebrity:1#N</code> across
+          shards and read a random replica, spreading load over multiple shards.
+        </li>
+        <li>
+          <strong>Request coalescing</strong> at the app node so duplicate
+          in-flight reads share one Redis round trip.
+        </li>
+        <li>
+          <strong>Detection:</strong> <code>redis-cli --hotkeys</code> (needs an
+          LFU policy) or per-key request counters surface hot keys before they
+          take a shard down.
+        </li>
+      </ul>
+
+      <h2 id="multi-tier">Multi-Tier Caching (L1 + L2)</h2>
+      <p>
+        A single Redis is fast (~0.5 ms) but it is still a network hop and a
+        shared resource. Multi-tier caching adds an{" "}
+        <strong>L1 in-process cache</strong> (a plain <code>Map</code>, an LRU,
+        or Caffeine) inside each application node, backed by{" "}
+        <strong>L2 Redis</strong>, backed by the database. An L1 hit costs ~50
+        ns with no network at all &mdash; three orders of magnitude faster than
+        L2.
+      </p>
+      <MermaidDiagram
+        chart={multiTier}
+        title="L1 (Local) → L2 (Redis) → Database"
+        caption="Each tier that hits short-circuits the next. L1 absorbs the hottest reads in-process; L2 is the shared cluster-wide cache; the DB is the source of truth."
+        minHeight={320}
+      />
+      <table>
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Location</th>
+            <th>Latency</th>
+            <th>Scope</th>
+            <th>Main risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>L1</strong>
+            </td>
+            <td>App process memory</td>
+            <td>~50 ns</td>
+            <td>Per-node</td>
+            <td>Per-node staleness (cannot be invalidated remotely)</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>L2</strong>
+            </td>
+            <td>Redis (shared)</td>
+            <td>~0.5 ms</td>
+            <td>Cluster-wide</td>
+            <td>Network hop; shared hot-shard pressure</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>DB</strong>
+            </td>
+            <td>Disk / SSD</td>
+            <td>5&ndash;100 ms</td>
+            <td>Source of truth</td>
+            <td>Load when both tiers miss</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>The catch is consistency.</strong> L1 copies are per-node, so
+        deleting a key in Redis does <em>not</em> invalidate the same key cached
+        locally in N app nodes &mdash; each node can serve its own stale copy
+        until the local entry expires. Mitigate with a very short L1 TTL
+        (seconds), or with pub/sub invalidation where Redis publishes a
+        &quot;key changed&quot; message and every node evicts its L1 entry, or
+        simply accept brief per-node staleness for data that tolerates it.
+      </p>
+      <CodeBlock
+        lang="typescript"
+        code={`const l1 = new Map<string, { v: unknown; exp: number }>(); // per-process
+const L1_TTL = 5_000; // 5s — short, because L1 can't be invalidated remotely
+
+async function getProduct(id: string) {
+  const key = \`product:\${id}\`;
+
+  const local = l1.get(key);
+  if (local && local.exp > Date.now()) return local.v;      // L1 hit (~50 ns)
+
+  const cached = await redis.get(key);
+  if (cached) {
+    const v = JSON.parse(cached);
+    l1.set(key, { v, exp: Date.now() + L1_TTL });           // promote to L1
+    return v;                                                // L2 hit (~0.5 ms)
+  }
+
+  const product = await db.products.findById(id);           // both miss → DB
+  await redis.setEx(key, 300, JSON.stringify(product));
+  l1.set(key, { v: product, exp: Date.now() + L1_TTL });
+  return product;
+}`}
+      />
 
       <h2 id="cache-warming">Cache Warming</h2>
       <p>
-        When a service restarts or a new cache is provisioned, the cache is cold (empty). All requests
-        miss and hit the database simultaneously. Cache warming pre-populates the cache with frequently
-        accessed data before traffic is sent to the service.
+        When a service restarts or a new cache is provisioned, the cache is cold
+        (empty). All requests miss and hit the database simultaneously. Cache
+        warming pre-populates the cache with frequently accessed data before
+        traffic is sent to the service.
       </p>
-      <CodeBlock lang="typescript" code={`// Cache warming script: run before traffic cutover
+      <CodeBlock
+        lang="typescript"
+        code={`// Cache warming script: run before traffic cutover
 async function warmCache() {
   // Get the top 1000 most viewed products from analytics
   const popularProducts = await analytics.getTopProducts(1000);
@@ -504,22 +1134,55 @@ async function warmCache() {
     await sleep(100);  // rate limit DB calls
   }
   console.log('Cache warm complete');
-}`} />
+}`}
+      />
 
       <h2 id="real-examples">Real Examples</h2>
-      <p><strong>Product catalog:</strong> Cache product data with 5-minute TTL. Invalidate on product updates. Use Redis hash for structured data.</p>
-      <p><strong>User profile:</strong> Cache with 30-minute TTL. Invalidate on profile update. Store only non-sensitive fields (not passwords, not full financial info).</p>
-      <p><strong>Dashboard metrics:</strong> Cache aggregated counts with 2-minute TTL. Accept slight staleness in dashboards.</p>
-      <p><strong>Rate limiting:</strong> Redis INCR + EXPIRE pattern for per-IP or per-user rate counters. Atomic operations ensure correctness across instances.</p>
-      <p><strong>Session storage:</strong> Redis with key <code>session:token</code>, TTL matching session duration. Invalidate on logout.</p>
+      <p>
+        <strong>Product catalog:</strong> Cache product data with 5-minute TTL.
+        Invalidate on product updates. Use Redis hash for structured data.
+      </p>
+      <p>
+        <strong>User profile:</strong> Cache with 30-minute TTL. Invalidate on
+        profile update. Store only non-sensitive fields (not passwords, not full
+        financial info).
+      </p>
+      <p>
+        <strong>Dashboard metrics:</strong> Cache aggregated counts with
+        2-minute TTL. Accept slight staleness in dashboards.
+      </p>
+      <p>
+        <strong>Rate limiting:</strong> Redis INCR + EXPIRE pattern for per-IP
+        or per-user rate counters. Atomic operations ensure correctness across
+        instances.
+      </p>
+      <p>
+        <strong>Session storage:</strong> Redis with key{" "}
+        <code>session:token</code>, TTL matching session duration. Invalidate on
+        logout.
+      </p>
 
       <h2 id="when-not-to-cache">When NOT to Cache</h2>
       <ul>
-        <li>Data that must be strongly consistent (bank balances, inventory counts during checkout)</li>
-        <li>Data that is unique per request (personalized, real-time recommendations)</li>
-        <li>Data that changes so frequently the cache hit rate would be near zero</li>
-        <li>Small datasets that fit in DB memory anyway (the DB already caches them)</li>
-        <li>Data whose staleness could cause security issues (permissions, auth tokens)</li>
+        <li>
+          Data that must be strongly consistent (bank balances, inventory counts
+          during checkout)
+        </li>
+        <li>
+          Data that is unique per request (personalized, real-time
+          recommendations)
+        </li>
+        <li>
+          Data that changes so frequently the cache hit rate would be near zero
+        </li>
+        <li>
+          Small datasets that fit in DB memory anyway (the DB already caches
+          them)
+        </li>
+        <li>
+          Data whose staleness could cause security issues (permissions, auth
+          tokens)
+        </li>
       </ul>
 
       <h2 id="interview-playbook">Interview Playbook</h2>
@@ -538,70 +1201,129 @@ async function warmCache() {
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>
         <li>
-          <strong>Caching user-specific data without user-scoped keys:</strong> Caching
-          <code>GET /user/profile</code> without including the user ID in the cache key means all
-          users get the same cached profile.
+          <strong>Caching user-specific data without user-scoped keys:</strong>{" "}
+          Caching
+          <code>GET /user/profile</code> without including the user ID in the
+          cache key means all users get the same cached profile.
         </li>
         <li>
-          <strong>Forgetting to invalidate on write:</strong> Updating a record in the database
-          without deleting the cache key. Users see stale data until TTL expires.
+          <strong>Forgetting to invalidate on write:</strong> Updating a record
+          in the database without deleting the cache key. Users see stale data
+          until TTL expires.
         </li>
         <li>
-          <strong>Too long a TTL for mutable data:</strong> Caching mutable user data for 24 hours.
-          Changes are invisible to users for up to 24 hours.
+          <strong>Too long a TTL for mutable data:</strong> Caching mutable user
+          data for 24 hours. Changes are invisible to users for up to 24 hours.
         </li>
         <li>
-          <strong>Not handling cache unavailability:</strong> If Redis goes down and your code
-          does not have a fallback path to the database, your entire service goes down. Always
-          handle cache errors gracefully and fall back to the database.
+          <strong>Not handling cache unavailability:</strong> If Redis goes down
+          and your code does not have a fallback path to the database, your
+          entire service goes down. Always handle cache errors gracefully and
+          fall back to the database.
         </li>
         <li>
-          <strong>Serializing complex objects without considering size:</strong> Caching large
-          objects (full user history, all orders) bloats Redis memory and the network round trip.
-          Cache only what the requesting view actually needs.
+          <strong>Serializing complex objects without considering size:</strong>{" "}
+          Caching large objects (full user history, all orders) bloats Redis
+          memory and the network round trip. Cache only what the requesting view
+          actually needs.
         </li>
       </ul>
 
       <h2 id="interview-questions">Interview Questions</h2>
 
-      <p><strong>Q: What caching strategies do you know and when would you use each?</strong></p>
       <p>
-        Cache-aside (lazy loading) is the most common: check cache, miss leads to DB read and cache
-        population. Good for read-heavy workloads with occasional writes. Write-through updates the
-        cache on every write, keeping it warm but populating even infrequently accessed data.
-        Write-behind queues the database write, allowing very fast write responses but risking data
-        loss on cache failure. Read-through has the cache handle DB misses automatically, abstracting
-        caching from the application. Choice depends on read/write ratio, consistency requirements,
-        and whether cache warmth matters.
+        <strong>
+          Q: What caching strategies do you know and when would you use each?
+        </strong>
+      </p>
+      <p>
+        Cache-aside (lazy loading) is the most common: check cache, miss leads
+        to DB read and cache population. Good for read-heavy workloads with
+        occasional writes. Write-through updates the cache on every write,
+        keeping it warm but populating even infrequently accessed data.
+        Write-behind queues the database write, allowing very fast write
+        responses but risking data loss on cache failure. Read-through has the
+        cache handle DB misses automatically, abstracting caching from the
+        application. Choice depends on read/write ratio, consistency
+        requirements, and whether cache warmth matters.
       </p>
 
-      <p><strong>Q: What is a cache stampede and how do you prevent it?</strong></p>
       <p>
-        A cache stampede happens when many concurrent requests simultaneously miss the same cache key
-        (usually after expiration), all query the database, and all try to repopulate the cache. This
-        hammers the database with redundant work. Prevention: probabilistic early expiration (refresh
-        slightly before expiry with increasing probability), mutex/lock-based recomputation (only one
-        request recomputes while others wait), or background refresh with stale-while-revalidate
-        (serve stale data while refreshing asynchronously).
+        <strong>Q: What is a cache stampede and how do you prevent it?</strong>
+      </p>
+      <p>
+        A cache stampede happens when many concurrent requests simultaneously
+        miss the same cache key (usually after expiration), all query the
+        database, and all try to repopulate the cache. This hammers the database
+        with redundant work. Prevention: probabilistic early expiration (refresh
+        slightly before expiry with increasing probability), mutex/lock-based
+        recomputation (only one request recomputes while others wait), or
+        background refresh with stale-while-revalidate (serve stale data while
+        refreshing asynchronously).
       </p>
 
-      <p><strong>Q: Why is cache invalidation hard?</strong></p>
       <p>
-        Cache invalidation is hard because you have two sources of truth (cache and database) that
-        can diverge, and notifying all caches reliably in a distributed system is complex. Time-based
-        expiry accepts brief staleness. Explicit invalidation on write requires coupling write paths
-        to cache management and can miss invalidations (race conditions, bugs). Event-driven
-        invalidation via change data capture is more robust but adds operational complexity. There
-        is no perfect solution &mdash; you choose the tradeoff that fits your consistency requirements.
+        <strong>Q: Why is cache invalidation hard?</strong>
+      </p>
+      <p>
+        Cache invalidation is hard because you have two sources of truth (cache
+        and database) that can diverge, and notifying all caches reliably in a
+        distributed system is complex. Time-based expiry accepts brief
+        staleness. Explicit invalidation on write requires coupling write paths
+        to cache management and can miss invalidations (race conditions, bugs).
+        Event-driven invalidation via change data capture is more robust but
+        adds operational complexity. There is no perfect solution &mdash; you
+        choose the tradeoff that fits your consistency requirements.
       </p>
 
-      <p><strong>Q: When should you NOT cache data?</strong></p>
       <p>
-        Do not cache when: strong consistency is required (inventory that must never show false
-        availability, bank balances during transactions), data is unique per request (personalized
-        real-time data), data changes so frequently the hit rate would be near zero (live sensor
-        readings), the dataset is small enough that the database already caches it in memory,
-        or staleness creates a security vulnerability (permission checks, revoked tokens).
+        <strong>Q: When should you NOT cache data?</strong>
+      </p>
+      <p>
+        Do not cache when: strong consistency is required (inventory that must
+        never show false availability, bank balances during transactions), data
+        is unique per request (personalized real-time data), data changes so
+        frequently the hit rate would be near zero (live sensor readings), the
+        dataset is small enough that the database already caches it in memory,
+        or staleness creates a security vulnerability (permission checks,
+        revoked tokens).
+      </p>
+
+      <p>
+        <strong>
+          Q: What is the difference between cache stampede, penetration, and
+          avalanche?
+        </strong>
+      </p>
+      <p>
+        A <strong>stampede</strong> is one hot key expiring while many
+        concurrent requests recompute it &mdash; fix with a mutex, probabilistic
+        early refresh, or stale-while-revalidate. <strong>Penetration</strong>{" "}
+        is requests for keys that exist in neither cache nor database, so every
+        request reaches the DB &mdash; fix with negative caching, a bloom
+        filter, and input validation. An <strong>avalanche</strong> is many keys
+        expiring simultaneously (or a cold cache restart) causing a database
+        spike &mdash; fix with TTL jitter, staggered warming, and a replicated
+        cache. They get conflated in interviews; naming the trigger precisely
+        signals depth.
+      </p>
+
+      <p>
+        <strong>
+          Q: Your Redis is full. What happens to the next write, and how do you
+          control it?
+        </strong>
+      </p>
+      <p>
+        It depends on <code>maxmemory-policy</code>. With{" "}
+        <code>noeviction</code> the write fails with an OOM error &mdash;
+        correct only when Redis is a system of record. For a cache you want an
+        eviction policy: <code>allkeys-lru</code> is the safe default;{" "}
+        <code>allkeys-lfu</code> is better under skewed access because it
+        resists scan pollution (a one-off batch job touching many keys will not
+        evict your genuinely hot data). Redis LRU/LFU are approximate &mdash; it
+        samples <code>maxmemory-samples</code> keys per eviction rather than
+        tracking exact order, to avoid spending memory on bookkeeping.
       </p>
     </div>
   );

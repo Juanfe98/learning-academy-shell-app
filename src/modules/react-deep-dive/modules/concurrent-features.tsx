@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -41,7 +41,7 @@ export default function ConcurrentFeatures() {
         distinction.
       </p>
 
-      <pre><code>{`// Without concurrent features: typing in an input that filters 10,000 rows
+      <CodeBlock code={`// Without concurrent features: typing in an input that filters 10,000 rows
 // React renders the filtered list synchronously — blocking the input.
 // The input feels laggy because the keystroke can't update until the list renders.
 
@@ -58,7 +58,7 @@ function SlowSearch({ items }: { items: Item[] }) {
       <ItemList items={filtered} /> {/* Re-renders with 10,000 nodes each keystroke */}
     </>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="usetransition">useTransition: Non-Urgent Updates</h2>
 
@@ -71,7 +71,7 @@ function SlowSearch({ items }: { items: Item[] }) {
         the heavy list render happens when the browser has cycles to spare.
       </p>
 
-      <pre><code>{`import { useState, useTransition } from "react";
+      <CodeBlock code={`import { useState, useTransition } from "react";
 
 function SearchPage({ items }: { items: Item[] }) {
   const [query, setQuery] = useState("");
@@ -101,7 +101,7 @@ function SearchPage({ items }: { items: Item[] }) {
       </div>
     </>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h3 id="ispending-flag">The isPending Flag</h3>
 
@@ -113,7 +113,7 @@ function SearchPage({ items }: { items: Item[] }) {
         a spinner that occludes content.
       </p>
 
-      <pre><code>{`// isPending lets you show progress without destroying the current UI
+      <CodeBlock code={`// isPending lets you show progress without destroying the current UI
 function TabView() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isPending, startTransition] = useTransition();
@@ -141,7 +141,7 @@ function TabView() {
 // This is fundamentally different from showing a Suspense fallback:
 // - Suspense fallback: replaces content with a spinner
 // - isPending dimming: keeps current content visible, adds a loading hint
-// Use isPending for transitions; use Suspense fallbacks for initial loads.`}</code></pre>
+// Use isPending for transitions; use Suspense fallbacks for initial loads.`} lang="text" />
 
       <h2 id="usedeferred-value">useDeferredValue: Deferring a Value</h2>
 
@@ -153,7 +153,7 @@ function TabView() {
         the new value.
       </p>
 
-      <pre><code>{`import { useState, useDeferredValue } from "react";
+      <CodeBlock code={`import { useState, useDeferredValue } from "react";
 
 function SearchPage({ items }: { items: Item[] }) {
   const [query, setQuery] = useState("");
@@ -183,7 +183,7 @@ function SearchPage({ items }: { items: Item[] }) {
       </div>
     </>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="starttransition">startTransition for Non-Hook Contexts</h2>
 
@@ -193,7 +193,7 @@ function SearchPage({ items }: { items: Item[] }) {
         handlers, or in library code that manages state updates.
       </p>
 
-      <pre><code>{`import { startTransition } from "react";
+      <CodeBlock code={`import { startTransition } from "react";
 
 // Router library signaling a navigation as a transition:
 function navigateTo(path: string) {
@@ -215,7 +215,7 @@ fetchData().then(data => {
     setData(data);      // This is also a transition
     setIsLoading(false);
   });
-});`}</code></pre>
+});`} lang="tsx" />
 
       <h2 id="when-to-use-which">When to Use Which</h2>
 
@@ -227,7 +227,7 @@ fetchData().then(data => {
         the value is set.
       </p>
 
-      <pre><code>{`// Use useTransition when you own the state update:
+      <CodeBlock code={`// Use useTransition when you own the state update:
 function SearchBox() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>([]);
@@ -255,7 +255,7 @@ function HeavyFilteredList({ query }: { query: string }) {
   );
 
   return <List items={filtered} />;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="real-examples">Real Examples</h2>
 
@@ -265,7 +265,7 @@ function HeavyFilteredList({ query }: { query: string }) {
         where the next route&apos;s content needs to load.
       </p>
 
-      <pre><code>{`// Tab switching with useTransition — the active tab remains visible
+      <CodeBlock code={`// Tab switching with useTransition — the active tab remains visible
 // while the new tab's heavy content renders in the background
 function Dashboard() {
   const [tab, setTab] = useState<"overview" | "analytics" | "settings">("overview");
@@ -298,7 +298,7 @@ function Dashboard() {
       </div>
     </div>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="interview-challenge">Interview Challenge: Laggy Faceted Search</h2>
 

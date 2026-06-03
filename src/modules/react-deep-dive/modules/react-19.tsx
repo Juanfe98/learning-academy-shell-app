@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -33,7 +33,7 @@ export default function React19() {
         other hooks because React handles it differently internally.
       </p>
 
-      <pre><code>{`import { use, Suspense } from "react";
+      <CodeBlock code={`import { use, Suspense } from "react";
 
 // use() with a Promise: reads the resolved value.
 // If the Promise is pending, the component suspends.
@@ -60,7 +60,7 @@ function ConditionalTheme({ applyTheme }: { applyTheme: boolean }) {
   // Legal: use() can be called inside a conditional
   const theme = use(ThemeContext);
   return <div className={theme}>Themed content</div>;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <p>
         <code>use()</code> is the foundation for patterns where data fetching happens at
@@ -77,7 +77,7 @@ function ConditionalTheme({ applyTheme }: { applyTheme: boolean }) {
         automatically through the new form integration APIs.
       </p>
 
-      <pre><code>{`// Server Action — runs exclusively on the server
+      <CodeBlock code={`// Server Action — runs exclusively on the server
 // File: app/actions.ts
 "use server";
 
@@ -116,7 +116,7 @@ function CreateUserForm() {
       </button>
     </form>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="use-optimistic">useOptimistic: Built-in Optimistic UI</h2>
 
@@ -128,7 +128,7 @@ function CreateUserForm() {
         completes (either successfully or with an error).
       </p>
 
-      <pre><code>{`import { useOptimistic, useTransition } from "react";
+      <CodeBlock code={`import { useOptimistic, useTransition } from "react";
 
 type Message = { id: string; text: string; pending?: boolean };
 
@@ -173,7 +173,7 @@ function MessageList({ messages }: { messages: Message[] }) {
       </form>
     </div>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="use-form-status-use-action-state">useFormStatus and useActionState</h2>
 
@@ -183,7 +183,7 @@ function MessageList({ messages }: { messages: Message[] }) {
         child components respond to form submission state without prop drilling.
       </p>
 
-      <pre><code>{`import { useFormStatus } from "react-dom"; // Note: from react-dom, not react
+      <CodeBlock code={`import { useFormStatus } from "react-dom"; // Note: from react-dom, not react
 
 // A submit button that knows when its form is pending — no props needed.
 function SubmitButton({ children }: { children: React.ReactNode }) {
@@ -213,7 +213,7 @@ function CheckoutForm() {
 // const [state, action, isPending] = useActionState(serverAction, initialState);
 // - state: accumulated state from the action's return values
 // - action: the action to pass to a form's action prop
-// - isPending: true while the action is in flight`}</code></pre>
+// - isPending: true while the action is in flight`} lang="tsx" />
 
       <h2 id="ref-as-prop">ref as a Regular Prop</h2>
 
@@ -224,7 +224,7 @@ function CheckoutForm() {
         prop. <code>forwardRef</code> still works but is no longer necessary for new code.
       </p>
 
-      <pre><code>{`// Before React 19: forwardRef boilerplate required
+      <CodeBlock code={`// Before React 19: forwardRef boilerplate required
 import { forwardRef } from "react";
 
 const TextInput = forwardRef<HTMLInputElement, InputProps>(
@@ -248,7 +248,7 @@ function TextInput({ label, ref, ...props }: InputProps & { ref?: React.Ref<HTML
 
 // Usage is identical in both cases:
 const inputRef = useRef<HTMLInputElement>(null);
-<TextInput ref={inputRef} label="Email" />`}</code></pre>
+<TextInput ref={inputRef} label="Email" />`} lang="tsx" />
 
       <h2 id="react-compiler">The React Compiler</h2>
 
@@ -267,7 +267,7 @@ const inputRef = useRef<HTMLInputElement>(null);
         memoization. The compiler handles it more precisely than human judgment anyway.
       </p>
 
-      <pre><code>{`// Before React Compiler: manual memoization
+      <CodeBlock code={`// Before React Compiler: manual memoization
 function ProductCard({ product, onAddToCart }: Props) {
   const formattedPrice = useMemo(
     () => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
@@ -301,7 +301,7 @@ function ProductCard({ product, onAddToCart }: Props) {
       <span>{formattedPrice}</span>
     </div>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="day-to-day-impact">What This Means for Day-to-Day Code</h2>
 

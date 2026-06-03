@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -39,7 +39,7 @@ export default function ContextInDepth() {
         consumer re-renders — no exceptions.
       </p>
 
-      <pre><code>{`// Context: the distribution layer — not the storage layer
+      <CodeBlock code={`// Context: the distribution layer — not the storage layer
 const ThemeContext = createContext<"light" | "dark">("light");
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
 function ThemeIcon() {
   const theme = useContext(ThemeContext);
   return <Icon name={theme === "dark" ? "moon" : "sun"} />;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="how-context-propagation-works">How Context Propagation Works</h2>
 
@@ -81,7 +81,7 @@ function ThemeIcon() {
         is logically identical.
       </p>
 
-      <pre><code>{`// Bug: new object reference on every parent render
+      <CodeBlock code={`// Bug: new object reference on every parent render
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
@@ -106,7 +106,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
   // Now consumers only re-render when user actually changes.
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="the-re-render-problem">The Re-render Problem</h2>
 
@@ -117,7 +117,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         triggers a re-render in every consumer — even if the component only cares about one field.
       </p>
 
-      <pre><code>{`// A context that holds multiple values
+      <CodeBlock code={`// A context that holds multiple values
 const AppContext = createContext<{
   user: User | null;
   notifications: Notification[];
@@ -136,7 +136,7 @@ function ThemeButton() {
 }
 
 // In a real app with dozens of consumers and frequent updates,
-// this creates serious performance issues.`}</code></pre>
+// this creates serious performance issues.`} lang="tsx" />
 
       <h2 id="splitting-context">Splitting Context Into Multiple Providers</h2>
 
@@ -147,7 +147,7 @@ function ThemeButton() {
         context it actually consumes changes.
       </p>
 
-      <pre><code>{`// Before: one large context — any update re-renders all consumers
+      <CodeBlock code={`// Before: one large context — any update re-renders all consumers
 const AppContext = createContext<AppState>({...});
 
 // After: split by change frequency
@@ -175,7 +175,7 @@ function AppProviders({ children }: { children: React.ReactNode }) {
       </ThemeProvider>
     </UserProvider>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="context-plus-usereducer">The Context + useReducer Pattern</h2>
 
@@ -187,7 +187,7 @@ function AppProviders({ children }: { children: React.ReactNode }) {
         only dispatch never re-render from state changes.
       </p>
 
-      <pre><code>{`type CartState = { items: CartItem[]; total: number };
+      <CodeBlock code={`type CartState = { items: CartItem[]; total: number };
 type CartAction =
   | { type: "ADD_ITEM"; item: CartItem }
   | { type: "REMOVE_ITEM"; itemId: string }
@@ -242,7 +242,7 @@ function AddToCartButton({ item }: { item: CartItem }) {
 function CartSummary() {
   const { items, total } = useCartState();
   return <div>{items.length} items — $\{total.toFixed(2)}</div>;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="when-to-use-external-state">When to Reach for Zustand or Jotai</h2>
 
@@ -255,7 +255,7 @@ function CartSummary() {
         causing real jank despite splitting.
       </p>
 
-      <pre><code>{`// Zustand gives you fine-grained selectors out of the box.
+      <CodeBlock code={`// Zustand gives you fine-grained selectors out of the box.
 // Only re-renders when the selected slice changes.
 const useStore = create<AppState>((set) => ({
   user: null,
@@ -276,7 +276,7 @@ function CartBadge() {
 // - Low-frequency values (theme, locale, authenticated user)
 // - Component library internals (sharing state between Tabs and Tab children)
 // - Dependency injection (passing a logger, a router, an analytics client)
-// Reserve external libraries for state that changes frequently and has many consumers.`}</code></pre>
+// Reserve external libraries for state that changes frequently and has many consumers.`} lang="tsx" />
 
       <h2 id="interview-challenge">Interview Challenge: Dashboard Re-render Storm</h2>
 

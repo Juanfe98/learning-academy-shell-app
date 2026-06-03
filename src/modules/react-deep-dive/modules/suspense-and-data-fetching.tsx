@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -32,7 +32,7 @@ export default function SuspenseAndDataFetching() {
         entire mechanism.
       </p>
 
-      <pre><code>{`// Suspense works by catching thrown Promises.
+      <CodeBlock code={`// Suspense works by catching thrown Promises.
 // This is a minimal illustration — not a pattern you'd use directly.
 function SuspendingComponent({ resource }: { resource: Resource<string> }) {
   // resource.read() throws a Promise if data isn't ready yet.
@@ -52,7 +52,7 @@ function App() {
 
 // In practice you never write resource.read() yourself.
 // React Query, SWR, Relay, and React's own use() hook handle
-// the Promise-throwing protocol internally.`}</code></pre>
+// the Promise-throwing protocol internally.`} lang="text" />
 
       <p>
         This &quot;throw a Promise&quot; protocol is intentionally low-level. You interact with
@@ -71,7 +71,7 @@ function App() {
         renders the actual content.
       </p>
 
-      <pre><code>{`// Suspense boundary placement determines loading granularity
+      <CodeBlock code={`// Suspense boundary placement determines loading granularity
 function ProductPage({ productId }: { productId: string }) {
   return (
     <div>
@@ -93,7 +93,7 @@ function ProductPage({ productId }: { productId: string }) {
 
 // If both were wrapped in one Suspense boundary,
 // you'd see one fallback until BOTH were ready.
-// Split boundaries let sections appear as they load independently.`}</code></pre>
+// Split boundaries let sections appear as they load independently.`} lang="text" />
 
       <h2 id="suspense-with-lazy-loading">Suspense with Lazy Loading</h2>
 
@@ -103,7 +103,7 @@ function ProductPage({ productId }: { productId: string }) {
         The module&apos;s Promise is thrown until the chunk loads, then the component renders.
       </p>
 
-      <pre><code>{`import { lazy, Suspense } from "react";
+      <CodeBlock code={`import { lazy, Suspense } from "react";
 
 // The component is only loaded when it's first rendered.
 // The dynamic import() returns a Promise — React.lazy wraps it.
@@ -129,7 +129,7 @@ function Dashboard({ showEditor }: { showEditor: boolean }) {
 }
 
 // Nested lazy loading: the parent resolves first, then children suspend individually.
-// This is intentional — granular loading states are usually better UX than one big spinner.`}</code></pre>
+// This is intentional — granular loading states are usually better UX than one big spinner.`} lang="tsx" />
 
       <h2 id="suspense-with-data-fetching">Suspense with Data Fetching</h2>
 
@@ -140,7 +140,7 @@ function Dashboard({ showEditor }: { showEditor: boolean }) {
         Components do it natively (async components just <code>await</code> their data).
       </p>
 
-      <pre><code>{`// React Query Suspense mode (v5+)
+      <CodeBlock code={`// React Query Suspense mode (v5+)
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 // With useSuspenseQuery, the component suspends if data isn't cached.
@@ -172,7 +172,7 @@ async function ProductPage({ id }: { id: string }) {
   // Direct await — no useState, no useEffect, no hooks.
   const product = await fetchProduct(id);
   return <ProductDetails product={product} />;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="error-boundaries">Error Boundaries</h2>
 
@@ -184,7 +184,7 @@ async function ProductPage({ id }: { id: string }) {
         component.
       </p>
 
-      <pre><code>{`// Error Boundaries must be class components — there's no hook equivalent yet.
+      <CodeBlock code={`// Error Boundaries must be class components — there's no hook equivalent yet.
 // In practice, use the react-error-boundary library instead of writing your own.
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -223,7 +223,7 @@ function UserSection({ userId }: { userId: string }) {
 // Error boundaries do NOT catch:
 // - Errors in event handlers (use try/catch)
 // - Errors in async callbacks (use try/catch)
-// - Errors in the error boundary itself`}</code></pre>
+// - Errors in the error boundary itself`} lang="tsx" />
 
       <h2 id="nested-suspense-boundaries">Nested Suspense Boundaries</h2>
 
@@ -234,7 +234,7 @@ function UserSection({ userId }: { userId: string }) {
         having a coarser catch-all at the route level.
       </p>
 
-      <pre><code>{`function SettingsPage() {
+      <CodeBlock code={`function SettingsPage() {
   return (
     // Route-level catch-all: if anything breaks badly, the whole page shows this
     <Suspense fallback={<PageSpinner />}>
@@ -256,7 +256,7 @@ function UserSection({ userId }: { userId: string }) {
 // 1. Page first renders with PageSpinner
 // 2. ProfileSection loads → replaces its skeleton, rest still loading
 // 3. BillingSection loads → replaces its skeleton
-// 4. Never shows the outer PageSpinner again after initial load`}</code></pre>
+// 4. Never shows the outer PageSpinner again after initial load`} lang="text" />
 
       <h2 id="the-waterfall-problem">The Waterfall Problem</h2>
 
@@ -266,7 +266,7 @@ function UserSection({ userId }: { userId: string }) {
         creating a sequential chain when parallel requests were possible.
       </p>
 
-      <pre><code>{`// WATERFALL: each layer waits for the parent's fetch to complete
+      <CodeBlock code={`// WATERFALL: each layer waits for the parent's fetch to complete
 function UserDashboard({ userId }: { userId: string }) {
   // 1. Fetch user first...
   const user = useSuspenseQuery({ queryKey: ["user", userId], queryFn: ... });
@@ -299,7 +299,7 @@ function UserDashboard({ userId }: { userId: string }) {
 router.on("navigate", ({ params }) => {
   queryClient.prefetchQuery({ queryKey: ["user", params.userId], ... });
   queryClient.prefetchQuery({ queryKey: ["orders", params.userId], ... });
-});`}</code></pre>
+});`} lang="text" />
 
       <h2 id="interview-challenge">Interview Challenge: Dashboard Loading Architecture</h2>
 

@@ -1,4 +1,4 @@
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -78,7 +78,7 @@ export default function IncidentResponse() {
       </table>
 
       <h2 id="incident-lifecycle">Incident Lifecycle</h2>
-      <pre>{`
+      <CodeBlock code={`
 DETECT
   Alert fires, customer report, anomaly detected
   → Acknowledge: someone owns the incident
@@ -106,7 +106,7 @@ POSTMORTEM
   Root cause analysis
   Blameless culture: systems failed, not people
   Action items to prevent recurrence
-`}</pre>
+`} lang="text" />
 
       <h2 id="detection">Detection</h2>
       <p>
@@ -144,7 +144,7 @@ POSTMORTEM
         <li><strong>Database failover:</strong> If RDS is unhealthy, trigger a manual failover to the standby.</li>
         <li><strong>Disable affected endpoint:</strong> Return a 503 for a broken endpoint to protect the rest of the service.</li>
       </ol>
-      <pre><code>{`# Quick rollback: ECS service deploy previous image
+      <CodeBlock code={`# Quick rollback: ECS service deploy previous image
 aws ecs update-service \
   --cluster production \
   --service api-service \
@@ -163,7 +163,7 @@ aws ecs update-service \
 # console.aws.amazon.com/health/
 # or
 aws health describe-events \
-  --filter "services=ECS,EC2,RDS" "regions=us-east-1"`}</code></pre>
+  --filter "services=ECS,EC2,RDS" "regions=us-east-1"`} lang="bash" />
 
       <h2 id="communication">Communication During an Incident</h2>
       <p>
@@ -192,7 +192,7 @@ aws health describe-events \
         made decisions with the information available at the time.
       </p>
       <p><strong>Postmortem template:</strong></p>
-      <pre>{`
+      <CodeBlock code={`
 ## Incident Postmortem: [Title]
 **Date:** [Date]
 **Severity:** P[1-4]
@@ -233,10 +233,10 @@ cover this case with production-realistic data.
 - Alert fired before customer reports
 - Rollback completed in 5 minutes
 - Clear communication on status page
-`}</pre>
+`} lang="bash" />
 
       <h2 id="runbooks">Runbook Example: API 500 Rate Spike</h2>
-      <pre>{`
+      <CodeBlock code={`
 RUNBOOK: API High Error Rate (5xx)
 Trigger: CloudWatch alarm "api-error-rate-high"
 
@@ -271,7 +271,7 @@ Step 5: Rollback if deploy-related
 Step 6: Update status page and notify on-call lead
 
 Step 7: After resolution: start postmortem within 24h
-`}</pre>
+`} lang="text" />
 
       <h2 id="real-scenarios">Real Production Scenarios</h2>
       <p><strong>Scenario 1: API outage from bad deploy</strong></p>

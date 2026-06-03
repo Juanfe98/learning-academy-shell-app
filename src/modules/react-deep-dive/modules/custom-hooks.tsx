@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -38,7 +38,7 @@ export default function CustomHooks() {
         and will silently break when called conditionally.
       </p>
 
-      <pre><code>{`// This is a custom hook — React treats it like a component for rules purposes.
+      <CodeBlock code={`// This is a custom hook — React treats it like a component for rules purposes.
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -58,7 +58,7 @@ function ResponsiveLayout() {
 }
 
 // React tracks hook state per component instance — not per hook definition.
-// Two components using useWindowWidth() each have their own separate state.`}</code></pre>
+// Two components using useWindowWidth() each have their own separate state.`} lang="text" />
 
       <h2 id="extracting-logic-vs-ui">Extracting Logic vs Extracting UI</h2>
 
@@ -69,7 +69,7 @@ function ResponsiveLayout() {
         side effects but leaves rendering to the caller, it should be a hook.
       </p>
 
-      <pre><code>{`// Logic → custom hook. The caller decides how to render the data.
+      <CodeBlock code={`// Logic → custom hook. The caller decides how to render the data.
 function useUserSearch(initialQuery = "") {
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<User[]>([]);
@@ -111,7 +111,7 @@ function SearchSidebar() {
       <CompactUserList users={results} />
     </aside>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="building-common-hooks">Building Common Hooks</h2>
 
@@ -122,7 +122,7 @@ function SearchSidebar() {
         the last change. Useful for avoiding excessive API calls on rapidly-changing inputs.
       </p>
 
-      <pre><code>{`function useDebounce<T>(value: T, delay: number): T {
+      <CodeBlock code={`function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
@@ -150,7 +150,7 @@ function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
       placeholder="Search..."
     />
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h3 id="useprevious">usePrevious</h3>
 
@@ -159,7 +159,7 @@ function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
         synchronizes after render.
       </p>
 
-      <pre><code>{`function usePrevious<T>(value: T): T | undefined {
+      <CodeBlock code={`function usePrevious<T>(value: T): T | undefined {
   const ref = useRef<T>();
 
   // useEffect fires after render, so ref.current holds last render's value
@@ -180,7 +180,7 @@ function AnimatedCounter({ count }: { count: number }) {
       {count}
     </div>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h3 id="uselocalstorage">useLocalStorage</h3>
 
@@ -188,7 +188,7 @@ function AnimatedCounter({ count }: { count: number }) {
         Persists state to localStorage, with hydration safety for SSR environments.
       </p>
 
-      <pre><code>{`function useLocalStorage<T>(key: string, initialValue: T) {
+      <CodeBlock code={`function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     // Lazy initializer runs once on mount — safe for SSR if guarded
     if (typeof window === "undefined") return initialValue;
@@ -227,7 +227,7 @@ function ThemeToggle() {
       {theme}
     </button>
   );
-}`}</code></pre>
+}`} lang="text" />
 
       <h3 id="useasync">useAsync</h3>
 
@@ -236,7 +236,7 @@ function ThemeToggle() {
         abort on cleanup and correct handling of race conditions.
       </p>
 
-      <pre><code>{`type AsyncState<T> =
+      <CodeBlock code={`type AsyncState<T> =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "success"; data: T }
@@ -281,7 +281,7 @@ function UserProfile({ userId }: { userId: string }) {
   if (state.status === "error")   return <ErrorBanner message={state.error.message} />;
   if (state.status === "success") return <Profile user={state.data} />;
   return null;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="rules-of-hooks">Rules of Hooks and Why They Exist</h2>
 
@@ -298,7 +298,7 @@ function UserProfile({ userId }: { userId: string }) {
         associate hook state with the wrong hook. This produces silent data corruption.
       </p>
 
-      <pre><code>{`// WRONG: hook called conditionally — breaks the linked list invariant
+      <CodeBlock code={`// WRONG: hook called conditionally — breaks the linked list invariant
 function UserCard({ userId, showEmail }: { userId: string; showEmail: boolean }) {
   const user = useUser(userId);
 
@@ -325,7 +325,7 @@ function UserCard({ userId, showEmail }: { userId: string; showEmail: boolean })
 // Why custom hooks must start with "use":
 // The linter enforces the Rules of Hooks on functions named with "use".
 // A function named getUser that calls useState internally won't get linting
-// warnings — and will silently break if called conditionally.`}</code></pre>
+// warnings — and will silently break if called conditionally.`} lang="text" />
 
       <h2 id="testing-custom-hooks">Testing Custom Hooks</h2>
 
@@ -335,7 +335,7 @@ function UserCard({ userId, showEmail }: { userId: string; showEmail: boolean })
         utility, which mounts a minimal component that calls your hook and exposes the result.
       </p>
 
-      <pre><code>{`import { renderHook, act } from "@testing-library/react";
+      <CodeBlock code={`import { renderHook, act } from "@testing-library/react";
 import { useDebounce } from "./useDebounce";
 import { vi } from "vitest";
 
@@ -369,7 +369,7 @@ describe("useDebounce", () => {
     act(() => vi.advanceTimersByTime(300));
     expect(result.current).toBe("updated");
   });
-});`}</code></pre>
+});`} lang="tsx" />
 
       <h2 id="interview-challenge">Interview Challenge: Reusable Server Table Hook</h2>
 

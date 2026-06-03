@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -38,7 +38,7 @@ export default function ComponentPatterns() {
         component managing that internal state.
       </p>
 
-      <pre><code>{`// Compound component implementation: Tabs
+      <CodeBlock code={`// Compound component implementation: Tabs
 const TabsContext = createContext<{
   activeTab: string;
   setActiveTab: (id: string) => void;
@@ -104,7 +104,7 @@ function SettingsPage() {
       <Tabs.Panel id="billing"><BillingSettings /></Tabs.Panel>
     </Tabs>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="render-props">Render Props</h2>
 
@@ -117,7 +117,7 @@ function SettingsPage() {
         renders, not just <em>how</em> the logic works.
       </p>
 
-      <pre><code>{`// Render prop: the List component manages selection state,
+      <CodeBlock code={`// Render prop: the List component manages selection state,
 // the consumer controls how items and the selected item look.
 function SelectableList<T extends { id: string }>({
   items,
@@ -157,7 +157,7 @@ function SelectableList<T extends { id: string }>({
     </button>
   )}
   renderSelected={user => <UserDetailPanel user={user} />}
-/>`}</code></pre>
+/>`} lang="text" />
 
       <h2 id="slot-pattern">The Slot Pattern with children Composition</h2>
 
@@ -168,7 +168,7 @@ function SelectableList<T extends { id: string }>({
         in layout components, modals, cards, and page shells.
       </p>
 
-      <pre><code>{`// Slot pattern: named props for different regions of a layout
+      <CodeBlock code={`// Slot pattern: named props for different regions of a layout
 interface PageLayoutProps {
   header: React.ReactNode;
   sidebar?: React.ReactNode;
@@ -200,7 +200,7 @@ function DashboardPage() {
       <DashboardContent />  {/* Goes into the children / "default" slot */}
     </PageLayout>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="controlled-vs-uncontrolled">Controlled vs Uncontrolled Components</h2>
 
@@ -218,7 +218,7 @@ function DashboardPage() {
         at submission and do not need to react to intermediate changes.
       </p>
 
-      <pre><code>{`// CONTROLLED: parent owns state — full visibility into value
+      <CodeBlock code={`// CONTROLLED: parent owns state — full visibility into value
 function ControlledInput({ value, onChange, maxLength }: {
   value: string;
   onChange: (value: string) => void;
@@ -251,7 +251,7 @@ function UncontrolledForm({ onSubmit }: { onSubmit: (data: FormData) => void }) 
 
 // The rule of thumb:
 // Use controlled when you need to react to every change (validation, formatting).
-// Use uncontrolled when you only need the value on submit and there's no live feedback.`}</code></pre>
+// Use uncontrolled when you only need the value on submit and there's no live feedback.`} lang="text" />
 
       <h2 id="higher-order-components">Higher-Order Components in 2024</h2>
 
@@ -264,7 +264,7 @@ function UncontrolledForm({ onSubmit }: { onSubmit: (data: FormData) => void }) 
         the component at the JSX level.
       </p>
 
-      <pre><code>{`// HOC: wraps a component to add permission checking
+      <CodeBlock code={`// HOC: wraps a component to add permission checking
 function withPermission<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   requiredPermission: Permission
@@ -299,7 +299,7 @@ function AdminPanel() {
 // When to choose HOC over hook:
 // - You cannot modify the wrapped component (third-party, class component)
 // - The enhancement needs to intercept rendering entirely (e.g., error boundaries)
-// - You are building a library and need a stable composable API`}</code></pre>
+// - You are building a library and need a stable composable API`} lang="tsx" />
 
       <h2 id="lifting-vs-pushing-state">Lifting State Up vs Pushing State Down</h2>
 
@@ -311,7 +311,7 @@ function AdminPanel() {
         re-renders and coupling.
       </p>
 
-      <pre><code>{`// TOO HIGH: global state for local UI behavior
+      <CodeBlock code={`// TOO HIGH: global state for local UI behavior
 // Putting a modal's open/closed state in a global store
 // when only one component needs it is unnecessary coupling.
 const useGlobalStore = create(set => ({
@@ -360,7 +360,7 @@ function Dashboard() {
       <FilterableTable />
     </>
   );
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="interview-challenge">Interview Challenge: Complex Filter Drawer + Results List</h2>
 

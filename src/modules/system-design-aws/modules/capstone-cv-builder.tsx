@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, ArticleTable, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const architectureDiagram = String.raw`flowchart TD
@@ -215,7 +215,7 @@ export default function CapstoneCvBuilder() {
       </ul>
 
       <h2 id="capacity-estimation">Capacity Estimation</h2>
-      <pre><code>{`// === Traffic ===
+      <CodeBlock code={`// === Traffic ===
 DAU = 100,000
 Average API calls per user per day = 20 (editing, previewing, loading sections)
 Average QPS = 100k × 20 / 86,400 ≈ 23 QPS
@@ -247,10 +247,10 @@ Export bandwidth: via S3 presigned URLs; not through API server
 
 // === Key conclusion ===
 // Scale is low to moderate. Simple architecture is appropriate.
-// Dominant costs: AI parsing provider, not infrastructure.`}</code></pre>
+// Dominant costs: AI parsing provider, not infrastructure.`} lang="text" />
 
       <h2 id="api-design">API Design</h2>
-      <pre><code>{`// Base URL: https://api.cvbuilder.com/v1
+      <CodeBlock code={`// Base URL: https://api.cvbuilder.com/v1
 // All endpoints require Authorization: Bearer {accessToken} unless noted
 
 // === Authentication ===
@@ -285,10 +285,10 @@ DELETE /me                              → 202 (GDPR erasure, async)
 // { error: { code: "CV_NOT_FOUND", message: "CV not found", details?: any } }
 // HTTP status codes:
 // 400 Bad Request, 401 Unauthorized, 403 Forbidden,
-// 404 Not Found, 409 Conflict, 429 Too Many Requests, 500 Internal Server Error`}</code></pre>
+// 404 Not Found, 409 Conflict, 429 Too Many Requests, 500 Internal Server Error`} lang="sql" />
 
       <h2 id="data-model">Data Model</h2>
-      <pre><code>{`// DynamoDB single-table design
+      <CodeBlock code={`// DynamoDB single-table design
 // Table name: cv-builder-prod
 
 // ENTITY: User
@@ -334,7 +334,7 @@ Attributes: { cvId, exportId, expiresAt }
 // DELETE /me triggers an async Lambda that:
 // 1. Deletes all DynamoDB items with PK=USER#userId or CV#cvId owned by user
 // 2. Deletes all S3 objects under uploads/{userId}/ and exports/{userId}/
-// 3. Records deletion timestamp in audit table (for compliance evidence)`}</code></pre>
+// 3. Records deletion timestamp in audit table (for compliance evidence)`} lang="text" />
 
       <h2 id="aws-architecture">AWS Architecture</h2>
       <MermaidDiagram
@@ -424,7 +424,7 @@ Attributes: { cvId, exportId, expiresAt }
       </ArticleTable>
 
       <h2 id="observability-architecture">Observability Architecture</h2>
-      <pre><code>{`// Structured log format (all services):
+      <CodeBlock code={`// Structured log format (all services):
 {
   "timestamp": "2025-04-30T10:15:30.123Z",
   "level": "info",
@@ -460,10 +460,10 @@ Attributes: { cvId, exportId, expiresAt }
 // API availability: 99.9% over 30-day rolling window
 // API p99 latency: ≤ 200ms over 1-hour windows (measured via CloudWatch Metrics)
 // CV parse success rate: ≥ 97% (DLQ / total attempts over 1 day)
-// Error budget burn rate: alert when burn rate > 5x (consuming error budget too fast)`}</code></pre>
+// Error budget burn rate: alert when burn rate > 5x (consuming error budget too fast)`} lang="text" />
 
       <h2 id="cicd-strategy">CI/CD Strategy</h2>
-      <pre><code>{`// Pipeline: GitHub Actions → ECR → ECS rolling deploy
+      <CodeBlock code={`// Pipeline: GitHub Actions → ECR → ECS rolling deploy
 
 // On PR:
 // 1. pnpm lint + pnpm test (unit + integration)
@@ -494,7 +494,7 @@ Attributes: { cvId, exportId, expiresAt }
 // Feature flags:
 // Using a simple DynamoDB table: { feature: "ai-summary", enabled: true, rolloutPercent: 10 }
 // API checks feature flag from Redis cache (refreshed every 60s)
-// Allows: gradual rollout, instant kill switch, A/B testing`}</code></pre>
+// Allows: gradual rollout, instant kill switch, A/B testing`} lang="text" />
 
       <h2 id="disaster-recovery">Disaster Recovery</h2>
       <ArticleTable caption="Disaster recovery tiers and their costs" minWidth={760}>

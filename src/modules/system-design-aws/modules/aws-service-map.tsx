@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable } from "@/components/ui";
+import { CodeBlock, ArticleTable } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const awsOverviewDiagram = String.raw`flowchart TD
@@ -470,7 +470,7 @@ export default function AwsServiceMap() {
       <p>
         When asked &quot;what service would you use for X?&quot; in an interview, use this mental framework:
       </p>
-      <pre><code>{`// Service selection decision guide
+      <CodeBlock code={`// Service selection decision guide
 
 // Compute:
 Need to run a container always-on?      → ECS Fargate
@@ -505,7 +505,7 @@ Need API keys for external partners?    → API Gateway API keys
 // Load balancing:
 HTTP/HTTPS traffic, path routing?       → ALB
 TCP/UDP, ultra-low latency?             → NLB
-Lambda-backed API, throttling, caching? → API Gateway`}</code></pre>
+Lambda-backed API, throttling, caching? → API Gateway`} lang="text" />
 
       <h2 id="common-wrong-choices">Common Wrong Service Choices</h2>
       <ul>

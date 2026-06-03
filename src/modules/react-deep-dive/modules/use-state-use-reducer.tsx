@@ -1,4 +1,4 @@
-import { InterviewChallenge } from "@/components/ui";
+import { CodeBlock, InterviewChallenge } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -33,7 +33,7 @@ export default function UseStateUseReducer() {
         value of state <em>at the time the render occurred</em>, not the latest value.
       </p>
 
-      <pre><code>{`function Counter() {
+      <CodeBlock code={`function Counter() {
   const [count, setCount] = useState(0);
 
   function handleClick() {
@@ -60,7 +60,7 @@ function MultipleUpdates() {
   }
 
   return <button onClick={handleClick}>{count}</button>;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="why-updates-look-async">Why State Updates Look Asynchronous</h2>
 
@@ -78,7 +78,7 @@ function MultipleUpdates() {
         and defer work without consistency issues.
       </p>
 
-      <pre><code>{`// Demonstrating the snapshot behavior with async code
+      <CodeBlock code={`// Demonstrating the snapshot behavior with async code
 function SearchBox() {
   const [query, setQuery] = useState("");
 
@@ -94,7 +94,7 @@ function SearchBox() {
 
   // Solution: use a ref for values you need to read after async operations,
   // or read from the function argument rather than closing over state.
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="functional-updater-pattern">The Functional Updater Pattern</h2>
 
@@ -106,7 +106,7 @@ function SearchBox() {
         for the next.
       </p>
 
-      <pre><code>{`function Counter() {
+      <CodeBlock code={`function Counter() {
   const [count, setCount] = useState(0);
 
   function handleClick() {
@@ -134,7 +134,7 @@ function TodoList() {
   }, []); // empty deps is safe here because we use the functional updater
 
   return <input onBlur={e => addTodo(e.target.value)} />;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="batching-behavior">Batching Behavior in React 18 vs 17</h2>
 
@@ -146,7 +146,7 @@ function TodoList() {
         previously caused two or three re-renders now causes one.
       </p>
 
-      <pre><code>{`// React 17: two separate re-renders
+      <CodeBlock code={`// React 17: two separate re-renders
 // React 18: one batched re-render
 async function loadUser(id: string) {
   const user = await fetchUser(id);
@@ -163,7 +163,7 @@ function handleFormSubmit() {
   // DOM is updated here — useful for measuring layout before a transition
   const rect = formRef.current?.getBoundingClientRect();
   animateOut(rect);
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="use-reducer">useReducer: When and Why</h2>
 
@@ -182,7 +182,7 @@ function handleFormSubmit() {
         deeply nested state updates that require spread hell with <code>useState</code>.
       </p>
 
-      <pre><code>{`type FetchState<T> =
+      <CodeBlock code={`type FetchState<T> =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "success"; data: T }
@@ -220,7 +220,7 @@ function UserProfile({ userId }: { userId: string }) {
   if (state.status === "error")   return <ErrorMessage message={state.message} />;
   if (state.status === "success") return <Profile user={state.data} />;
   return <button onClick={() => dispatch({ type: "FETCH_START" })}>Load</button>;
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="designing-state-shape">Designing State Shape</h2>
 
@@ -231,7 +231,7 @@ function UserProfile({ userId }: { userId: string }) {
         simultaneously).
       </p>
 
-      <pre><code>{`// BAD: three booleans that can represent 8 states, but only 3 are valid
+      <CodeBlock code={`// BAD: three booleans that can represent 8 states, but only 3 are valid
 const [isLoading, setIsLoading] = useState(false);
 const [isError, setIsError] = useState(false);
 const [data, setData] = useState<User | null>(null);
@@ -252,7 +252,7 @@ if (request.status === "error") {
 }
 if (request.status === "success") {
   console.log(request.data.name); // data is only accessible here
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="derived-vs-redundant-state">Derived State vs Redundant State</h2>
 
@@ -262,7 +262,7 @@ if (request.status === "success") {
         time its source changes. Forgetting to do so introduces stale state bugs.
       </p>
 
-      <pre><code>{`// REDUNDANT STATE — keeps firstName, lastName, AND fullName in state
+      <CodeBlock code={`// REDUNDANT STATE — keeps firstName, lastName, AND fullName in state
 function UserForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -289,7 +289,7 @@ const sortedItems = useMemo(
   () => [...items].sort((a, b) => a.name.localeCompare(b.name)),
   [items]
 );
-// For most string concatenation and filtering: no useMemo needed.`}</code></pre>
+// For most string concatenation and filtering: no useMemo needed.`} lang="tsx" />
 
       <h2 id="interview-challenge">Interview Challenge: Editable Table + Bulk Actions</h2>
 

@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const eventCascadeDiagram = String.raw`flowchart TD
@@ -91,7 +91,7 @@ export default function EventDrivenArchitecture() {
         <li><strong>Fact-based:</strong> Events represent what happened, not what should happen next. That decision belongs to the consumer.</li>
         <li><strong>Self-contained:</strong> A well-designed event contains enough data for consumers to act without additional lookups.</li>
       </ul>
-      <pre><code>{`// Good event: fact-based, self-contained, immutable
+      <CodeBlock code={`// Good event: fact-based, self-contained, immutable
 {
   "type": "user.signed_up",
   "version": "1.0",
@@ -112,7 +112,7 @@ export default function EventDrivenArchitecture() {
 
 // Bad event: command-like (tells consumers what to do)
 { "type": "send_welcome_email", "userId": "user-alice" }
-// → couples the producer to a specific consumer action`}</code></pre>
+// → couples the producer to a specific consumer action`} lang="text" />
 
       <h2 id="event-types">Domain Events vs Integration Events</h2>
       <table>
@@ -234,7 +234,7 @@ export default function EventDrivenArchitecture() {
         Webhooks are HTTP callbacks. Instead of your service polling another service for updates,
         the other service pushes updates to your endpoint when something happens.
       </p>
-      <pre><code>{`// Stripe webhook: payment status changes
+      <CodeBlock code={`// Stripe webhook: payment status changes
 app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   // Verify the webhook signature (IMPORTANT: prevents fake webhooks)
   let event;
@@ -265,7 +265,7 @@ async function handleStripeEvent(event) {
       await notifyPaymentFailed(event.data.object.metadata.orderId);
       break;
   }
-}`}</code></pre>
+}`} lang="typescript" />
       <p>
         <strong>Webhook best practices:</strong> Always verify signatures. Respond with 2xx
         immediately and process async (webhooks time out). Handle duplicates idempotently.
@@ -285,7 +285,7 @@ async function handleStripeEvent(event) {
         <li><strong>Schema registry:</strong> Discover and document event schemas. Auto-generates TypeScript types.</li>
         <li><strong>Event replay:</strong> Archive events and replay them for debugging or bootstrapping new consumers.</li>
       </ul>
-      <pre><code>{`// Publish event to EventBridge
+      <CodeBlock code={`// Publish event to EventBridge
 await eventBridge.putEvents({
   Entries: [{
     EventBusName: 'my-app-bus',
@@ -313,7 +313,7 @@ resource "aws_cloudwatch_event_target" "parse_cv" {
   rule      = aws_cloudwatch_event_rule.cv_uploaded.name
   target_id = "ParseCV"
   arn       = aws_lambda_function.cv_parser.arn
-}`}</code></pre>
+}`} lang="hcl" />
 
       <h2 id="kafka-concepts">Kafka Conceptually</h2>
       <p>

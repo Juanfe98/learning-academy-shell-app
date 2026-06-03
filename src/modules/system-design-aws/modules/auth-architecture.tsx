@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const authFlowDiagram = String.raw`sequenceDiagram
@@ -82,7 +82,7 @@ export default function AuthArchitecture() {
         (stored in database or Redis), generates a unique session ID, and sends it to the browser
         as a cookie.
       </p>
-      <pre><code>{`// Session auth flow
+      <CodeBlock code={`// Session auth flow
 // 1. Login
 POST /auth/login
 Body: { email, password }
@@ -109,7 +109,7 @@ Max-Age=3600 → Cookie expires in 1 hour
 const sessions = new Map();  // breaks with horizontal scaling
 
 // Redis (correct for multi-instance):
-await redis.setEx(\`session:\${sessionId}\`, 3600, JSON.stringify(session));`}</code></pre>
+await redis.setEx(\`session:\${sessionId}\`, 3600, JSON.stringify(session));`} lang="typescript" />
 
       <h2 id="jwt">JWT: Structure, Signing, Tradeoffs</h2>
       <p>
@@ -117,7 +117,7 @@ await redis.setEx(\`session:\${sessionId}\`, 3600, JSON.stringify(session));`}</
         server-side session storage. The token is cryptographically signed so its contents cannot
         be tampered with.
       </p>
-      <pre><code>{`// JWT structure: header.payload.signature (all base64url-encoded)
+      <CodeBlock code={`// JWT structure: header.payload.signature (all base64url-encoded)
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9    // header
 .eyJzdWIiOiJ1c2VyLWFsaWNlIiwicm9sZSI6InVzZXIiLCJleHAiOjE3MDY4NDgwMDB9  // payload
 .SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c  // signature
@@ -158,14 +158,14 @@ const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
 // Solution: short TTL (15 min access tokens) + refresh tokens
 // Solution: token blacklist in Redis (adds state, reduces stateless benefit)
 // 2. Size: JWTs are larger than session IDs (bandwidth overhead)
-// 3. Claims embedded: role changes take up to TTL to propagate`}</code></pre>
+// 3. Claims embedded: role changes take up to TTL to propagate`} lang="typescript" />
 
       <h2 id="oauth2">OAuth 2.0: Authorization Code Flow</h2>
       <p>
         OAuth 2.0 is an authorization framework for allowing one application to act on behalf of
         a user in another application, without sharing the user&apos;s credentials.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 Authorization Code Flow (used by Google Login, GitHub Login, etc.):
 
 User visits your app → clicks "Login with Google"
@@ -201,7 +201,7 @@ Key security points:
 - client_secret never goes to the browser (server-to-server exchange)
 - state parameter prevents CSRF (forge-request-on-behalf-of-user attack)
 - PKCE (Proof Key for Code Exchange) for mobile apps instead of client_secret
-`}</pre>
+`} lang="text" />
 
       <h2 id="oidc">OIDC: Identity on Top of OAuth2</h2>
       <p>
@@ -251,7 +251,7 @@ Key security points:
           </tr>
         </tbody>
       </table>
-      <pre><code>{`// Token refresh flow
+      <CodeBlock code={`// Token refresh flow
 // 1. API request with expired access token → 401
 // 2. Client detects 401, calls refresh endpoint
 // 3. Server validates refresh token, issues new access token (and optionally rotates refresh token)
@@ -280,7 +280,7 @@ app.post('/auth/refresh', async (req, res) => {
 
   res.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: true, sameSite: 'strict' });
   res.json({ accessToken });
-});`}</code></pre>
+});`} lang="text" />
 
       <h2 id="rbac-abac">RBAC vs ABAC</h2>
       <p>
@@ -294,7 +294,7 @@ app.post('/auth/refresh', async (req, res) => {
         Example: &quot;Allow access if user.department == resource.department AND
         environment.time is weekday business hours.&quot;
       </p>
-      <pre><code>{`// RBAC: role-based middleware
+      <CodeBlock code={`// RBAC: role-based middleware
 const permissions = {
   admin:  ['read', 'write', 'delete', 'admin'],
   editor: ['read', 'write'],
@@ -322,7 +322,7 @@ app.delete('/api/cvs/:id', authenticate, async (req, res) => {
     return res.status(403).json({ error: 'Cannot delete another user\\'s CV' });
   }
   await db.cvs.delete(req.params.id);
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="api-keys">API Keys</h2>
       <p>
@@ -330,7 +330,7 @@ app.delete('/api/cvs/:id', authenticate, async (req, res) => {
         are appropriate for: B2B integrations where a company authenticates as itself (not as a user),
         webhook endpoint authentication, SDK access.
       </p>
-      <pre><code>{`// Generating and storing API keys
+      <CodeBlock code={`// Generating and storing API keys
 // Never store raw API keys — store hash
 const rawKey = \`sk_live_\${crypto.randomBytes(32).toString('hex')}\`;
 const hashedKey = crypto.createHash('sha256').update(rawKey).digest('hex');
@@ -357,7 +357,7 @@ app.use('/api/v1', async (req, res, next) => {
 
   req.apiKeyUser = await db.users.findById(keyRecord.userId);
   next();
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="service-to-service">Service-to-Service Auth with IAM Roles</h2>
       <p>
@@ -366,7 +366,7 @@ app.use('/api/v1', async (req, res, next) => {
         the ECS task. AWS automatically provides temporary credentials to the task, which the
         SDK retrieves transparently.
       </p>
-      <pre><code>{`// WRONG: hardcoded credentials
+      <CodeBlock code={`// WRONG: hardcoded credentials
 const s3 = new S3Client({
   credentials: {
     accessKeyId: 'AKIAIOSFODNN7EXAMPLE',   // ← security nightmare
@@ -393,7 +393,7 @@ const s3 = new S3Client({ region: 'us-east-1' });
     "Action": ["dynamodb:GetItem", "dynamodb:PutItem"],
     "Resource": "arn:aws:dynamodb:us-east-1:123:table/cvs"
   }]
-}`}</code></pre>
+}`} lang="javascript" />
 
       <h2 id="cognito">AWS Cognito: User Pools vs Identity Pools</h2>
       <table>

@@ -1,4 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
+import { CodeBlock } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const deploymentPipelineDiagram = String.raw`flowchart TD
@@ -113,7 +114,7 @@ export default function CicdDeployment() {
         ECS rolling deploys are the default. The service gradually replaces old tasks with new ones,
         a few at a time. ALB health checks ensure new tasks are healthy before shifting traffic.
       </p>
-      <pre><code>{`# ECS rolling deployment configuration
+      <CodeBlock code={`# ECS rolling deployment configuration
 resource "aws_ecs_service" "api" {
   name            = "api-service"
   cluster         = aws_ecs_cluster.main.id
@@ -144,7 +145,7 @@ aws ecs update-service \
   --cluster production \
   --service api-service \
   --task-definition api-task:NEW_VERSION \
-  --force-new-deployment`}</code></pre>
+  --force-new-deployment`} lang="hcl" />
 
       <h2 id="blue-green">Blue/Green Deployment</h2>
       <p>
@@ -152,7 +153,7 @@ aws ecs update-service \
         identical environment. Traffic is switched at the load balancer level when green is
         confirmed healthy. Rollback is instant: switch back to blue.
       </p>
-      <pre><code>{`# Blue/Green with ECS and CodeDeploy
+      <CodeBlock code={`# Blue/Green with ECS and CodeDeploy
 # CodeDeploy creates a new target group (green), deploys new tasks there,
 # runs a test period, then shifts traffic
 
@@ -176,7 +177,7 @@ Hooks:
   - BeforeAllowTraffic: "arn:aws:lambda:...:PreTrafficHook"
   # Run smoke tests before allowing production traffic
   - AfterAllowTraffic: "arn:aws:lambda:...:PostTrafficHook"
-  # Verify metrics after traffic switch`}</code></pre>
+  # Verify metrics after traffic switch`} lang="hcl" />
 
       <h2 id="canary">Canary Deployment</h2>
       <p>
@@ -184,7 +185,7 @@ Hooks:
         and latency for the canary. If healthy, gradually increase to 25%, 50%, 100%. If errors
         are detected, shift 100% back to the stable version.
       </p>
-      <pre><code>{`# Canary with Route 53 weighted routing (service-level canary)
+      <CodeBlock code={`# Canary with Route 53 weighted routing (service-level canary)
 # 95% to stable ALB, 5% to canary ALB
 resource "aws_route53_record" "api_stable" {
   name           = "api.example.com"
@@ -205,7 +206,7 @@ aws lambda update-alias \
   --function-name cv-processor \
   --name production \
   --routing-config AdditionalVersionWeights={"3"=0.05}
-# 5% to version 3 (new), 95% to current version`}</code></pre>
+# 5% to version 3 (new), 95% to current version`} lang="hcl" />
 
       <h2 id="feature-flags">Feature Flags: Decouple Deploy from Release</h2>
       <p>
@@ -218,7 +219,7 @@ aws lambda update-alias \
         visibility), gradual rollouts (release to 1% → 10% → 100% of users), instant rollback
         (disable flag, no deployment needed), kill switches for new features.
       </p>
-      <pre><code>{`// Simple feature flag with DynamoDB or environment variable
+      <CodeBlock code={`// Simple feature flag with DynamoDB or environment variable
 async function parseCV(cvId: string) {
   const cv = await db.cvs.findById(cvId);
 
@@ -236,7 +237,7 @@ async function parseCV(cvId: string) {
 }
 
 // LaunchDarkly, Unleash, AWS AppConfig, or simple DynamoDB table
-// for feature flags at different sophistication levels`}</code></pre>
+// for feature flags at different sophistication levels`} lang="typescript" />
 
       <h2 id="rollbacks">Rollbacks: When and How</h2>
       <p>
@@ -247,7 +248,7 @@ async function parseCV(cvId: string) {
         <strong>Fix forward when:</strong> Rollback would revert other desirable changes, the issue
         is in infrastructure (not application code), or rollback itself might cause data issues.
       </p>
-      <pre><code>{`# ECS: rollback to previous task definition revision
+      <CodeBlock code={`# ECS: rollback to previous task definition revision
 aws ecs update-service \
   --cluster production \
   --service api-service \
@@ -264,7 +265,7 @@ aws lambda update-alias \
   --function-version PREVIOUS_VERSION
 
 # GitHub Actions: manual rollback workflow
-# workflow_dispatch trigger + input for revision number`}</code></pre>
+# workflow_dispatch trigger + input for revision number`} lang="bash" />
 
       <h2 id="db-migrations">Database Migrations: Expand/Contract Pattern</h2>
       <p>
@@ -275,7 +276,7 @@ aws lambda update-alias \
       <p>
         <strong>Expand/Contract (backwards-compatible migration):</strong>
       </p>
-      <pre><code>{`// WRONG: single migration that breaks old code
+      <CodeBlock code={`// WRONG: single migration that breaks old code
 ALTER TABLE users
   RENAME COLUMN full_name TO display_name;
 // Old running code: uses full_name → breaks immediately
@@ -299,7 +300,7 @@ UPDATE users SET display_name = full_name WHERE display_name IS NULL;
 ALTER TABLE users DROP COLUMN full_name;
 // Now safe: no code uses full_name anymore
 
-// Timeline: Phase 1+2 deployed → verify → Phase 3 deployed → verify → Phase 4`}</code></pre>
+// Timeline: Phase 1+2 deployed → verify → Phase 3 deployed → verify → Phase 4`} lang="sql" />
 
       <h2 id="release-monitoring">Release Monitoring</h2>
       <p>
@@ -312,7 +313,7 @@ ALTER TABLE users DROP COLUMN full_name;
         <li>DB query performance &mdash; new query patterns causing load?</li>
         <li>SQS queue depth &mdash; new code blocking worker processing?</li>
       </ul>
-      <pre><code>{`# GitHub Actions: post-deploy monitoring step
+      <CodeBlock code={`# GitHub Actions: post-deploy monitoring step
 - name: Monitor deployment
   run: |
     # Wait 5 minutes, then check error rate
@@ -329,7 +330,7 @@ ALTER TABLE users DROP COLUMN full_name;
     if [ "\${ERROR_COUNT%.*}" -gt "10" ]; then
       echo "ERROR: High error rate detected post-deploy"
       exit 1  # trigger rollback in next step
-    fi`}</code></pre>
+    fi`} lang="bash" />
 
       <h2 id="aws-tools">AWS CI/CD Tools</h2>
       <table>
@@ -370,7 +371,7 @@ ALTER TABLE users DROP COLUMN full_name;
       </table>
 
       <h2 id="github-actions-ecs">GitHub Actions &rarr; ECR &rarr; ECS Example</h2>
-      <pre><code>{`# .github/workflows/deploy.yml
+      <CodeBlock code={`# .github/workflows/deploy.yml
 name: Deploy to Production
 
 on:
@@ -426,7 +427,7 @@ jobs:
           wait-for-service-stability: true  # wait until deploy completes
 
       - name: Monitor deployment health
-        run: ./scripts/check-deployment-health.sh`}</code></pre>
+        run: ./scripts/check-deployment-health.sh`} lang="bash" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

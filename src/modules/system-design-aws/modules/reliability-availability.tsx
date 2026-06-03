@@ -1,4 +1,4 @@
-import { InterviewPlaybook } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -87,7 +87,7 @@ export default function ReliabilityAvailability() {
         99.9% × 99.9% = 99.8%. Add a cache (99.9%) and you get 99.7%. This is why removing
         dependencies from the critical path (circuit breakers, fallbacks) improves system availability.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 System availability = product of all dependency availabilities
 
 API: 99.9% × DB: 99.9% × Cache: 99.9% × Queue: 99.9% = 99.6%
@@ -96,7 +96,7 @@ That's 3.5 hours of downtime/year from a system that looks like four 99.9% compo
 With redundant components (both must fail for outage):
 Redundant DB: 1 - (1-0.999)^2 = 1 - 0.000001 = 99.9999%
 Much higher than either individual instance!
-`}</pre>
+`} lang="text" />
 
       <h2 id="reliability-vs-availability">Reliability vs Availability</h2>
       <p>
@@ -132,7 +132,7 @@ Much higher than either individual instance!
         capability when a component fails, rather than failing completely. The user gets a degraded
         experience, but the core flow still works.
       </p>
-      <pre><code>{`// Graceful degradation example: recommendation service fails
+      <CodeBlock code={`// Graceful degradation example: recommendation service fails
 async function getProductPage(productId: string) {
   const product = await db.products.findById(productId);  // critical path
 
@@ -146,7 +146,7 @@ async function getProductPage(productId: string) {
   }
 
   return { product, recommendations };
-}`}</code></pre>
+}`} lang="typescript" />
 
       <h2 id="redundancy">Redundancy: Eliminating Single Points of Failure</h2>
       <p>
@@ -217,7 +217,7 @@ async function getProductPage(productId: string) {
         failure) is a known production event. AWS has experienced AZ-level failures. Spreading
         resources across multiple AZs means a single-AZ failure causes no outage in your system.
       </p>
-      <pre>{`
+      <CodeBlock code={`
 AWS Region: us-east-1
 ┌─────────────────────────────────────────────────────────┐
 │                                                         │
@@ -239,7 +239,7 @@ If us-east-1a fails:
 - ALB stops routing to us-east-1a targets (within seconds)
 - RDS failover promotes us-east-1b standby to primary (~60s)
 - Traffic continues via us-east-1b and us-east-1c
-`}</pre>
+`} lang="text" />
 
       <h2 id="multi-region">Multi-Region: Active-Active vs Active-Passive</h2>
       <p>
@@ -318,7 +318,7 @@ If us-east-1a fails:
           automatically starts a replacement task.
         </li>
       </ul>
-      <pre><code>{`// Health check endpoint: comprehensive check
+      <CodeBlock code={`// Health check endpoint: comprehensive check
 app.get('/health', async (req, res) => {
   const checks = {
     database: 'unknown',
@@ -346,7 +346,7 @@ app.get('/health', async (req, res) => {
     checks,
     timestamp: new Date().toISOString()
   });
-});`}</code></pre>
+});`} lang="text" />
 
       <h2 id="aws-examples">AWS Services and Their Availability Guarantees</h2>
       <table>

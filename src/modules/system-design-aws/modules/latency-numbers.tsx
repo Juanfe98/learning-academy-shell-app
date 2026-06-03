@@ -1,4 +1,4 @@
-import { ArticleTable } from "@/components/ui";
+import { CodeBlock, ArticleTable } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 export const toc: TocItem[] = [
@@ -269,7 +269,7 @@ export default function LatencyNumbers() {
         <li><strong>Estimate bandwidth:</strong> how much data moves in/out per second</li>
         <li><strong>Identify the bottleneck:</strong> what is the constraint &mdash; compute, storage, bandwidth, or cost?</li>
       </ol>
-      <pre><code>{`// Back-of-envelope template
+      <CodeBlock code={`// Back-of-envelope template
 
 // Step 1: Users
 DAU = 1 million (1M)
@@ -304,10 +304,10 @@ Media/year = 6 GB × 365 = ~2 TB/year
 Read QPS >> Write QPS (social feeds: 100:1 read/write ratio)
 Response size = 10 posts × 400 bytes = 4 KB per feed request
 Read bandwidth = Read QPS × Response size
-             = 300 QPS × 4 KB = 1.2 MB/s ≈ 10 Mbps  // very manageable`}</code></pre>
+             = 300 QPS × 4 KB = 1.2 MB/s ≈ 10 Mbps  // very manageable`} lang="text" />
 
       <h2 id="qps-estimation">QPS Estimation</h2>
-      <pre><code>{`// The essential formula
+      <CodeBlock code={`// The essential formula
 Average QPS = (DAU × avg_requests_per_user_per_day) / 86,400
 
 // Rule of thumb: 1M DAU ≈ 12 average QPS (with 10 requests/user/day)
@@ -332,10 +332,10 @@ Average QPS = (DAU × avg_requests_per_user_per_day) / 86,400
 // ECS Fargate:
 // 1 task = ~100-500 QPS depending on CPU/memory and request complexity
 // 10 tasks = 1k-5k QPS
-// Auto-scaling handles growth, but plan capacity headroom`}</code></pre>
+// Auto-scaling handles growth, but plan capacity headroom`} lang="text" />
 
       <h2 id="storage-estimation">Storage Estimation</h2>
-      <pre><code>{`// Storage estimation formula
+      <CodeBlock code={`// Storage estimation formula
 Daily storage = Daily writes × Average object size
 
 // Data type size reference:
@@ -365,10 +365,10 @@ Daily storage = Daily writes × Average object size
 // S3 Standard:   $0.023/GB/month → 1 TB = $23/month
 // S3 IA:         $0.0125/GB/month → for infrequently accessed data
 // S3 Glacier:    $0.004/GB/month → for archives (minutes to hours retrieval)
-// EBS gp3:       $0.08/GB/month → attached block storage for EC2/RDS`}</code></pre>
+// EBS gp3:       $0.08/GB/month → attached block storage for EC2/RDS`} lang="text" />
 
       <h2 id="bandwidth-estimation">Bandwidth Estimation</h2>
-      <pre><code>{`// Bandwidth formula
+      <CodeBlock code={`// Bandwidth formula
 Bandwidth = QPS × Average response size
 
 // Common response sizes:
@@ -393,7 +393,7 @@ Bandwidth = QPS × Average response size
 
 // At 1 TB/month outbound from EC2: $90/month
 // At 100 TB/month outbound via CloudFront: ~$850/month
-// → For high-traffic static content, CloudFront pays for itself in reduced EC2 egress`}</code></pre>
+// → For high-traffic static content, CloudFront pays for itself in reduced EC2 egress`} lang="text" />
 
       <h2 id="units">Unit Conversions to Memorize</h2>
       <ArticleTable caption="Unit conversions for back-of-envelope calculations" minWidth={600}>
@@ -469,7 +469,7 @@ Bandwidth = QPS × Average response size
       <p>
         Walk through a complete back-of-envelope estimation for a Twitter-like system:
       </p>
-      <pre><code>{`// Given: Design a Twitter-like social feed system
+      <CodeBlock code={`// Given: Design a Twitter-like social feed system
 // Users: 300M MAU, 100M DAU
 // Average user: reads 10 tweets, writes 0.1 tweets per day
 
@@ -504,7 +504,7 @@ Media/day = 10M × 0.2 × 200 KB = 400 GB/day
 // Redis cluster for timeline cache:
 // Each user's timeline = 100 recent tweet IDs × 8 bytes = 800 bytes
 // 100M users × 800 bytes = 80 GB → fits in a Redis cluster
-// Cache hit rate target = 99% to keep DB load at 1% of read traffic`}</code></pre>
+// Cache hit rate target = 99% to keep DB load at 1% of read traffic`} lang="text" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

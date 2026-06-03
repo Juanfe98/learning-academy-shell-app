@@ -13,9 +13,10 @@ import { MERMAID_CONFIG } from "@/lib/mermaid";
 
 type MermaidModule = typeof import("mermaid");
 
-const MIN_SCALE = 0.65;
+const MIN_SCALE = 0.25;
 const MAX_SCALE = 2.4;
 const ZOOM_STEP = 0.18;
+const DEFAULT_SCALE = 0.7;
 
 let mermaidLoader: Promise<MermaidModule["default"]> | null = null;
 
@@ -55,7 +56,7 @@ export default function MermaidDiagram({
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(DEFAULT_SCALE);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -78,7 +79,7 @@ export default function MermaidDiagram({
   }
 
   function resetView() {
-    setScale(1);
+    setScale(DEFAULT_SCALE);
     setOffset({ x: 0, y: 0 });
   }
 
@@ -108,7 +109,7 @@ export default function MermaidDiagram({
     async function renderDiagram() {
       setError(null);
       setIsReady(false);
-      setScale(1);
+      setScale(DEFAULT_SCALE);
       setOffset({ x: 0, y: 0 });
 
       try {
@@ -119,7 +120,7 @@ export default function MermaidDiagram({
 
         containerRef.current.innerHTML = svg;
         bindFunctions?.(containerRef.current);
-        applyTransform(1, { x: 0, y: 0 });
+        applyTransform(DEFAULT_SCALE, { x: 0, y: 0 });
         setIsReady(true);
       } catch (renderError) {
         if (cancelled) return;

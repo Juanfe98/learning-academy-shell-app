@@ -1,5 +1,5 @@
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { InterviewPlaybook, ArticleTable } from "@/components/ui";
+import { CodeBlock, InterviewPlaybook, ArticleTable } from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 const iacPipelineDiagram = String.raw`flowchart LR
@@ -107,7 +107,7 @@ export default function InfrastructureAsCode() {
         (HashiCorp Configuration Language) and works with any cloud provider through a plugin system
         called &quot;providers.&quot; You describe what you want, not how to build it.
       </p>
-      <pre><code>{`# main.tf — a simple Terraform configuration
+      <CodeBlock code={`# main.tf — a simple Terraform configuration
 
 terraform {
   required_providers {
@@ -171,7 +171,7 @@ output "dynamodb_table_name" {
 # terraform init    — download providers, configure backend
 # terraform plan    — show what would change (safe, read-only)
 # terraform apply   — make the changes
-# terraform destroy — tear down everything (careful!)`}</code></pre>
+# terraform destroy — tear down everything (careful!)`} lang="hcl" />
       <p>
         Key Terraform concepts:
       </p>
@@ -191,7 +191,7 @@ output "dynamodb_table_name" {
         into CloudFormation templates. If you are a TypeScript engineer, CDK feels natural &mdash; you
         get type safety, IDE autocomplete, loops, conditionals, and reuse through classes.
       </p>
-      <pre><code>{`// CDK example in TypeScript
+      <CodeBlock code={`// CDK example in TypeScript
 import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -251,7 +251,7 @@ export class AppStack extends cdk.Stack {
 // cdk synth   — synthesize CloudFormation template (safe, shows what it generates)
 // cdk diff    — show what would change vs current deployed stack
 // cdk deploy  — deploy the stack
-// cdk destroy — tear down the stack`}</code></pre>
+// cdk destroy — tear down the stack`} lang="typescript" />
       <p>
         CDK excels when your infrastructure has complex logic: looping over environments, conditionally
         including resources, or reusing patterns across many services through constructs (CDK&apos;s
@@ -266,7 +266,7 @@ export class AppStack extends cdk.Stack {
         &mdash; rollbacks, drift detection, change sets &mdash; but its YAML verbosity and limited
         logic make it painful to write directly at scale.
       </p>
-      <pre><code>{`# CloudFormation template (YAML)
+      <CodeBlock code={`# CloudFormation template (YAML)
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Notes application infrastructure
 
@@ -298,7 +298,7 @@ Outputs:
   TableName:
     Value: !Ref NotesTable
     Export:
-      Name: !Sub "\${Environment}-NotesTable"`}</code></pre>
+      Name: !Sub "\${Environment}-NotesTable"`} lang="bash" />
 
       <h2 id="pulumi">Pulumi</h2>
       <p>
@@ -394,7 +394,7 @@ Outputs:
       <p>
         <strong>Always use remote state in teams:</strong>
       </p>
-      <pre><code>{`# Remote state backend — store state in S3 with locking via DynamoDB
+      <CodeBlock code={`# Remote state backend — store state in S3 with locking via DynamoDB
 terraform {
   backend "s3" {
     bucket         = "my-company-terraform-state"  # versioned, private bucket
@@ -409,14 +409,14 @@ terraform {
 # - Without remote state, two engineers running 'terraform apply' simultaneously
 #   can corrupt state and create duplicate resources
 # - S3 versioning lets you recover if state gets corrupted
-# - DynamoDB locking ensures only one person applies at a time`}</code></pre>
+# - DynamoDB locking ensures only one person applies at a time`} lang="hcl" />
       <p>
         <strong>Drift</strong> happens when the actual infrastructure diverges from the state file.
         Common cause: someone clicks around in the AWS Console and changes something that Terraform
         manages. The next <code>terraform plan</code> will detect the drift and offer to reconcile it.
         Fix: either import the manual change into Terraform or let Terraform revert it.
       </p>
-      <pre><code>{`# Import an existing resource into Terraform state
+      <CodeBlock code={`# Import an existing resource into Terraform state
 # (for resources created manually that you now want IaC to manage)
 terraform import aws_dynamodb_table.notes notes-prod
 
@@ -424,7 +424,7 @@ terraform import aws_dynamodb_table.notes notes-prod
 terraform plan   # shows what Terraform would do to make real state match config
 
 # Refresh state to match actual cloud state (does NOT apply changes)
-terraform refresh`}</code></pre>
+terraform refresh`} lang="bash" />
 
       <h2 id="plan-apply">The Plan/Apply Workflow</h2>
       <p>
@@ -436,7 +436,7 @@ terraform refresh`}</code></pre>
         caption="terraform plan runs in PR (safe, read-only). terraform apply runs only after merge to main."
         minHeight={220}
       />
-      <pre><code>{`# Safe workflow:
+      <CodeBlock code={`# Safe workflow:
 
 # 1. Make infrastructure changes in code
 # 2. terraform init (if new providers/modules)
@@ -450,7 +450,7 @@ terraform refresh`}</code></pre>
 # 6. Verify in AWS Console or with terraform state list
 
 # NEVER do:
-# terraform apply -auto-approve  # skips review, dangerous in production`}</code></pre>
+# terraform apply -auto-approve  # skips review, dangerous in production`} lang="bash" />
 
       <h2 id="modules-environments">Modules and Environments</h2>
       <p>
@@ -458,7 +458,7 @@ terraform refresh`}</code></pre>
         functions for infrastructure. A well-designed VPC module can be used for dev, staging, and
         production with different parameters.
       </p>
-      <pre><code>{`# modules/vpc/main.tf — a reusable VPC module
+      <CodeBlock code={`# modules/vpc/main.tf — a reusable VPC module
 variable "environment" { type = string }
 variable "cidr_block" { default = "10.0.0.0/16" }
 
@@ -496,7 +496,7 @@ module "vpc_dev" {
 # Terraform workspaces (alternative to separate directories)
 # terraform workspace new staging
 # terraform workspace select prod
-# Reference current workspace: terraform.workspace`}</code></pre>
+# Reference current workspace: terraform.workspace`} lang="hcl" />
       <MermaidDiagram
         chart={iacStackDiagram}
         title="Environments from a Single IaC Codebase"
@@ -510,7 +510,7 @@ module "vpc_dev" {
         password committed to a Terraform file is visible to everyone with repo access &mdash; forever,
         even after deletion, because Git history is permanent.
       </p>
-      <pre><code>{`# BAD — never do this
+      <CodeBlock code={`# BAD — never do this
 resource "aws_db_instance" "main" {
   password = "mypassword123"  # visible in Git, Terraform state, and CI logs
 }
@@ -540,14 +540,14 @@ resource "aws_db_instance" "main" {
 }
 
 # Note: Terraform state still contains the password value.
-# This is why state files must be encrypted and access-controlled.`}</code></pre>
+# This is why state files must be encrypted and access-controlled.`} lang="hcl" />
 
       <h2 id="cicd-for-infra">CI/CD for Infrastructure</h2>
       <p>
         Infrastructure changes should follow the same review process as code changes. Never let an
         engineer run <code>terraform apply</code> directly from their laptop in production.
       </p>
-      <pre><code>{`# .github/workflows/terraform.yml
+      <CodeBlock code={`# .github/workflows/terraform.yml
 name: Terraform
 
 on:
@@ -593,10 +593,10 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production   # requires manual approval in GitHub
     steps:
-      - run: terraform apply -auto-approve tfplan`}</code></pre>
+      - run: terraform apply -auto-approve tfplan`} lang="bash" />
 
       <h2 id="example">Example: Full Stack in Terraform</h2>
-      <pre><code>{`# A complete example: VPC + ALB + ECS + DynamoDB + S3
+      <CodeBlock code={`# A complete example: VPC + ALB + ECS + DynamoDB + S3
 
 # --- NETWORKING ---
 resource "aws_vpc" "main" {
@@ -682,7 +682,7 @@ resource "aws_s3_bucket_public_access_block" "uploads" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-}`}</code></pre>
+}`} lang="hcl" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

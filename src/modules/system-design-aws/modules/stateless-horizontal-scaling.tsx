@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "stateless-vs-stateful", title: "Stateless vs Stateful: The Core Distinction", level: 2 },
@@ -44,7 +45,7 @@ export default function StatelessHorizontalScaling() {
         memory or local files. A server that holds your session in memory must receive your future
         requests too &mdash; you cannot route you to any server, only to your server.
       </p>
-      <pre><code>{`// STATEFUL (bad for horizontal scaling)
+      <CodeBlock code={`// STATEFUL (bad for horizontal scaling)
 const sessions = new Map();  // in-process memory
 
 app.post('/login', (req, res) => {
@@ -75,7 +76,7 @@ app.get('/profile', async (req, res) => {
   const payload = jwt.verify(token, process.env.JWT_SECRET);  // cryptographic verification
   const user = await db.users.findById(payload.userId);       // from shared DB
   res.json(user);
-});`}</code></pre>
+});`} lang="typescript" />
 
       <h2 id="horizontal-vs-vertical">Horizontal vs Vertical Scaling</h2>
       <table>
@@ -156,7 +157,7 @@ app.get('/profile', async (req, res) => {
         There are three correct approaches to session storage in a multi-instance architecture:
       </p>
       <p><strong>Option 1: Shared session store (Redis)</strong></p>
-      <pre><code>{`// Express + Redis session store
+      <CodeBlock code={`// Express + Redis session store
 import session from 'express-session';
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
@@ -173,7 +174,7 @@ app.use(session({
 }));
 
 // Now any server instance can read the session from Redis
-// Sessions survive server restarts and instance replacements`}</code></pre>
+// Sessions survive server restarts and instance replacements`} lang="typescript" />
 
       <p><strong>Option 2: Database-backed sessions</strong></p>
       <p>
@@ -188,7 +189,7 @@ app.use(session({
         session state at all. Any server can verify the token by checking the signature with the
         shared secret.
       </p>
-      <pre><code>{`// JWT: stateless, no server-side storage needed
+      <CodeBlock code={`// JWT: stateless, no server-side storage needed
 import jwt from 'jsonwebtoken';
 
 // Login: create token
@@ -204,7 +205,7 @@ const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY);
 
 // Tradeoff: JWTs cannot be invalidated before expiry
 // Solution: short-lived access tokens (15min) + refresh tokens
-// Or: token blacklist in Redis (but now you have state again)`}</code></pre>
+// Or: token blacklist in Redis (but now you have state again)`} lang="javascript" />
 
       <h2 id="lb-algorithms">Load Balancing Algorithms</h2>
       <p>
@@ -275,7 +276,7 @@ const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY);
           your traffic patterns (e.g., a B2B SaaS with business hours traffic).
         </li>
       </ul>
-      <pre><code>{`# ECS Service Auto Scaling (AWS CLI)
+      <CodeBlock code={`# ECS Service Auto Scaling (AWS CLI)
 aws application-autoscaling register-scalable-target \
   --service-namespace ecs \
   --resource-id service/my-cluster/my-service \
@@ -297,7 +298,7 @@ aws application-autoscaling put-scaling-policy \
     },
     "ScaleInCooldown": 300,
     "ScaleOutCooldown": 60
-  }'`}</code></pre>
+  }'`} lang="bash" />
 
       <h2 id="ecs-fargate">AWS ECS Fargate: Stateless Containers</h2>
       <p>
@@ -312,7 +313,7 @@ aws application-autoscaling put-scaling-policy \
         <li><strong>Task:</strong> A running instance of a task definition (one or more containers).</li>
         <li><strong>Service:</strong> Maintains a desired number of tasks, integrates with ALB, handles rolling deploys.</li>
       </ul>
-      <pre><code>{`# task-definition.json
+      <CodeBlock code={`# task-definition.json
 {
   "family": "api-task",
   "networkMode": "awsvpc",
@@ -346,7 +347,7 @@ aws application-autoscaling put-scaling-policy \
       "retries": 3
     }
   }]
-}`}</code></pre>
+}`} lang="bash" />
 
       <h2 id="lambda-scaling">AWS Lambda: Invocation Model and Scaling</h2>
       <p>
@@ -378,7 +379,7 @@ aws application-autoscaling put-scaling-policy \
       </ul>
 
       <h2 id="refactor-example">Refactoring: Stateful &rarr; Stateless</h2>
-      <pre><code>{`// BEFORE: Stateful rate limiter (breaks with horizontal scaling)
+      <CodeBlock code={`// BEFORE: Stateful rate limiter (breaks with horizontal scaling)
 const requestCounts = new Map();  // in-process memory
 
 app.use('/api', (req, res, next) => {
@@ -404,7 +405,7 @@ app.use('/api', async (req, res, next) => {
   next();
 });
 // Now Redis maintains the count across all server instances
-// Works correctly regardless of which server handles the request`}</code></pre>
+// Works correctly regardless of which server handles the request`} lang="typescript" />
 
       <h2 id="common-mistakes">Common Mistakes</h2>
       <ul>

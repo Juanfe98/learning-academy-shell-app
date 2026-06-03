@@ -1,4 +1,5 @@
 import type { TocItem } from "@/lib/types/academy";
+import { CodeBlock } from "@/components/ui";
 
 export const toc: TocItem[] = [
   { id: "what-is-a-render", title: "What Is a Render?", level: 2 },
@@ -39,7 +40,7 @@ export default function RenderingModel() {
         you opt out with <code>React.memo</code>).
       </p>
 
-      <pre><code>{`// React calls this function on every render
+      <CodeBlock code={`// React calls this function on every render
 function UserCard({ userId }: { userId: string }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -59,7 +60,7 @@ function UserCard({ userId }: { userId: string }) {
 
 // If the parent re-renders, UserCard re-renders too — even if userId didn't change.
 // This is the default behavior. React.memo can prevent this.
-const MemoizedUserCard = React.memo(UserCard);`}</code></pre>
+const MemoizedUserCard = React.memo(UserCard);`} lang="tsx" />
 
       <h2 id="virtual-dom-and-reconciliation">Virtual DOM & Reconciliation</h2>
 
@@ -79,7 +80,7 @@ const MemoizedUserCard = React.memo(UserCard);`}</code></pre>
         destroyed parent.
       </p>
 
-      <pre><code>{`// When condition flips, React destroys the <Input> subtree and
+      <CodeBlock code={`// When condition flips, React destroys the <Input> subtree and
 // creates a fresh one. The input loses its DOM state (focus, scroll position).
 function SearchPanel({ isAdvanced }: { isAdvanced: boolean }) {
   return (
@@ -98,7 +99,7 @@ function SearchPanel({ isAdvanced }: { isAdvanced: boolean }) {
 }
 
 // If you want both inputs to persist, render both and hide one with CSS.
-// Or give them the same position in the tree so React reuses the node.`}</code></pre>
+// Or give them the same position in the tree so React reuses the node.`} lang="text" />
 
       <h2 id="fiber-architecture">The Fiber Architecture</h2>
 
@@ -123,7 +124,7 @@ function SearchPanel({ isAdvanced }: { isAdvanced: boolean }) {
         where the actual state lives.
       </p>
 
-      <pre><code>{`// Conceptually, a fiber looks like this (massively simplified):
+      <CodeBlock code={`// Conceptually, a fiber looks like this (massively simplified):
 // {
 //   type: UserCard,          // the component function or "div", "span", etc.
 //   key: null,
@@ -137,7 +138,7 @@ function SearchPanel({ isAdvanced }: { isAdvanced: boolean }) {
 //
 // useState's state is stored in memoizedState on this fiber.
 // That's why hooks must be called in the same order every render —
-// React walks the linked list positionally to find each hook's state.`}</code></pre>
+// React walks the linked list positionally to find each hook's state.`} lang="text" />
 
       <h2 id="render-phase-vs-commit-phase">Render Phase vs Commit Phase</h2>
 
@@ -162,7 +163,7 @@ function SearchPanel({ isAdvanced }: { isAdvanced: boolean }) {
         <code>useEffect</code> callbacks.
       </p>
 
-      <pre><code>{`// Render phase: pure, may run multiple times — NO side effects here
+      <CodeBlock code={`// Render phase: pure, may run multiple times — NO side effects here
 function ProductList({ categoryId }: { categoryId: string }) {
   // This runs during the render phase — keep it pure.
   const filtered = products.filter(p => p.categoryId === categoryId);
@@ -184,7 +185,7 @@ function Tooltip({ anchorRef }: { anchorRef: React.RefObject<HTMLElement> }) {
   });
 
   return <div ref={tooltipRef} className="tooltip" />;
-}`}</code></pre>
+}`} lang="text" />
 
       <h2 id="batching-in-react-18">Batching in React 18</h2>
 
@@ -202,7 +203,7 @@ function Tooltip({ anchorRef }: { anchorRef: React.RefObject<HTMLElement> }) {
         use <code>flushSync</code> from <code>react-dom</code>.
       </p>
 
-      <pre><code>{`import { flushSync } from "react-dom";
+      <CodeBlock code={`import { flushSync } from "react-dom";
 
 function handleAsyncAction() {
   // React 18: both updates batched — ONE re-render
@@ -225,7 +226,7 @@ function handleCriticalUpdate() {
   });
   // You can safely read the DOM here — it reflects the new state
   const element = document.getElementById("target");
-}`}</code></pre>
+}`} lang="tsx" />
 
       <h2 id="keys-and-reconciliation">Keys and Their Role in Reconciliation</h2>
 
@@ -242,7 +243,7 @@ function handleCriticalUpdate() {
         its state. When a keyed item disappears, React destroys its fiber and unmounts it cleanly.
       </p>
 
-      <pre><code>{`// WITHOUT keys — React matches by position
+      <CodeBlock code={`// WITHOUT keys — React matches by position
 // If items reorder, the wrong state stays attached to the wrong item
 function BadList({ items }: { items: Item[] }) {
   return (
@@ -276,7 +277,7 @@ items.map((item, index) => <li key={index}>{item.name}</li>)
 // ADVANCED: using key to force a component reset
 // Changing the key destroys the old fiber and creates a fresh one.
 // This is the idiomatic way to reset uncontrolled component state.
-<ProfileForm key={userId} userId={userId} />`}</code></pre>
+<ProfileForm key={userId} userId={userId} />`} lang="text" />
 
       <h2 id="common-misconceptions">Common Misconceptions</h2>
 
