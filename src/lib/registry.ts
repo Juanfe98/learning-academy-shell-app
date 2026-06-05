@@ -11,6 +11,7 @@ import indeedSrReactNextjs from "@/modules/indeed-senior-react-nextjs-11802/mani
 import disneyStaffEngineer from "@/modules/disney-staff-engineer/manifest";
 import godaddySeniorSdeAi from "@/modules/godaddy-senior-sde-ai/manifest";
 import webComponents from "@/modules/web-components/manifest";
+import designSystems from "@/modules/design-systems/manifest";
 
 export const REGISTRY: AcademyManifest[] = [
   webFundamentals,
@@ -25,6 +26,7 @@ export const REGISTRY: AcademyManifest[] = [
   disneyStaffEngineer,
   godaddySeniorSdeAi,
   webComponents,
+  designSystems,
 ];
 
 export function findAcademy(slug: string): AcademyManifest | undefined {
