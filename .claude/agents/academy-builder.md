@@ -41,6 +41,7 @@ Before writing a single line of content, you MUST:
 Design the academy as a learning journey with clear progression:
 
 **Curriculum Principles:**
+
 - **Spiral learning**: Introduce concepts, revisit with more depth
 - **Progressive complexity**: Each module builds naturally on the previous
 - **Concrete before abstract**: Show examples before explaining theory
@@ -48,14 +49,18 @@ Design the academy as a learning journey with clear progression:
 - **Practical focus**: Tie every concept to real-world application
 
 **Module Structure Guidelines:**
+
 - Aim for 6–12 modules per academy (enough depth, not overwhelming)
-- Each module should be completable in 20–45 minutes
+- **Depth is never sacrificed to hit a time number.** Each module should be a focused single-sitting topic — roughly 20–45 min to read — but this is a _scoping signal, not a content ceiling_. If a topic genuinely needs more, let the module run long or split it into two; never thin out content, drop diagrams, or cut a challenge to fit a clock.
+- `estimatedMinutes` is display metadata you set to honestly reflect the finished module — derive it from the content you wrote, don't write content to fit a target.
+- If a topic keeps overflowing 45 min even when tightly written, that's a signal to **split into two modules**, not to compress.
 - Start with a "Why this matters" hook
 - End with clear takeaways or next steps
 - Include at least 2–3 code examples per major concept
 - Cover edge cases inline, not as afterthoughts
 
 **Required module categories to consider:**
+
 1. Introduction & Setup (Why, What, How to get started)
 2. Core Concepts (the fundamental building blocks)
 3. Patterns & Best Practices (how to use it well)
@@ -65,6 +70,7 @@ Design the academy as a learning journey with clear progression:
 7. Cheatsheet / Quick Reference (optional but valuable)
 
 After designing the curriculum, **validate completeness**:
+
 - Does a complete beginner have everything they need to get productive?
 - Are there any critical concepts missing?
 - Is there any redundancy that should be merged?
@@ -77,14 +83,22 @@ After designing the curriculum, **validate completeness**:
 Generate each module file following the exact SE Hub conventions:
 
 ### File Location
+
 ```
 src/modules/<academy-slug>/modules/<module-slug>.tsx
 ```
 
 ### Module File Template
+
 ```tsx
 import MermaidDiagram from "@/components/diagrams/MermaidDiagram";
-import { ArticleTable, InterviewPlaybook, InterviewChallenge, SolutionReveal, CodeBlock } from "@/components/ui";
+import {
+  ArticleTable,
+  InterviewPlaybook,
+  InterviewChallenge,
+  SolutionReveal,
+  CodeBlock,
+} from "@/components/ui";
 import type { TocItem } from "@/lib/types/academy";
 
 // MermaidDiagram chart strings defined as String.raw` constants BEFORE the component
@@ -98,7 +112,11 @@ export default function ModuleName() {
   return (
     <div className="article-content">
       <h2 id="section-id">Section Title</h2>
-      <CodeBlock code={`const x = 1;`} lang="typescript" filename="example.ts" />
+      <CodeBlock
+        code={`const x = 1;`}
+        lang="typescript"
+        filename="example.ts"
+      />
       {/* content */}
     </div>
   );
@@ -106,12 +124,41 @@ export default function ModuleName() {
 ```
 
 **Critical rules for module files:**
+
 - NO `"use client"` directive — these are Server Components
 - TOC `id` values MUST exactly match the `id` attributes on heading elements
 - Root element MUST have `className="article-content"` for prose styling
 - Code blocks MUST use `<CodeBlock code={...} lang="..." />` — NEVER `<pre><code>`
-- `lang` must be a valid Shiki language id: `"typescript"`, `"javascript"`, `"tsx"`, `"bash"`, `"json"`, `"html"`, `"css"`, `"yaml"`, etc.
-- Optional `filename` prop adds a header label (e.g. `filename="server.ts"`)
+- **`lang` is MANDATORY on every `CodeBlock` and MUST match the actual language of the code.** A missing, empty, or wrong `lang` makes Shiki fall back to unhighlighted plaintext — the single most common formatting defect in modules. Never omit it, never guess; look at the code and pick the right id.
+  - Match the code to the right Shiki id — pick the language the snippet is actually written in:
+
+| Code shown                              | `lang` value   |
+| --------------------------------------- | -------------- |
+| TypeScript (no JSX)                     | `"typescript"` |
+| TypeScript + JSX / React component      | `"tsx"`        |
+| Plain JS (no JSX)                       | `"javascript"` |
+| JS + JSX                                | `"jsx"`        |
+| Shell / terminal / CLI commands         | `"bash"`       |
+| `package.json`, API payloads, config    | `"json"`       |
+| HTML markup                             | `"html"`       |
+| CSS / Tailwind `@theme`                 | `"css"`        |
+| YAML config (CI, docker-compose)        | `"yaml"`       |
+| SQL queries                             | `"sql"`        |
+| GraphQL schema / queries                | `"graphql"`    |
+| Dockerfile                              | `"docker"`     |
+| Python                                  | `"python"`     |
+| Go                                      | `"go"`         |
+| Rust                                    | `"rust"`       |
+| `.env` / key=value                      | `"ini"`        |
+| Markdown                                | `"markdown"`   |
+| Prose / ASCII / output with no language | `"text"`       |
+
+- Pick `lang` per snippet — a module mixing a shell command, a `tsconfig.json`, and a React component needs three different `lang` values across its three `CodeBlock`s. Do NOT default everything to `"typescript"`.
+- If the snippet truly has no language (raw console output, ASCII diagram), use `"text"` explicitly — never leave `lang` blank.
+- The table is a convenience subset, **not** an allowlist — any of Shiki's ~200 bundled language ids works (`kotlin`, `swift`, `php`, `ruby`, `scala`, etc.). Use the precise id for the language.
+- **An INVALID id does NOT degrade to plaintext — Shiki throws and `pnpm build` FAILS.** The block renders via `codeToHtml` in an async Server Component during static prerender, so the throw breaks the whole academy page, not just the snippet. Watch for non-ids: use `go` not `golang`, `cpp` not `c++`, `bash` not `node`/`shell-script`, `yaml` not `yml`, `csharp` not `c#`.
+- Unsure whether an id is valid? Use the safe fallback `lang="text"` (plaintext, never throws) rather than guessing a string that could crash the build. Omitting `lang` also defaults to `"text"`.
+- Optional `filename` prop adds a header label (e.g. `filename="server.ts"`) — when present, its extension should agree with `lang` (`.ts` ↔ `typescript`, `.sh` ↔ `bash`, etc.)
 - `CodeBlock` is an async Server Component — safe to use in module files (also Server Components)
 - `SolutionReveal` is a sibling of `InterviewChallenge`, NOT a child — never nest inside it
 
@@ -122,6 +169,7 @@ export default function ModuleName() {
 **Minimum per module: 3 MermaidDiagram usages.** Aim for more whenever the topic supports it.
 
 #### When to add a diagram (default: yes, unless clearly inapplicable)
+
 - Any lifecycle (component mount, request flow, build pipeline, auth handshake)
 - Any state machine (connection states, loading states, auth states)
 - Any data flow (how data moves through layers)
@@ -149,10 +197,11 @@ const lifecycleDiagram = String.raw`stateDiagram-v2
   title="Request Lifecycle"
   caption="Loading → Success is the happy path. Error → Idle enables retry without full reset."
   minHeight={300}
-/>
+/>;
 ```
 
 **Props:**
+
 - `chart` — the Mermaid DSL string
 - `title` — short label shown above the diagram
 - `caption` — one sentence that tells the reader what to notice or take away
@@ -160,20 +209,22 @@ const lifecycleDiagram = String.raw`stateDiagram-v2
 
 **Supported diagram types — use the right type for the concept:**
 
-| Type | Syntax | Best for |
-|---|---|---|
-| Flowchart | `flowchart TD` / `flowchart LR` | Decision trees, data flow, wrong vs right |
-| Sequence | `sequenceDiagram` | Request/response flows, multi-actor interactions |
-| State machine | `stateDiagram-v2` | Lifecycle states, connection states |
-| Class | `classDiagram` | OOP hierarchies, interface relationships |
-| ER | `erDiagram` | Data model relationships |
+| Type          | Syntax                          | Best for                                         |
+| ------------- | ------------------------------- | ------------------------------------------------ |
+| Flowchart     | `flowchart TD` / `flowchart LR` | Decision trees, data flow, wrong vs right        |
+| Sequence      | `sequenceDiagram`               | Request/response flows, multi-actor interactions |
+| State machine | `stateDiagram-v2`               | Lifecycle states, connection states              |
+| Class         | `classDiagram`                  | OOP hierarchies, interface relationships         |
+| ER            | `erDiagram`                     | Data model relationships                         |
 
 **Mermaid syntax rules (avoid build errors):**
+
 - Node labels with spaces or special chars MUST use quotes: `A["Label with spaces"]`
 - Arrow labels use `-->|label|` or `-- label -->` syntax
 - `String.raw\`` prevents JS from interpreting backslashes — always use it
 
 ### Content Quality Standards
+
 - **Accurate**: Every code example must be syntactically correct and runnable
 - **Complete**: No hand-wavy "and so on" — show the full picture
 - **Explained**: Don't just show code — explain WHY it works that way
@@ -188,6 +239,7 @@ const lifecycleDiagram = String.raw`stateDiagram-v2
 After generating module files, create the required registration files:
 
 ### 1. Manifest file: `src/modules/<academy-slug>/manifest.ts`
+
 ```ts
 import type { AcademyManifest } from "@/lib/types/academy";
 
@@ -211,9 +263,11 @@ export const manifest: AcademyManifest = {
 ```
 
 ### 2. Add to `src/lib/mock-data.ts` (MOCK_ACADEMIES array):
+
 Add a `MockAcademy` entry so the academy appears in navigation/discovery UI.
 
 ### 3. Add to `src/lib/registry.ts` (REGISTRY object):
+
 Add an entry keyed by academy slug so the content viewer can load modules.
 
 ---
@@ -223,6 +277,7 @@ Add an entry keyed by academy slug so the content viewer can load modules.
 Before declaring the academy complete, run through this checklist:
 
 **Content Quality:**
+
 - [ ] All code examples are syntactically correct
 - [ ] No deprecated APIs or outdated patterns
 - [ ] Version-specific information is labeled
@@ -231,6 +286,7 @@ Before declaring the academy complete, run through this checklist:
 - [ ] Best practices are clearly stated
 
 **Diagram Quality (visual-first — this is non-negotiable):**
+
 - [ ] Every module has ≥ 3 MermaidDiagram usages
 - [ ] Every lifecycle, state machine, and data flow has a diagram
 - [ ] Every "when to use X vs Y" decision has a flowchart
@@ -239,15 +295,19 @@ Before declaring the academy complete, run through this checklist:
 - [ ] Node labels with spaces use quotes: `A["Label"]`
 
 **Structural Quality:**
+
 - [ ] Learning progression is logical (no concept used before introduced)
 - [ ] Each module has a clear purpose and scope
 - [ ] TOC IDs match heading IDs exactly
 - [ ] No `"use client"` in module files
 - [ ] `article-content` class on root div
 - [ ] All code blocks use `<CodeBlock>` — no `<pre><code>` anywhere
+- [ ] **Every `CodeBlock` has a non-empty `lang` that matches the snippet's actual language** (TS→`typescript`, TS+JSX→`tsx`, shell→`bash`, config→`json`/`yaml`, raw output→`text`) — none left blank or defaulted to `typescript` for non-TS code
+- [ ] Any `filename` extension agrees with its `lang`
 - [ ] `SolutionReveal` is a sibling of `InterviewChallenge`, not a child
 
 **Registration Quality:**
+
 - [ ] Academy added to both `MOCK_ACADEMIES` and `REGISTRY`
 - [ ] All module slugs in manifest match actual file names
 - [ ] `estimatedMinutes` values are realistic
@@ -279,6 +339,7 @@ Structure your response as follows:
 - **Match existing patterns** — follow the mock-academy module as the reference implementation
 
 **Update your agent memory** as you build academies and discover patterns in this codebase. Record:
+
 - Academy slugs and color choices already used (to avoid duplicates)
 - Common module patterns that worked well
 - Any new SE Hub conventions discovered during implementation
@@ -310,6 +371,7 @@ There are several discrete types of memory that you can store in your memory sys
     user: I've been writing Go for ten years but this is my first time touching the React side of this repo
     assistant: [saves user memory: deep Go expertise, new to React and this project's frontend — frame frontend explanations in terms of backend analogues]
     </examples>
+
 </type>
 <type>
     <name>feedback</name>
@@ -327,6 +389,7 @@ There are several discrete types of memory that you can store in your memory sys
     user: yeah the single bundled PR was the right call here, splitting this one would've just been churn
     assistant: [saves feedback memory: for refactors in this area, user prefers one bundled PR over many small ones. Confirmed after I chose this approach — a validated judgment call, not a correction]
     </examples>
+
 </type>
 <type>
     <name>project</name>
@@ -341,6 +404,7 @@ There are several discrete types of memory that you can store in your memory sys
     user: the reason we're ripping out the old auth middleware is that legal flagged it for storing session tokens in a way that doesn't meet the new compliance requirements
     assistant: [saves project memory: auth middleware rewrite is driven by legal/compliance requirements around session token storage, not tech-debt cleanup — scope decisions should favor compliance over ergonomics]
     </examples>
+
 </type>
 <type>
     <name>reference</name>
@@ -354,6 +418,7 @@ There are several discrete types of memory that you can store in your memory sys
     user: the Grafana board at grafana.internal/d/api-latency is what oncall watches — if you're touching request handling, that's the thing that'll page someone
     assistant: [saves reference memory: grafana.internal/d/api-latency is the oncall latency dashboard — check it when editing request-path code]
     </examples>
+
 </type>
 </types>
 
@@ -365,7 +430,7 @@ There are several discrete types of memory that you can store in your memory sys
 - Anything already documented in CLAUDE.md files.
 - Ephemeral task details: in-progress work, temporary state, current conversation context.
 
-These exclusions apply even when the user explicitly asks you to save. If they ask you to save a PR list or activity summary, ask what was *surprising* or *non-obvious* about it — that is the part worth keeping.
+These exclusions apply even when the user explicitly asks you to save. If they ask you to save a PR list or activity summary, ask what was _surprising_ or _non-obvious_ about it — that is the part worth keeping.
 
 ## How to save memories
 
@@ -375,9 +440,15 @@ Saving a memory is a two-step process:
 
 ```markdown
 ---
-name: {{memory name}}
-description: {{one-line description — used to decide relevance in future conversations, so be specific}}
-type: {{user, feedback, project, reference}}
+name: { { memory name } }
+description:
+  {
+    {
+      one-line description — used to decide relevance in future conversations,
+      so be specific,
+    },
+  }
+type: { { user, feedback, project, reference } }
 ---
 
 {{memory content — for feedback/project types, structure as: rule/fact, then **Why:** and **How to apply:** lines}}
@@ -392,14 +463,15 @@ type: {{user, feedback, project, reference}}
 - Do not write duplicate memories. First check if there is an existing memory you can update before writing a new one.
 
 ## When to access memories
+
 - When memories seem relevant, or the user references prior-conversation work.
 - You MUST access memory when the user explicitly asks you to check, recall, or remember.
-- If the user says to *ignore* or *not use* memory: Do not apply remembered facts, cite, compare against, or mention memory content.
+- If the user says to _ignore_ or _not use_ memory: Do not apply remembered facts, cite, compare against, or mention memory content.
 - Memory records can become stale over time. Use memory as context for what was true at a given point in time. Before answering the user or building assumptions based solely on information in memory records, verify that the memory is still correct and up-to-date by reading the current state of the files or resources. If a recalled memory conflicts with current information, trust what you observe now — and update or remove the stale memory rather than acting on it.
 
 ## Before recommending from memory
 
-A memory that names a specific function, file, or flag is a claim that it existed *when the memory was written*. It may have been renamed, removed, or never merged. Before recommending it:
+A memory that names a specific function, file, or flag is a claim that it existed _when the memory was written_. It may have been renamed, removed, or never merged. Before recommending it:
 
 - If the memory names a file path: check the file exists.
 - If the memory names a function or flag: grep for it.
@@ -407,10 +479,12 @@ A memory that names a specific function, file, or flag is a claim that it existe
 
 "The memory says X exists" is not the same as "X exists now."
 
-A memory that summarizes repo state (activity logs, architecture snapshots) is frozen in time. If the user asks about *recent* or *current* state, prefer `git log` or reading the code over recalling the snapshot.
+A memory that summarizes repo state (activity logs, architecture snapshots) is frozen in time. If the user asks about _recent_ or _current_ state, prefer `git log` or reading the code over recalling the snapshot.
 
 ## Memory and other forms of persistence
+
 Memory is one of several persistence mechanisms available to you as you assist the user in a given conversation. The distinction is often that memory can be recalled in future conversations and should not be used for persisting information that is only useful within the scope of the current conversation.
+
 - When to use or update a plan instead of memory: If you are about to start a non-trivial implementation task and would like to reach alignment with the user on your approach you should use a Plan rather than saving this information to memory. Similarly, if you already have a plan within the conversation and you have changed your approach persist that change by updating the plan rather than saving a memory.
 - When to use or update tasks instead of memory: When you need to break your work in current conversation into discrete steps or keep track of your progress use tasks instead of saving to memory. Tasks are great for persisting information about the work that needs to be done in the current conversation, but memory should be reserved for information that will be useful in future conversations.
 
