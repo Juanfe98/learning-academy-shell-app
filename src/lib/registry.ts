@@ -12,6 +12,8 @@ import disneyStaffEngineer from "@/modules/disney-staff-engineer/manifest";
 import godaddySeniorSdeAi from "@/modules/godaddy-senior-sde-ai/manifest";
 import webComponents from "@/modules/web-components/manifest";
 import designSystems from "@/modules/design-systems/manifest";
+import kubernetesMastery from "@/modules/kubernetes-mastery/manifest";
+import growthLifeClientApiMastery from "@/modules/growth-life-client-api-mastery/manifest";
 
 export const REGISTRY: AcademyManifest[] = [
   webFundamentals,
@@ -27,6 +29,8 @@ export const REGISTRY: AcademyManifest[] = [
   godaddySeniorSdeAi,
   webComponents,
   designSystems,
+  kubernetesMastery,
+  growthLifeClientApiMastery,
 ];
 
 export function findAcademy(slug: string): AcademyManifest | undefined {
