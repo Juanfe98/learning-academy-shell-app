@@ -8,6 +8,9 @@ import { Button } from "@/components/ui";
 import PathCard from "@/components/hub/PathCard";
 import { HUB_ACADEMIES } from "@/lib/hub-academies";
 import { useProgressStore } from "@/lib/store";
+import { groupAcademiesByCategory } from "@/lib/academy-categories";
+
+const HOME_GROUPS = groupAcademiesByCategory(HUB_ACADEMIES);
 
 /* ─── Helpers ────────────────────────────────────────────��───────────────── */
 
@@ -149,14 +152,24 @@ function PathsSection({
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {HUB_ACADEMIES.map((academy, i) => (
-            <PathCard
-              key={academy.slug}
-              academy={academy}
-              progress={academyProgress[academy.slug] ?? 0}
-              index={i}
-            />
+        <div className="space-y-10">
+          {HOME_GROUPS.map((group) => (
+            <div key={group.id}>
+              <motion.div {...inView(0)} className="flex items-baseline gap-2 mb-4">
+                <h3 className="text-base font-semibold text-primary">{group.label}</h3>
+                <span className="text-xs text-muted tabular-nums">{group.academies.length}</span>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {group.academies.map((academy, i) => (
+                  <PathCard
+                    key={academy.slug}
+                    academy={academy}
+                    progress={academyProgress[academy.slug] ?? 0}
+                    index={i}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>

@@ -6,14 +6,18 @@ import { BookOpen, Clock, Map, Search, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import PathCard from "@/components/hub/PathCard";
 import { HUB_ACADEMIES } from "@/lib/hub-academies";
+import { groupAcademiesByCategory, type AcademyCategory } from "@/lib/academy-categories";
 import { useProgressStore } from "@/lib/store";
 
-type Filter = "all" | "available" | "soon";
+type Filter = "all" | AcademyCategory;
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "available", label: "Available" },
-  { id: "soon", label: "Coming Soon" },
+const CATEGORY_FILTERS: { id: Filter; label: string; count: number }[] = [
+  { id: "all", label: "All", count: HUB_ACADEMIES.length },
+  ...groupAcademiesByCategory(HUB_ACADEMIES).map((group) => ({
+    id: group.id,
+    label: group.label,
+    count: group.academies.length,
+  })),
 ];
 
 const TOTAL_MODULES = HUB_ACADEMIES.reduce((s, a) => s + a.moduleCount, 0);
@@ -49,17 +53,10 @@ export default function PathsPage() {
 
   useEffect(() => setMounted(true), []);
 
-  const counts: Record<Filter, number> = {
-    all: HUB_ACADEMIES.length,
-    available: HUB_ACADEMIES.filter((a) => !a.comingSoon).length,
-    soon: HUB_ACADEMIES.filter((a) => a.comingSoon).length,
-  };
-
-  const filtered = HUB_ACADEMIES.filter((a) => {
-    if (filter === "available") return !a.comingSoon;
-    if (filter === "soon") return a.comingSoon;
-    return true;
-  });
+  const filtered =
+    filter === "all"
+      ? HUB_ACADEMIES
+      : HUB_ACADEMIES.filter((a) => a.category === filter);
 
   const searchResults = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -181,7 +178,7 @@ export default function PathsPage() {
             role="tablist"
             aria-label="Filter learning paths"
           >
-            {FILTERS.map(({ id, label }) => {
+            {CATEGORY_FILTERS.map(({ id, label, count }) => {
               const active = filter === id;
               return (
                 <button
@@ -213,7 +210,7 @@ export default function PathsPage() {
                         : { background: "rgba(255,255,255,0.07)", color: "var(--text-muted)" }
                     }
                   >
-                    {counts[id]}
+                    {count}
                   </span>
                 </button>
               );

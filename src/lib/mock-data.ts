@@ -1,4 +1,5 @@
 import type { AcademyManifest, AcademyGroup, AcademyRoute } from "./types/academy";
+import type { AcademyCategory } from "./academy-categories";
 
 export type MockAcademyRoute = Omit<AcademyRoute, "component">;
 
@@ -6,6 +7,7 @@ export interface MockAcademy extends Omit<
   AcademyManifest,
   "routes" | "totalEstimatedMinutes"
 > {
+  category: AcademyCategory;
   comingSoon?: boolean;
   externalUrl?: string;
   moduleCount: number;
@@ -17,6 +19,7 @@ export interface MockAcademy extends Omit<
 export const MOCK_ACADEMIES: MockAcademy[] = [
   {
     slug: "apollo-graphql",
+    category: "frontend",
     title: "Apollo GraphQL",
     description:
       "Master the Apollo ecosystem — client, server, caching, federation, and production patterns for modern GraphQL APIs.",
@@ -322,6 +325,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "web-fundamentals",
+    category: "fundamentals",
     title: "Web Fundamentals",
     description:
       "HTML, CSS, layout, responsive design, and accessibility — structured for frontend interview prep with lessons, code examples, and practice challenges.",
@@ -437,6 +441,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "graphql-core",
+    category: "frontend",
     title: "GraphQL Core",
     description:
       "Deep dive into the GraphQL specification — type system, execution model, introspection, and language internals.",
@@ -451,6 +456,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "react-deep-dive",
+    category: "frontend",
     title: "React Deep Dive",
     description:
       "Go beyond the API surface — understand how React actually works. Rendering, reconciliation, concurrent features, React 19, and the patterns that separate competent React developers from great ones.",
@@ -597,6 +603,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "python-mastery",
+    category: "fundamentals",
     title: "Python Mastery",
     description:
       "Learn Python from fundamentals to advanced interview-ready topics. Designed for engineers coming from JavaScript/TypeScript — covering syntax, OOP, async, typing, testing, FastAPI, and coding interview patterns.",
@@ -722,6 +729,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "typescript-mastery",
+    category: "fundamentals",
     title: "TypeScript Mastery",
     description:
       "Go beyond the basics — structural typing, generics, utility types, mapped and conditional types, and the advanced patterns that separate TypeScript experts from beginners.",
@@ -830,6 +838,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "nodejs-mastery",
+    category: "backend-systems",
     title: "Node.js Mastery",
     description:
       "Master Node.js from runtime internals to production architecture. Learn the event loop, async patterns, streams, networking, observability, performance, security, and interview-ready backend scenarios.",
@@ -906,6 +915,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "express-backend",
+    category: "backend-systems",
     title: "Express.js & Backend Engineering",
     description:
       "Master Express.js from fundamentals to production — REST design, authentication, authorization, caching, security, testing, and performance patterns for Node.js backends.",
@@ -1029,6 +1039,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "nextjs-mastery",
+    category: "frontend",
     title: "Next.js Mastery",
     description:
       "Master Next.js App Router from routing fundamentals to production deployment. Server Components, data fetching, caching, Server Actions, middleware, auth patterns, and the interview answers senior engineers are expected to know.",
@@ -1254,6 +1265,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "web-components",
+    category: "frontend",
     title: "Web Components",
     description:
       "Understand the platform-native component model. Custom Elements, Shadow DOM, HTML Templates, slots, lifecycle callbacks, and how Web Components interop with React and modern frameworks.",
@@ -1390,6 +1402,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "design-systems",
+    category: "frontend",
     title: "Design Systems",
     description:
       "From zero to hero on frontend design systems. Tokens, component architecture, theming, styling technologies, accessibility, Storybook, monorepo distribution, versioning, testing, Figma workflows, governance, real-world case studies, and a from-scratch capstone.",
@@ -1741,6 +1754,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "kubernetes-mastery",
+    category: "platform-ops",
     title: "Kubernetes Mastery",
     description:
       "Master Kubernetes from cluster architecture to production operations. Learn the control plane, workloads, networking, storage, RBAC, scaling, observability, and the GitOps patterns that senior engineers use in real clusters.",
@@ -1810,6 +1824,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "growth-life-client-api-mastery",
+    category: "disney",
     title: "growth-life-client-api Mastery",
     description:
       "Become an expert on Flex's growth-life-client-api — the template-driven Koa BFF behind Disney+, Hulu, and ESPN+ subscription screens. Learn the request lifecycle, the GLO→Flex type systems, the screen pipeline, backends, element builders, executions, feature flags, experimentation, the platform migration, and the testing standards, all grounded in the real codebase.",
@@ -1937,6 +1952,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "espn-architecture",
+    category: "disney",
     title: "ESPN Architecture",
     description:
       "Zero-to-hero on ESPN inside Disney: the three-domain web presence (www.espn.com content, plus.espn.com sales, secure.web.plus.espn.com checkout), the platforms and teams behind each layer, the products and offers being sold, the signup and checkout flows, the Flex server-driven-UI boundary, identity via OneID, flags and experiments, observability, and how ESPN diverges from Disney+ and Hulu — all traced to real code.",
@@ -2027,6 +2043,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "commerce-base-foundations",
+    category: "disney",
     title: "commerce-base Foundations",
     description:
       "Master @solo/commerce-base (CUP V2) — the shared, multi-tenant commerce library behind Disney+, Hulu, and ESPN+ checkout, billing, account, and subscription flows. Learn the architecture and page-flow pipeline, the data-interface pattern, Jotai/React Query/XState state, the dictionary/i18n and region/globalization systems, feature flags and WeaponX experiments, the testing standards, and the dev/build tooling — all grounded in the real codebase.",
@@ -2146,6 +2163,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "datadog-mastery",
+    category: "platform-ops",
     title: "Datadog Mastery",
     description:
       "Master Datadog from observability fundamentals to production operations. The Agent, metrics, tagging, dashboards, monitors, log management, APM and distributed tracing, infrastructure and container monitoring, synthetics, RUM, and the query and SLO patterns engineers rely on to run real systems.",
@@ -2426,6 +2444,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "server-driven-ui-lab",
+    category: "disney",
     title: "Server-Driven UI Lab",
     description:
       "Build and understand a server-driven UI backend from zero, mirroring Disney's Flex architecture at a scale small enough to hold in your head. One screen, one service, every file read in full — the request lifecycle, the wire contract, the Raw→Domain conversion boundary, per-surface templates, graceful degradation, and a side-by-side comparison with growth-life-client-api.",
@@ -2506,6 +2525,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "hulu-architecture",
+    category: "disney",
     title: "Hulu Architecture",
     description:
       "Zero-to-hero on Hulu inside Disney's streaming stack: the Hulu commerce app in cgi-web, the Flex BFF partner branching (isPartnerHulu everywhere), Hulu's own auth (IDM/Edna, _hulu_at cookies), its own experimentation platform (Spearmint vs WeaponX), its own analytics (HITS), legacy vs ACP subscriptions, One Hulu product context, feature flags, and how to develop and QA Hulu flows locally — all traced to real code.",
