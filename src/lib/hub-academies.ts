@@ -1,10 +1,12 @@
 import type { AcademyGroup, AcademyRoute } from "./types/academy";
+import type { AcademyCategory } from "./academy-categories";
 import { MOCK_ACADEMIES } from "./mock-data";
 
 export type HubAcademyRoute = Omit<AcademyRoute, "component">;
 
 export interface HubAcademy {
   slug: string;
+  category: AcademyCategory;
   title: string;
   description: string;
   version: string;
@@ -208,6 +210,7 @@ const SYSTEM_DESIGN_AWS_RELEASED_ROUTES: HubAcademyRoute[] = [
 
 const SYSTEM_DESIGN_AWS_RELEASED: HubAcademy = {
   slug: "system-design-aws",
+  category: "backend-systems",
   title: "System Design & AWS",
   description:
     "Master system design from first principles through AWS-powered production architecture. Built for senior engineers preparing for architecture interviews and real-world cloud design.",

@@ -211,10 +211,71 @@ return fillTemplate({
       <h3 id="config">Template Configuration &amp; Versioning</h3>
       <p>
         Which template (and which version) a screen uses is decided by a{" "}
-        <strong>template configuration</strong>. A screen&apos;s <code>constants.ts</code> defines a{" "}
-        <code>DEFAULT_TEMPLATE_CONFIGURATION</code> and a <code>CONFIGURATION_REQ</code>. This
+        <strong>template configuration</strong>. Think of this as a lookup step before fetching the
+        actual JSON template: the service says, “I am rendering this screen; what template should I
+        use today?” A screen&apos;s <code>constants.ts</code> usually defines two related values:
+      </p>
+      <ArticleTable
+        caption="The two template-configuration constants serve different purposes."
+        minWidth={720}
+      >
+        <table>
+          <thead>
+            <tr>
+              <th>Constant</th>
+              <th>What it means</th>
+              <th>Why it exists</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <code>DEFAULT_TEMPLATE_CONFIGURATION</code>
+              </td>
+              <td>The fallback template identity: template id, data set, and data key.</td>
+              <td>Lets the screen render even when there is no configured override.</td>
+            </tr>
+            <tr>
+              <td>
+                <code>CONFIGURATION_REQ</code>
+              </td>
+              <td>The lookup request used to ask template configuration for an override.</td>
+              <td>
+                Lets config point the API at a different template/layout/version without changing
+                service code.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ArticleTable>
+      <CodeBlock
+        lang="typescript"
+        filename="src/domain/screen/account/deviceOutOfHousehold/constants.ts (shape)"
+        code={`export const DEVICE_OUT_OF_HOUSEHOLD_TEMPLATE_CONFIGURATION_REQ = {
+  configType: 'device-out-of-household',
+  namespace: DEVICE_OUT_OF_HOUSEHOLD_SCREEN_TYPE,
+};
+
+export const DEFAULT_DEVICE_OUT_OF_HOUSEHOLD_SCREEN_TEMPLATE_CONFIGURATION = {
+  templateId: 'device-out-of-household',
+  dataSetId: 'default',
+  dataKey: 'default',
+};`}
+      />
+      <p>
+        In plain English: <code>CONFIGURATION_REQ</code> asks, “is there a configured template for
+        the device-out-of-household screen?” If configuration returns an override, that override wins.
+        If not, the service falls back to <code>DEFAULT_TEMPLATE_CONFIGURATION</code>. This
         indirection is what lets the template repo ship a new layout version and have the API pick it
         up via configuration rather than a code change.
+      </p>
+      <p>
+        Important edge case: the default is not a generated backup template. It is only a pointer to
+        a default template. If configuration does not return an override <em>and</em> the default
+        template it points to is missing or malformed, the API has no JSON structure to fill and the
+        screen request fails unless that screen has an explicit fallback path. In other words, the
+        API code and template repo share an operational contract: every default configuration must
+        point to a real, valid template.
       </p>
 
       <h2 id="cypher">Cypher Keys: Localization Without Hardcoding</h2>

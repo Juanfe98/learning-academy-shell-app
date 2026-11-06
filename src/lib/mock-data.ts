@@ -1,4 +1,5 @@
 import type { AcademyManifest, AcademyGroup, AcademyRoute } from "./types/academy";
+import type { AcademyCategory } from "./academy-categories";
 
 export type MockAcademyRoute = Omit<AcademyRoute, "component">;
 
@@ -6,6 +7,7 @@ export interface MockAcademy extends Omit<
   AcademyManifest,
   "routes" | "totalEstimatedMinutes"
 > {
+  category: AcademyCategory;
   comingSoon?: boolean;
   externalUrl?: string;
   moduleCount: number;
@@ -17,6 +19,7 @@ export interface MockAcademy extends Omit<
 export const MOCK_ACADEMIES: MockAcademy[] = [
   {
     slug: "apollo-graphql",
+    category: "frontend",
     title: "Apollo GraphQL",
     description:
       "Master the Apollo ecosystem — client, server, caching, federation, and production patterns for modern GraphQL APIs.",
@@ -322,6 +325,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "web-fundamentals",
+    category: "fundamentals",
     title: "Web Fundamentals",
     description:
       "HTML, CSS, layout, responsive design, and accessibility — structured for frontend interview prep with lessons, code examples, and practice challenges.",
@@ -437,6 +441,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "graphql-core",
+    category: "frontend",
     title: "GraphQL Core",
     description:
       "Deep dive into the GraphQL specification — type system, execution model, introspection, and language internals.",
@@ -451,6 +456,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "react-deep-dive",
+    category: "frontend",
     title: "React Deep Dive",
     description:
       "Go beyond the API surface — understand how React actually works. Rendering, reconciliation, concurrent features, React 19, and the patterns that separate competent React developers from great ones.",
@@ -597,6 +603,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "python-mastery",
+    category: "fundamentals",
     title: "Python Mastery",
     description:
       "Learn Python from fundamentals to advanced interview-ready topics. Designed for engineers coming from JavaScript/TypeScript — covering syntax, OOP, async, typing, testing, FastAPI, and coding interview patterns.",
@@ -722,6 +729,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "typescript-mastery",
+    category: "fundamentals",
     title: "TypeScript Mastery",
     description:
       "Go beyond the basics — structural typing, generics, utility types, mapped and conditional types, and the advanced patterns that separate TypeScript experts from beginners.",
@@ -830,6 +838,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "nodejs-mastery",
+    category: "backend-systems",
     title: "Node.js Mastery",
     description:
       "Master Node.js from runtime internals to production architecture. Learn the event loop, async patterns, streams, networking, observability, performance, security, and interview-ready backend scenarios.",
@@ -906,6 +915,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "express-backend",
+    category: "backend-systems",
     title: "Express.js & Backend Engineering",
     description:
       "Master Express.js from fundamentals to production — REST design, authentication, authorization, caching, security, testing, and performance patterns for Node.js backends.",
@@ -1029,6 +1039,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "nextjs-mastery",
+    category: "frontend",
     title: "Next.js Mastery",
     description:
       "Master Next.js App Router from routing fundamentals to production deployment. Server Components, data fetching, caching, Server Actions, middleware, auth patterns, and the interview answers senior engineers are expected to know.",
@@ -1254,6 +1265,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "web-components",
+    category: "frontend",
     title: "Web Components",
     description:
       "Understand the platform-native component model. Custom Elements, Shadow DOM, HTML Templates, slots, lifecycle callbacks, and how Web Components interop with React and modern frameworks.",
@@ -1390,6 +1402,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "design-systems",
+    category: "frontend",
     title: "Design Systems",
     description:
       "From zero to hero on frontend design systems. Tokens, component architecture, theming, styling technologies, accessibility, Storybook, monorepo distribution, versioning, testing, Figma workflows, governance, real-world case studies, and a from-scratch capstone.",
@@ -1741,6 +1754,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "kubernetes-mastery",
+    category: "platform-ops",
     title: "Kubernetes Mastery",
     description:
       "Master Kubernetes from cluster architecture to production operations. Learn the control plane, workloads, networking, storage, RBAC, scaling, observability, and the GitOps patterns that senior engineers use in real clusters.",
@@ -1810,14 +1824,15 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
   },
   {
     slug: "growth-life-client-api-mastery",
+    category: "disney",
     title: "growth-life-client-api Mastery",
     description:
       "Become an expert on Flex's growth-life-client-api — the template-driven Koa BFF behind Disney+, Hulu, and ESPN+ subscription screens. Learn the request lifecycle, the GLO→Flex type systems, the screen pipeline, backends, element builders, executions, feature flags, experimentation, the platform migration, and the testing standards, all grounded in the real codebase.",
     version: "1.1.0",
     icon: "🧬",
     accentColor: "#113ccf",
-    moduleCount: 20,
-    totalHours: 17,
+    moduleCount: 24,
+    totalHours: 20.2,
     comingSoon: false,
     routes: [
       { slug: "what-is-growth-life-client-api", title: "What Is growth-life-client-api", order: 0, estimatedMinutes: 40, tags: ["foundations", "architecture", "bff", "flex", "disney"], keywords: ["template driven", "koa bff", "screens vs executions", "growth-life-client-templates", "s3 templates", "disney hulu espn"] },
@@ -1833,6 +1848,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
       { slug: "action-executions", title: "Action Executions", order: 10, estimatedMinutes: 50, tags: ["execution", "mutations", "cancel", "switch", "payments"], keywords: ["domain/execution", "cancelSubscriptionExecution", "state change", "guards", "preconditions", "idempotency", "no experiments in executions"] },
       { slug: "feature-flags", title: "Feature Flags", order: 11, estimatedMinutes: 40, tags: ["execution", "flags", "launchdarkly", "rollout"], keywords: ["FlagKeys", "FeatureFlag", "getFeatureFlagValue", "defaultValue", "LaunchDarkly", "two file pattern", "cleanup jsdoc"] },
       { slug: "experimentation", title: "Experimentation", order: 12, estimatedMinutes: 65, tags: ["execution", "experiments", "weaponx", "featureset", "abtest"], keywords: ["WeaponX", "getExperimentTreatment", "FeatureSet pattern", "treatment undefined trap", "variants registry treatment", "initialize cleanup productionalize", "template config vs service code"] },
+      { slug: "jafar-testpersona-experiments", title: "Jafar & testPersona Experiments (POP)", order: 20, estimatedMinutes: 45, tags: ["execution", "experiments", "jafar", "testpersona", "pop"], keywords: ["testPersona", "TestPersona type", "Jafar", "getExperienceIdAndPersona", "getExperienceIdAndPersonaForRoadblock", "accountSharingExperienceId", "base64 decode", "pop-experiment-overrides", "mapJafarSDKAssignmentsToWeaponXExperiments", "server-side experiment transport"] },
       { slug: "platform-migration", title: "Platform Migration", order: 13, estimatedMinutes: 55, tags: ["mastery", "platform", "migration", "parity"], keywords: ["src/platform", "migrationConfig", "createScreenConfig", "pipeline assembly", "dual path", "change both", "parity tests", "migrating qa deprecated"] },
       { slug: "testing-standards", title: "Testing Standards", order: 14, estimatedMinutes: 50, tags: ["mastery", "testing", "mocks", "factories"], keywords: ["TESTING.md", "setupMocks", "MockOverrides", "factory functions", "behavioral assertions", "mock GLO client not wrapper", "legacy test policy", "behavior matrix"] },
       { slug: "build-tooling-and-ci", title: "Build Tooling & CI", order: 15, estimatedMinutes: 45, tags: ["mastery", "tooling", "ci", "codegen"], keywords: ["build:typeguards", "build:swagger", "generated schemas", "import rules", "! aliases", "no-screen-function-registry", "CI checks", "HULU_ENV"] },
@@ -1840,6 +1856,9 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
       { slug: "caching-and-performance", title: "Caching & Performance", order: 17, estimatedMinutes: 45, tags: ["cross-cutting", "caching", "performance", "valkey"], keywords: ["CacheInterface", "ValkeyCache", "retrieve dataFetcher", "CachedXClient decorator", "TTL cache key", "read-through cache", "Promise.all"] },
       { slug: "error-handling-and-resilience", title: "Error Handling & Resilience", order: 18, estimatedMinutes: 50, tags: ["cross-cutting", "errors", "resilience", "observability"], keywords: ["ApplicationError", "BaseError taxonomy", "errorHandler executionErrorHandler proxyErrorHandler", "invalidStateResponse", "logLevel", "logWithSampling", "mask PII", "Datadog tracing", "graceful degradation"] },
       { slug: "context-region-and-eligibility", title: "Context, Region & Eligibility", order: 19, estimatedMinutes: 45, tags: ["cross-cutting", "region", "context", "eligibility"], keywords: ["RegionConfiguration", "REGION_EXPERIENCE_MAP", "regionExperience LATAM EMEA APAC", "DeviceContext", "SessionAccess isAuthenticated", "eligibilityRules", "flexEligibilityService", "redirectHandler"] },
+      { slug: "local-testing-and-the-glo-proxy", title: "Local Testing & the GLO Proxy", order: 21, estimatedMinutes: 45, tags: ["qa-harness", "testing", "proxy", "local", "evidence"], keywords: ["flex-qa-harness", "GLO_BASE_URL", "selective proxy", "passthrough", "PR evidence curl", "states staging cannot produce", "mock the minimum", "port 4300"] },
+      { slug: "proxy-profiles-and-recording", title: "Proxy Profiles & Recording", order: 22, estimatedMinutes: 50, tags: ["qa-harness", "profiles", "recording", "mutation", "proxy"], keywords: ["server.mjs", "resolveProfileName", "x-qa-profile", "qa-profile account id", "match handle passthrough", "canned vs live mutation", "proxy:record", "recordings", "churned profile"] },
+      { slug: "case-study-l4l-switch-ledger", title: "Case Study: L4L Switch Ledger (GCIEX-18128)", order: 23, estimatedMinutes: 55, tags: ["qa-harness", "case-study", "l4l", "ledger", "debugging"], keywords: ["GCIEX-18128", "Case 0 baseline Case 1 treatment", "payment guards redirect", "checkout-purchased account", "L4L_EXPIRATION recurringPrice", "termPrice billingFrequency REPEAT_COUNT TOTAL_PRICE", "x-bamtech-weaponx-assignments", "wrong worktree lsof", "billing_standalone_subcopy_2_l4l"] },
     ],
     learningPath: [
       "what-is-growth-life-client-api",
@@ -1855,6 +1874,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
       "action-executions",
       "feature-flags",
       "experimentation",
+      "jafar-testpersona-experiments",
       "platform-migration",
       "testing-standards",
       "build-tooling-and-ci",
@@ -1862,6 +1882,9 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
       "caching-and-performance",
       "error-handling-and-resilience",
       "context-region-and-eligibility",
+      "local-testing-and-the-glo-proxy",
+      "proxy-profiles-and-recording",
+      "case-study-l4l-switch-ledger",
     ],
     groups: [
       {
@@ -1892,7 +1915,7 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
         id: "glca-execution-experimentation",
         title: "Path 3 — Execution, Flags & Experimentation",
         description: "The write side and the levers: state-changing action executions, LaunchDarkly feature flags, and the WeaponX experimentation system with the FeatureSet pattern.",
-        routeSlugs: ["action-executions", "feature-flags", "experimentation"],
+        routeSlugs: ["action-executions", "feature-flags", "experimentation", "jafar-testpersona-experiments"],
       },
       {
         id: "glca-mastery",
@@ -1915,6 +1938,693 @@ export const MOCK_ACADEMIES: MockAcademy[] = [
           "context-region-and-eligibility",
         ],
       },
+      {
+        id: "glca-local-qa-harness",
+        title: "Path 6 — Local QA Harness (flex-qa-harness)",
+        description: "How to make your local server render states staging cannot produce: the selective GLO proxy, its profile/recording system, and a full real-ticket case study (GCIEX-18128) from zero-mock baseline to treatment evidence.",
+        routeSlugs: [
+          "local-testing-and-the-glo-proxy",
+          "proxy-profiles-and-recording",
+          "case-study-l4l-switch-ledger",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "espn-architecture",
+    category: "disney",
+    title: "ESPN Architecture",
+    description:
+      "Zero-to-hero on ESPN inside Disney: the three-domain web presence (www.espn.com content, plus.espn.com sales, secure.web.plus.espn.com checkout), the platforms and teams behind each layer, the products and offers being sold, the signup and checkout flows, the Flex server-driven-UI boundary, identity via OneID, flags and experiments, observability, and how ESPN diverges from Disney+ and Hulu — all traced to real code.",
+    version: "1.0.0",
+    icon: "🏈",
+    accentColor: "#cc0000",
+    moduleCount: 19,
+    totalHours: 12.6,
+    comingSoon: false,
+    routes: [
+      { slug: "three-domains-of-espn-web", title: "The Three Domains of ESPN Web", order: 0, estimatedMinutes: 30, tags: ["foundations", "architecture", "domains", "ownership"], keywords: ["www.espn.com plus.espn.com secure.web.plus.espn.com", "content sales checkout three websites", "contextualization screen traffic cop", "nexus marketing platform", "CUP unified commerce cgi-web", "partner activation TVE tv provider", "ledger billing vocabulary", "unified platform ownership per screen"] },
+      { slug: "espn-products-plans-and-entitlements", title: "ESPN Products, Plans & Entitlements", order: 1, estimatedMinutes: 32, tags: ["foundations", "domain-model", "offers-and-packages", "entitlements"], keywords: ["package vs offer vs plan", "pref query param package id", "FlexOfferType ESPN_STANDALONE", "offerId campaignId offers param", "subscriber cohorts wholesale MVPD", "MLB consent swid add-on", "offer tokens fallback price", "entitlement vs purchase"] },
+      { slug: "espn-repos-and-ownership-map", title: "Repos, Packages & the Ownership Map", order: 2, estimatedMinutes: 40, tags: ["foundations", "monorepo", "codeowners", "triage", "onboarding"], keywords: ["cgi-web monorepo apps packages", "growth-life-client-api flex repo", "CODEOWNERS ownership map teams", "commerce-base shared library", "data-interface-espn", "x-bamtech-partner edge header", "isPartnerESPN predicate", "which repo owns this bug"] },
+      { slug: "espn-marketing-app-anatomy", title: "ESPN Marketing App Anatomy", order: 3, estimatedMinutes: 35, tags: ["nexus", "marketing-app", "nextjs", "cms-driven", "middleware"], keywords: ["optional catch-all route one page", "getServerSideProps pipeline", "middleware headers geo precedence", "CMS route inventory 29 routes", "Stitch component registry", "espn brand tokens breakpoints", "local.plus.espn.com 5040", "README doc drift"] },
+      { slug: "nexus-data-fetching-cannonball-spaceball", title: "Nexus Data Fetching — Cannonball → Spaceball", order: 4, estimatedMinutes: 28, tags: ["nexus", "cms-integration", "data-fetching", "migration-patterns", "feature-flags"], keywords: ["Cannonball manifest", "Spaceball GraphQL", "checkPathInCannonball", "getPageData ternary migration seam", "shape-preserving boundary", "offer tokens pricing", "enableSpaceball flag", "fail-soft zod validation"] },
+      { slug: "plan-cards-and-the-handoff", title: "Plan Cards & The Hand-Off", order: 5, estimatedMinutes: 30, tags: ["nexus", "commerce-handoff", "cms-driven-ui", "ownership-boundaries"], keywords: ["plan card component registry", "offer tokens fallback always renders", "pref package id vocabulary", "commerce billing hand-off url", "buildLink href passthrough", "CMS content bug triage", "no attribution forwarding", "espn_unlimited espn_select"] },
+      { slug: "espn-commerce-app-anatomy", title: "ESPN Commerce App Anatomy", order: 6, estimatedMinutes: 40, tags: ["commerce", "monorepo", "nextjs", "multi-tenant", "cgi-web"], keywords: ["apps/commerce/espn thin shell", "three sibling apps commerce-base", "PRODUCT env tenant switch", "four brand namespaces partner tenant", "buildGetServerSideProps 24 steps", "isRouteEnabled 404 feature flag", "Sparrow remote config workspace", "local.plus.espn.com 5004"] },
+      { slug: "espn-data-interface-and-sdk", title: "ESPN's Data Interface & the Browser SDK", order: 7, estimatedMinutes: 35, tags: ["data-layer", "bamtech-sdk", "dependency-inversion", "flex"], keywords: ["buildDataInterface dependency inversion", "DATA_INTERFACE duck-typed contract", "BamTech Browser SDK adapter", "SDK config snapshot 106 endpoints", "notImplemented Proxy spread hazard", "hard-coded response envelopes", "espn_aid device attribute provider", "error normalisation React Query"] },
+      { slug: "flex-server-driven-ui-for-espn", title: "Flex & Server-Driven UI for ESPN", order: 8, estimatedMinutes: 45, tags: ["flex", "server-driven-ui", "backend-for-frontend", "cross-repo-debugging"], keywords: ["flex bff growth-life-client-api", "x-bamtech-partner edge stamping", "configurationId template receipt", "legacy vs platform engine Promise.all", "experimentFeatureIds first-match drop", "cypher key dictionary resolution", "traffic director edge docker 3200", "symptom to owning layer triage"] },
+      { slug: "espn-identity-and-auth", title: "ESPN Identity & Auth", order: 9, estimatedMinutes: 38, tags: ["identity", "authentication", "session-management", "oneid"], keywords: ["OneID v4 script not Identity v5", "MyDisney brand vs OneID system", "identitySDK null config proof", "BAM session tokens localStorage", "cross-domain SSO responder page", "redirectURL three validators", "reauth action grant modal", "no TVE MVPD in this repo"] },
+      { slug: "espn-checkout-flow-screen-by-screen", title: "ESPN Checkout Flow, Screen by Screen", order: 10, estimatedMinutes: 45, tags: ["commerce", "checkout-flow", "server-driven-ui", "debugging"], keywords: ["commerce billing ledger", "identity loading redirect handlers", "Flex payload is offer source of truth", "pref vs offerId entry contracts", "V2 ledger WeaponX flag injection", "FLX-0226 eligibility offer switch", "add-ons experiment gate", "SIGNUP_SUCCESS unsampled log"] },
+      { slug: "espn-vs-dplus-vs-hulu-divergences", title: "ESPN vs Disney+ vs Hulu — How Divergence Is Expressed", order: 11, estimatedMinutes: 50, tags: ["multi-tenancy", "brand-divergence", "config-driven", "code-review"], keywords: ["divergence in data not code", "366 matches but 3 brand literals", "productConfigMap table lookup", "code present never invoked", "identitySDK null OneID v4", "build-time theming dataTheme", "renderWithProviders Disney default", "four brand namespaces trap"] },
+      { slug: "flags-and-experiments-for-espn", title: "Flags & Experiments for ESPN", order: 12, estimatedMinutes: 45, tags: ["feature-flags", "experiments", "weaponx", "sparrow-config"], keywords: ["two flag systems wpnx vs sparrow", "useMystiqueFeatureFlags bootstrap cache", "treatment undefined silent control", "isRouteEnabled notFound gate", "Flex template dataKey first-match latch", "productionalize flag to business rule", "territory parentCountry inheritance", "fixture-only dead flags"] },
+      { slug: "region-i18n-and-copy-for-espn", title: "Region, Localization & Copy for ESPN", order: 13, estimatedMinutes: 32, tags: ["localization", "region-config", "cypher-dictionary", "pricing"], keywords: ["ESPN is US-only 8 territories", "parentCountry US inheritance", "business region vs territory vs locale", "Cypher dictionary tenant isolation", "MISSING_CYPHER_KEY_IN_DICTIONARY", "applyLegalRounding rounds up", "render-time cypher key rewrite", "CMS offer tokens hard-coded USD"] },
+      { slug: "espn-brand-theming-and-ui", title: "ESPN Brand, Theming & UI Components", order: 14, estimatedMinutes: 32, tags: ["design-tokens", "theming", "tailwind", "design-system"], keywords: ["ESPN brand token is blue not red", "Tailwind preset is the theme", "no runtime ThemeProvider", "Style Dictionary from Figma", "breakpoints singleton defaults Disney", "font-weight Cond Heavy defect", "Stitch is not Stitches", "semantic class name contract"] },
+      { slug: "espn-observability-and-analytics", title: "ESPN Observability & Analytics", order: 15, estimatedMinutes: 55, tags: ["observability", "datadog-rum", "adobe-analytics", "incident-response"], keywords: ["Adobe not Glimpse for ESPN", "web-solo-commerce-espn vs espn-nexus", "two disconnected RUM applications", "env prod vs non-prod tag trap", "unsampled SIGNUP_SUCCESS log", "four service names per app", "RUM blind spots SSR dark", "purchase-drop triage recipe"] },
+      { slug: "reading-the-espn-signup-dashboard", title: "Reading the ESPN Signup Dashboard", order: 16, estimatedMinutes: 45, tags: ["observability", "datadog-rum", "experiment-monitoring", "runbook"], keywords: ["espn signup monitoring dashboard spg-pqf-s6u", "variant table arm columns census", "34 percent assignment never read volume", "cypher guardrail quarantine pattern", "billing pipeline conversion denominator", "funnel cannot cross rum applications", "N/A row unassigned p75 frustrated percent", "monitoring template tailoring find replace key"] },
+      { slug: "espn-local-dev-testing-and-ci", title: "ESPN Local Dev, Testing & CI", order: 17, estimatedMinutes: 45, tags: ["local-dev", "testing", "ci-cd", "playwright", "runbook"], keywords: ["espn local dev setup ports", "three run modes mocked qa local-flex", "PRODUCT=espn jest fixture trap", "traffic director edge docker", "playwright sharding merge gate", "27 character branch limit", "100 percent coverage next config", "validation ladder before push"] },
+      { slug: "espn-mastery-capstone", title: "ESPN Mastery Capstone", order: 18, estimatedMinutes: 55, tags: ["capstone", "triage", "debugging", "architecture", "checklist"], keywords: ["one page full stack map", "end to end purchase trace", "master symptom to owner table", "defect and doc-drift register", "pre-PR checklist for ESPN", "five minute architecture narrative", "known unknowns edges of the map", "self assessment by module"] },
+    ],
+    groups: [
+      {
+        id: "espn-foundations",
+        title: "Path 1 — Foundations & Mental Model",
+        description:
+          "The map before the territory: ESPN's three-domain web presence, what is actually being sold, and which repo, package, and team owns each layer.",
+        routeSlugs: ["three-domains-of-espn-web", "espn-products-plans-and-entitlements", "espn-repos-and-ownership-map"],
+      },
+      {
+        id: "espn-sales-layer",
+        title: "Path 2 — The Sales Layer (plus.espn.com / NEXUS)",
+        description:
+          "How marketing pages are built and content-driven, how CMS data reaches them mid-migration between two backends, and the exact contract that hands a user to checkout.",
+        routeSlugs: ["espn-marketing-app-anatomy", "nexus-data-fetching-cannonball-spaceball", "plan-cards-and-the-handoff"],
+      },
+      {
+        id: "espn-checkout-layer",
+        title: "Path 3 — The Checkout Layer (secure.web.plus.espn.com / CUP)",
+        description:
+          "The commerce app shell, its data layer over the Browser SDK, the Flex server-driven-UI boundary, identity via OneID, the real screen-by-screen purchase path, and the craft of multi-brand divergence.",
+        routeSlugs: ["espn-commerce-app-anatomy", "espn-data-interface-and-sdk", "flex-server-driven-ui-for-espn", "espn-identity-and-auth", "espn-checkout-flow-screen-by-screen", "espn-vs-dplus-vs-hulu-divergences"],
+      },
+      {
+        id: "espn-config-and-content",
+        title: "Path 4 — Configuration, Content & Experimentation",
+        description:
+          "The systems that change behaviour without changing code: two flag systems and the experiment lifecycle, region and localization, copy resolution, and the design-token pipeline behind ESPN's look.",
+        routeSlugs: ["flags-and-experiments-for-espn", "region-i18n-and-copy-for-espn", "espn-brand-theming-and-ui"],
+      },
+      {
+        id: "espn-operate-and-master",
+        title: "Path 5 — Operate, Observe & Master",
+        description:
+          "Running ESPN in anger: what the instrumentation can and cannot tell you, how to develop and test locally and land a green PR, and a capstone that consolidates every triage path into one map.",
+        routeSlugs: ["espn-observability-and-analytics", "reading-the-espn-signup-dashboard", "espn-local-dev-testing-and-ci", "espn-mastery-capstone"],
+      },
+    ],
+    learningPath: [
+      "three-domains-of-espn-web",
+      "espn-products-plans-and-entitlements",
+      "espn-repos-and-ownership-map",
+      "espn-marketing-app-anatomy",
+      "nexus-data-fetching-cannonball-spaceball",
+      "plan-cards-and-the-handoff",
+      "espn-commerce-app-anatomy",
+      "espn-data-interface-and-sdk",
+      "flex-server-driven-ui-for-espn",
+      "espn-identity-and-auth",
+      "espn-checkout-flow-screen-by-screen",
+      "espn-vs-dplus-vs-hulu-divergences",
+      "flags-and-experiments-for-espn",
+      "region-i18n-and-copy-for-espn",
+      "espn-brand-theming-and-ui",
+      "espn-observability-and-analytics",
+      "espn-local-dev-testing-and-ci",
+      "espn-mastery-capstone",
+    ],
+  },
+  {
+    slug: "commerce-base-foundations",
+    category: "disney",
+    title: "commerce-base Foundations",
+    description:
+      "Master @solo/commerce-base (CUP V2) — the shared, multi-tenant commerce library behind Disney+, Hulu, and ESPN+ checkout, billing, account, and subscription flows. Learn the architecture and page-flow pipeline, the data-interface pattern, Jotai/React Query/XState state, the dictionary/i18n and region/globalization systems, feature flags and WeaponX experiments, the testing standards, and the dev/build tooling — all grounded in the real codebase.",
+    version: "1.1.0",
+    icon: "🛒",
+    accentColor: "#0063e5",
+    moduleCount: 21,
+    totalHours: 16.4,
+    comingSoon: false,
+    routes: [
+      { slug: "what-is-commerce-base", title: "What Is commerce-base", order: 0, estimatedMinutes: 40, tags: ["foundations", "architecture", "cup-v2", "multi-tenant"], keywords: ["commerce-base", "CUP V2", "source library not package", "dataInterfaceAtom", "feature-based organization", "disney hulu espn"] },
+      { slug: "monorepo-and-multi-tenancy", title: "Monorepo & Multi-Tenancy", order: 1, estimatedMinutes: 45, tags: ["foundations", "monorepo", "pnpm", "turbo", "tenancy"], keywords: ["pnpm catalogs", "workspace protocol", "turbo", "PRODUCT", "partnerName", "four dimensions brand region language flags"] },
+      { slug: "page-flow-and-layouts", title: "Page Flow & Layouts", order: 2, estimatedMinutes: 55, tags: ["foundations", "pages-router", "gssp", "layouts"], keywords: ["buildGetServerSideProps", "getPageLayout", "CommercePageProps", "ApplicationLayout", "HydrateBaseAtoms", "_app layout dispatcher"] },
+      { slug: "commerce-base-and-flex", title: "commerce-base & Flex", order: 3, estimatedMinutes: 45, tags: ["foundations", "flex", "bff", "server-driven-ui"], keywords: ["growth-life-client-api", "server-driven UI", "getFlexScreen", "flexExecution", "three repos", "debugging boundary"] },
+      { slug: "data-interface-pattern", title: "The Data-Interface Pattern", order: 4, estimatedMinutes: 50, tags: ["data", "dependency-inversion", "multi-tenant"], keywords: ["DATA_INTERFACE", "dataInterfaceAtom", "useHydrateDataInterface", "buildDataInterface", "hydration guard", "screens vs executions"] },
+      { slug: "react-query-server-state", title: "React Query & Server State", order: 5, estimatedMinutes: 50, tags: ["data", "react-query", "server-state"], keywords: ["useQuery", "useMutation", "enabled gating", "select", "meta.owner", "QueryClient error net", "react-query v3"] },
+      { slug: "dictionary-and-i18n", title: "Dictionary & i18n", order: 6, estimatedMinutes: 45, tags: ["data", "i18n", "localization", "dictionary"], keywords: ["useDictionary", "cypher keys", "MISSING_CYPHER_KEY_IN_DICTIONARY", "unified-commerce", "location gate", "copy overrides"] },
+      { slug: "jotai-atoms-and-hydration", title: "Jotai Atoms & Hydration", order: 7, estimatedMinutes: 50, tags: ["state", "jotai", "hydration", "ssr"], keywords: ["atom", "atomWithStorage", "derived atom guard", "useHydrateAtoms", "HydrateBaseAtoms", "client navigation staleness"] },
+      { slug: "xstate-flows", title: "XState Flows", order: 8, estimatedMinutes: 55, tags: ["state", "xstate", "machines", "profiles"], keywords: ["createMachine", "use-machine hook pairing", "guarded transitions", "invoke services", "switch state.value", "typegen"] },
+      { slug: "region-and-globalization", title: "Region & Globalization", order: 9, estimatedMinutes: 45, tags: ["region", "globalization", "rtl", "currency"], keywords: ["regionAtom", "physicalRegionAtom", "model.metadata region", "useCurrencySymbol", "language direction rtl", "germany regulated cancel"] },
+      { slug: "feature-flags", title: "Feature Flags", order: 10, estimatedMinutes: 40, tags: ["flags", "mystique", "config"], keywords: ["useMystiqueFeatureFlags", "commerce config flags", "useCommerceFeatureFlag", "LocalizedFeatureFlag", "territory inheritance", "wpnx"] },
+      { slug: "experiments-weaponx", title: "Experiments (WeaponX)", order: 11, estimatedMinutes: 55, tags: ["experiments", "weaponx", "abtest", "productionalization"], keywords: ["wpnx experiments", "experiment hook shape", "FEATURE_ID", "productionalize flag to business rule", "partnerName rule", "copy override engine", "spearmint"] },
+      { slug: "testing-standards", title: "Testing Standards", order: 12, estimatedMinutes: 55, tags: ["mastery", "testing", "jest", "msw", "coverage"], keywords: ["renderWithProviders", "generateProviderWrapper", "MSW setupServer", "100% coverage", "PRODUCT disneyPlus", "withLoadingGate"] },
+      { slug: "dev-build-tooling", title: "Dev & Build Tooling", order: 13, estimatedMinutes: 45, tags: ["mastery", "tooling", "turbo", "storybook"], keywords: ["pnpm turbo", "PRODUCT env", "NEXT_PUBLIC_API_MOCKING", "turbo caching filter", "storybook sauce labs vrt", "lint type-check"] },
+      { slug: "mastery-capstone", title: "Mastery Capstone", order: 14, estimatedMinutes: 30, tags: ["mastery", "capstone", "debugging", "workflow"], keywords: ["layer map", "debug by symptom triage", "ticket workflow", "productionalize price test", "pre-PR checklist", "which repo owns it"] },
+      { slug: "local-setup-and-onboarding", title: "Local Setup & Onboarding", order: 15, estimatedMinutes: 45, tags: ["execution", "runbook", "setup", "onboarding"], keywords: ["scripts/setup", "mkcert certs trap", "node 22.14.0 volta pnpm 10.16.0", "configure msw playwright secrets", "check-commerce-secrets guardrail", "vault env.local"] },
+      { slug: "running-and-debugging-locally", title: "Running & Debugging Locally", order: 16, estimatedMinutes: 55, tags: ["execution", "runbook", "dev", "ssl-proxy", "local-flex"], keywords: ["dev:commerce brand ports", "ssl proxy wcs local hostnames", "integration mode NEXT_PUBLIC_API_MOCKING", "local flex traffic director edge 3200", "WITH_TRAFFIC_DIRECTOR assets prefix", "debugging techniques"] },
+      { slug: "running-tests-and-checks", title: "Running Tests & Checks", order: 17, estimatedMinutes: 50, tags: ["execution", "runbook", "testing", "validation"], keywords: ["test:commerce:jest", "test:commerce:playwright headless", "test:commerce-base:coverage", "lint lint:type-check:all", "validation ladder", "pre-PR gate"] },
+      { slug: "signup-auth-flow", title: "D+ Sign-Up & Auth Flow", order: 18, estimatedMinutes: 50, tags: ["identity", "sign-up", "auth", "xstate", "flows"], keywords: ["create-account machine", "login machine passwordless OTP", "identity v5 sdk sparrow edna", "identity/loading navigation redirect handlers", "useBillingRedirects DOB review-and-accept", "subscriber-agreement forced regional review", "license plate begin start"] },
+      { slug: "dplus-purchase-flow", title: "D+ Purchase & Checkout Flow", order: 19, estimatedMinutes: 50, tags: ["commerce", "checkout", "flows", "billing", "regional"], keywords: ["plans fork selectPlanSelectCadence selectPlanSignup", "cadence billing frequency L4L", "billing checkout guards BILLING_REDIRECT", "SIGNUP_SUCCESS vs signupExecutionV2 attempts outcomes", "review-subscription regulatory DE FR AR TR", "purchase completes per market", "review-and-accept vs review-subscription naming trap", "success purchaseSuccess license plate activation"] },
+      { slug: "espn-signup-flow", title: "ESPN Signup Flow (Web)", order: 20, estimatedMinutes: 30, tags: ["espn", "signup", "flows", "datadog", "rum"], keywords: ["contextualization traffic cop espn takeover", "plan cards plus.espn.com espn-nexus", "MyDisney login conditional", "SIGNUP_SUCCESS espn checkout ledger", "wpnx-ESPN-Generic-Entry-Plan-Order", "spg-pqf-s6u monitoring template", "observability boundaries nexus no experiments", "partner activation TVE scope"] },
+    ],
+    learningPath: [
+      "what-is-commerce-base",
+      "monorepo-and-multi-tenancy",
+      "page-flow-and-layouts",
+      "commerce-base-and-flex",
+      "data-interface-pattern",
+      "react-query-server-state",
+      "dictionary-and-i18n",
+      "jotai-atoms-and-hydration",
+      "xstate-flows",
+      "signup-auth-flow",
+      "dplus-purchase-flow",
+      "espn-signup-flow",
+      "region-and-globalization",
+      "feature-flags",
+      "experiments-weaponx",
+      "testing-standards",
+      "dev-build-tooling",
+      "mastery-capstone",
+      "local-setup-and-onboarding",
+      "running-and-debugging-locally",
+      "running-tests-and-checks",
+    ],
+    groups: [
+      {
+        id: "cb-foundations",
+        title: "Path 1 — Foundations & Architecture",
+        description:
+          "The mental model: what commerce-base (CUP V2) is, how it serves three brands from one monorepo, how a page loads through the GSSP → getPageLayout → hydration pipeline, and how it relates to the Flex server-driven-UI BFF.",
+        routeSlugs: [
+          "what-is-commerce-base",
+          "monorepo-and-multi-tenancy",
+          "page-flow-and-layouts",
+          "commerce-base-and-flex",
+        ],
+      },
+      {
+        id: "cb-data-rendering",
+        title: "Path 2 — Data & Rendering",
+        description:
+          "How data moves: the brand-agnostic data-interface pattern, React Query server state and its conventions, and the dictionary/i18n system that turns cypher keys into localized copy.",
+        routeSlugs: [
+          "data-interface-pattern",
+          "react-query-server-state",
+          "dictionary-and-i18n",
+        ],
+      },
+      {
+        id: "cb-state",
+        title: "Path 3 — State Management",
+        description:
+          "The two client-state systems: Jotai atoms and the SSR hydration pattern (including the client-navigation staleness trap), and XState machines for branching multi-step flows.",
+        routeSlugs: ["jotai-atoms-and-hydration", "xstate-flows", "signup-auth-flow", "dplus-purchase-flow", "espn-signup-flow"],
+      },
+      {
+        id: "cb-region-flags-experiments",
+        title: "Path 4 — Region, Flags & Experiments",
+        description:
+          "The levers of a multi-region, experiment-driven product: region and globalization, the two feature-flag systems, and the WeaponX experiment lifecycle from flag to productionalized business rule.",
+        routeSlugs: [
+          "region-and-globalization",
+          "feature-flags",
+          "experiments-weaponx",
+        ],
+      },
+      {
+        id: "cb-mastery",
+        title: "Path 5 — Testing, Tooling & Mastery",
+        description:
+          "The professional layer: the 100%-coverage testing standards with MSW, the pnpm/Turbo dev and build tooling, and a capstone that ties every layer into a debug-by-symptom triage and ticket workflow.",
+        routeSlugs: ["testing-standards", "dev-build-tooling", "mastery-capstone"],
+      },
+      {
+        id: "cb-execution",
+        title: "Path 6 — Running & Executing the Project",
+        description:
+          "The hands-on runbook: provision your machine and get a brand running from a clean clone, run and debug locally (ports, SSL proxy, MSW mocking, and against a local Flex BFF), and validate a change end-to-end with the right tests, checks, and pre-PR gate.",
+        routeSlugs: [
+          "local-setup-and-onboarding",
+          "running-and-debugging-locally",
+          "running-tests-and-checks",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "datadog-mastery",
+    category: "platform-ops",
+    title: "Datadog Mastery",
+    description:
+      "Master Datadog from observability fundamentals to production operations. The Agent, metrics, tagging, dashboards, monitors, log management, APM and distributed tracing, infrastructure and container monitoring, synthetics, RUM, and the query and SLO patterns engineers rely on to run real systems.",
+    version: "1.0.0",
+    icon: "🐶",
+    accentColor: "#632ca6",
+    moduleCount: 24,
+    totalHours: 16.8,
+    comingSoon: false,
+    routes: [
+      {
+        slug: "observability-and-datadog-fundamentals",
+        title: "Observability & Datadog Fundamentals",
+        order: 0,
+        estimatedMinutes: 30,
+        tags: ["datadog", "observability", "fundamentals"],
+        keywords: ["observability", "three pillars", "metrics logs traces", "monitoring vs observability", "MELT", "datadog platform", "telemetry", "cardinality", "SRE"],
+      },
+      {
+        slug: "the-datadog-agent",
+        title: "The Datadog Agent",
+        order: 1,
+        estimatedMinutes: 35,
+        tags: ["datadog", "agent", "integrations"],
+        keywords: ["datadog agent", "datadog.yaml", "integrations", "checks", "autodiscovery", "dogstatsd", "agent commands", "datadog-agent status", "conf.d", "cluster agent"],
+      },
+      {
+        slug: "metrics-and-dogstatsd",
+        title: "Metrics & DogStatsD",
+        order: 2,
+        estimatedMinutes: 40,
+        tags: ["datadog", "metrics", "dogstatsd"],
+        keywords: ["metric types", "count", "gauge", "rate", "histogram", "distribution", "set", "custom metrics", "dogstatsd", "statsd", "metric submission", "cardinality", "rollup", "as_count", "as_rate"],
+      },
+      {
+        slug: "tagging-strategy",
+        title: "Tagging Strategy",
+        order: 3,
+        estimatedMinutes: 30,
+        tags: ["datadog", "tags", "unified-service-tagging"],
+        keywords: ["tags", "unified service tagging", "env", "service", "version", "reserved tags", "tag cardinality", "DD_TAGS", "host tags", "tag key value", "filtering", "group by"],
+      },
+      {
+        slug: "dashboards-and-visualization",
+        title: "Dashboards & Visualization",
+        order: 4,
+        estimatedMinutes: 35,
+        tags: ["datadog", "dashboards", "widgets"],
+        keywords: ["timeboard", "screenboard", "dashboard", "widget", "timeseries", "top list", "heatmap", "template variables", "notebooks", "powerpack", "dashboard as code", "terraform dashboard"],
+      },
+      {
+        slug: "monitors-and-alerting",
+        title: "Monitors & Alerting",
+        order: 5,
+        estimatedMinutes: 40,
+        tags: ["datadog", "monitors", "alerting"],
+        keywords: ["monitor", "metric monitor", "anomaly monitor", "outlier", "forecast", "composite monitor", "threshold", "evaluation window", "notification", "downtime", "muting", "SLO", "alert fatigue", "no data", "recovery threshold"],
+      },
+      {
+        slug: "log-management",
+        title: "Log Management",
+        order: 6,
+        estimatedMinutes: 45,
+        tags: ["datadog", "logs", "pipelines"],
+        keywords: ["log management", "log pipeline", "grok parser", "processors", "log indexes", "retention", "facets", "log-based metrics", "exclusion filter", "logging without limits", "log rehydration", "attributes", "reserved attributes", "sensitive data scanner"],
+      },
+      {
+        slug: "apm-and-distributed-tracing",
+        title: "APM & Distributed Tracing",
+        order: 7,
+        estimatedMinutes: 45,
+        tags: ["datadog", "apm", "tracing"],
+        keywords: ["APM", "distributed tracing", "span", "trace", "service map", "instrumentation", "dd-trace", "auto-instrumentation", "trace analytics", "span tags", "continuous profiler", "trace log correlation", "flame graph", "sampling", "resource", "latency p99"],
+      },
+      {
+        slug: "infrastructure-and-containers",
+        title: "Infrastructure & Container Monitoring",
+        order: 8,
+        estimatedMinutes: 40,
+        tags: ["datadog", "infrastructure", "kubernetes"],
+        keywords: ["infrastructure monitoring", "host map", "process monitoring", "containers", "kubernetes", "cluster agent", "cloud integrations", "AWS integration", "GCP", "Azure", "network performance monitoring", "NPM", "live containers", "orchestrator explorer"],
+      },
+      {
+        slug: "synthetics-and-rum",
+        title: "Synthetic Monitoring & RUM",
+        order: 9,
+        estimatedMinutes: 35,
+        tags: ["datadog", "synthetics", "rum"],
+        keywords: ["synthetic monitoring", "API test", "browser test", "multistep", "private location", "RUM", "real user monitoring", "session replay", "error tracking", "core web vitals", "frontend monitoring", "user journey"],
+      },
+      {
+        slug: "rum-frustration-signals-and-user-experience",
+        title: "RUM Frustration Signals & User Experience",
+        order: 10,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "frustration-signals", "user-experience"],
+        keywords: ["frustration signals", "rage click", "dead click", "error click", "session.frustration.count", "action.frustration.type", "data-dd-action-name", "actionNameAttribute", "trackUserInteractions", "action naming", "frustration monitor", "session replay sampling", "user experience SLI"],
+      },
+      {
+        slug: "query-slos-and-best-practices",
+        title: "Query Language, SLOs & Best Practices",
+        order: 11,
+        estimatedMinutes: 40,
+        tags: ["datadog", "query", "slo"],
+        keywords: ["metric query", "query language", "functions", "arithmetic", "space aggregation", "time aggregation", "SLO", "error budget", "burn rate", "incident management", "watchdog", "cost optimization", "custom metrics cost", "best practices"],
+      },
+      {
+        slug: "experiment-monitoring-dashboards",
+        title: "Experiment Monitoring Dashboards (GREAT-1131)",
+        order: 12,
+        estimatedMinutes: 35,
+        tags: ["datadog", "rum", "dashboards", "experiment"],
+        keywords: ["experiment monitoring", "RUM dashboard", "feature flag tracking", "addFeatureFlagEvaluation", "@feature_flags", "control vs treatment", "variant breakdown", "facets", "measures", "template variables", "regional variations", "GREAT-1131", "D+ signup", "email screen", "CUP app", "XD team"],
+      },
+      {
+        slug: "signup-email-screen-case-study",
+        title: "Case Study: D+ Signup Email Screen Widgets",
+        order: 13,
+        estimatedMinutes: 35,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1131", "email screen widgets", "views by variant", "signup progression funnel", "new accounts", "noise-filtered errors", "error source filter", "modal accepts", "triangulation", "p75 loading time", "identity pages", "actionKey gap", "template clone", "variant facet", "wpnx-web-identity-email-error-reduction"],
+      },
+      {
+        slug: "subscriber-agreement-case-study",
+        title: "Case Study: Subscriber Agreement & the Flow-Level Restructure",
+        order: 14,
+        estimatedMinutes: 55,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1132", "subscriber agreement", "consent page", "billing guards", "DOB review-and-accept", "requiresForcedSubscriberAgreement", "requiresActiveReview re-acceptance", "Sparrow config", "anchor market Brazil", "crash-test dummy example experiment", "flow-level restructure", "route-level funnel", "variantId split", "localized click names", "CONCORDAR E CONTINUAR", "noise filter error source", "MISSING_CYPHER_KEY_IN_DICTIONARY", "p75", "donor widget"],
+      },
+      {
+        slug: "template-architecture",
+        title: "The Template Architecture — Intent, Design & Plumbing",
+        order: 15,
+        estimatedMinutes: 60,
+        tags: ["datadog", "rum", "dashboards", "architecture"],
+        keywords: ["template architecture", "template per flow", "clone lifecycle", "dashboards as code", "pup CLI", "base plugins", "datadog browser-rum SDK", "solo observe", "trackUserInteractions", "sessionSampleRate sampling", "setGlobalContextProperty experiments", "variant facet grammar", "Glimpse vs RUM", "one question per section", "conventions intent", "crash-test dummy", "anchor market", "noise filter", "validate facets", "backup before update", "template family XD Experimentation", "GREAT-1129"],
+      },
+      {
+        slug: "password-screen-case-study",
+        title: "Case Study: D+ Signup Password Screen Widgets",
+        order: 16,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1133", "password screen", "create-password", "signup vs login branch", "bucket truncation false zero", "bucket sum check", "anchor market Canada", "l4l-suf-canada-mvp three arms", "anchor equals experiment market", "custom action vs click", "registration call successful", "server-confirmed outcomes", "localized click trap", "funnel create-password to plans", "commerce plans", "missing-info DOB", "noise filter", "pc75 nanoseconds", "header contract renumbering", "low volume time window"],
+      },
+      {
+        slug: "dob-screen-case-study",
+        title: "Case Study: D+ Signup Date of Birth Widgets",
+        order: 17,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1134", "date of birth", "DOB page", "missing-info route", "page proves own identity", "click on Birthdate", "US only 98.9", "regional variations sheet", "referrer sampling mainline", "billing guard redirect", "login missing-info sibling", "stamp coverage trap", "stamped views vs stamped actions", "commerce experiments assign late", "identity experiment coverage", "passwordless login example", "empty control caveat", "EN ES OR click copies", "Guardar cambios", "saves exceed views retries", "funnel referrer masking identity start", "session sequence funnel", "flow order correction", "header table transpose debt"],
+      },
+      {
+        slug: "plan-select-case-study",
+        title: "Case Study: D+ Signup Plan Select Widgets",
+        order: 18,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1135", "plan select", "commerce plans", "overlap welcome back template", "duplication by design", "template per flow", "first commerce page", "actionKey", "selectPlanSelectCadence", "selectPlanSignup", "CTA path fork widget", "cadence vs direct", "LATAM heavy US anchor", "divider regional disclosure", "payment-event-details 50 50", "stamp coverage shape proportional", "funnel label lied", "A then eventually B", "all paths relabel", "direct by subtraction", "identical p75 perf neutral", "header table transpose sections as rows", "drag incident layout restore"],
+      },
+      {
+        slug: "billing-case-study",
+        title: "Case Study: D+ Signup Billing Widgets",
+        order: 19,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1136", "billing", "checkout", "conversion moment", "journey slot gate catch", "billing after subscriber agreement", "SIGNUP_SUCCESS", "signupExecutionV2 attempts vs outcomes", "decline retry gap", "EMEA purchases complete review-subscription", "anchor encodes market flow", "payment-event-details semantic home", "99.3 percent stamped", "coverage shapes trilogy proportional skewed inverted", "BILLING_REDIRECT guard", "changeTemplate payment method switch", "PayPal branch", "741k errors ranking is the product", "exclude missing group by", "Apple Pay session error", "billing to success funnel", "heavy p75 payment SDKs", "shared experiment key find replace"],
+      },
+      {
+        slug: "purchase-confirmation-case-study",
+        title: "Case Study: D+ Signup Purchase Confirmation Widgets",
+        order: 20,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1137", "purchase confirmation", "review-subscription", "regulatory confirmation page", "explicit order button law", "Zahlungspflichtig bestellen", "Germany France Argentina Turkey", "not EMEA LATAM", "regional label hypothesis", "perfect bucket sum reconciliation", "Germany anchor", "naming trap review-and-accept vs review-subscription", "purchase completes per market", "Lastschrift direct debit", "Braintree PayPal", "lilo stitch interstitial experiment", "proportional coverage", "free slot packing zero shifts", "billing caveat precision fix", "precision propagates"],
+      },
+      {
+        slug: "success-screen-case-study",
+        title: "Case Study: D+ Signup Success Screen — Completing the Template",
+        order: 21,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1138", "success screen", "journey end", "capstone", "template complete", "disambiguation", "purchaseSuccess fresh arrivals vs revisits", "all purchase flows land here", "no funnel deviation", "considered and rejected", "START STREAMING different service", "TV license plate activation on success page", "ACTIVATE_LICENSE_PLATE_SUCCESS", "third section same key", "find replace commerce chain", "identical p75 twice perf neutral", "occupancy asserts rectangle intersection", "52 widgets final structure", "eight sections five anchors", "cadence gap teammate ticket"],
+      },
+      {
+        slug: "espn-reconnects-board-design",
+        title: "Case Study: ESPN Reconnects Board — Design & Build Plan",
+        order: 22,
+        estimatedMinutes: 45,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1156", "ESPN welcome back", "reconnects", "restart subscription", "pending cancel undo", "board 3jx-75k-inx", "dark page verified", "flag off every environment", "enableCommerceUnifiedWelcomeBack", "missing cypher WB copy keys", "Hulu pivot precedent", "seven section skeleton", "wpnx-ESPN-Generic-Entry-Plan-Order example key", "93.6 percent stamp coverage", "WeaponX nested variantId facet", "structural commit POST execution restart", "localized CTA Aceptar y suscribirse", "no pause on ESPN", "commerce subscription third entry", "30 day window low volume", "cypher live bug 1773"],
+      },
+      {
+        slug: "espn-ips-upsells-flow-and-board",
+        title: "Case Study: ESPN In-Product Switch (Upsells) — Flow Anatomy & Board Design",
+        order: 23,
+        estimatedMinutes: 50,
+        tags: ["datadog", "rum", "dashboards", "case-study"],
+        keywords: ["case study", "GREAT-1159", "in-product switch", "IPS", "upsells", "board x5n-qhe-qqh", "ESPN has no IPS screen", "unlock dead route error page", "change-subscription flow", "plan-switch v2", "execution v3 subscription switch", "device paywall chain", "espn paywall 14.8M", "espn device-ledger FLAGSHIP_STANDALONE", "app-store IAP invisible to Flex", "storage tier flex logs trap", "indexes empty no storage field", "CLI validates widget renders", "limit alphabetical truncation referrer", "missing copy 1.39M", "owner table excl missing-copy", "mixed paywall population", "account-initiated switch D+ deviation", "scope decision without PM"],
+      },
+    ],
+    learningPath: [
+      "observability-and-datadog-fundamentals",
+      "the-datadog-agent",
+      "metrics-and-dogstatsd",
+      "tagging-strategy",
+      "dashboards-and-visualization",
+      "monitors-and-alerting",
+      "log-management",
+      "apm-and-distributed-tracing",
+      "infrastructure-and-containers",
+      "synthetics-and-rum",
+      "rum-frustration-signals-and-user-experience",
+      "query-slos-and-best-practices",
+      "experiment-monitoring-dashboards",
+      "signup-email-screen-case-study",
+      "subscriber-agreement-case-study",
+      "template-architecture",
+      "password-screen-case-study",
+      "dob-screen-case-study",
+      "plan-select-case-study",
+      "billing-case-study",
+      "purchase-confirmation-case-study",
+      "success-screen-case-study",
+      "espn-reconnects-board-design",
+      "espn-ips-upsells-flow-and-board",
+    ],
+    groups: [
+      {
+        id: "datadog-foundations",
+        title: "Observability Foundations",
+        description:
+          "The three pillars, the Agent, how metrics are collected and submitted, and the tagging strategy that makes every other feature work.",
+        routeSlugs: [
+          "observability-and-datadog-fundamentals",
+          "the-datadog-agent",
+          "metrics-and-dogstatsd",
+          "tagging-strategy",
+        ],
+      },
+      {
+        id: "datadog-visualize-alert",
+        title: "Visualize & Alert",
+        description:
+          "Turn telemetry into dashboards people actually read, and monitors that page the right person at the right time without alert fatigue.",
+        routeSlugs: ["dashboards-and-visualization", "monitors-and-alerting"],
+      },
+      {
+        id: "datadog-telemetry",
+        title: "Logs, Traces & Infrastructure",
+        description:
+          "The deep telemetry surfaces: log pipelines, distributed tracing with APM, container and cloud infrastructure monitoring, frontend synthetics and RUM, and the frustration signals that measure felt user experience.",
+        routeSlugs: [
+          "log-management",
+          "apm-and-distributed-tracing",
+          "infrastructure-and-containers",
+          "synthetics-and-rum",
+          "rum-frustration-signals-and-user-experience",
+        ],
+      },
+      {
+        id: "datadog-operate",
+        title: "Operating Datadog",
+        description:
+          "The query language internals, SLOs, incident management, Watchdog, and the cost and best-practice patterns senior engineers are expected to own.",
+        routeSlugs: ["query-slos-and-best-practices"],
+      },
+      {
+        id: "datadog-applied",
+        title: "Applied: On-the-Job Tickets",
+        description:
+          "Focused, task-specific playbooks mapped to real assigned work on the D+ Signup dashboard epic (GREAT-1129): RUM experiment-monitoring concepts, the Email Screen build (GREAT-1131), the Subscriber Agreement build plus flow-level restructure (GREAT-1132), the page-build case studies through the Success capstone (GREAT-1133–1138), and the family's next boards — the ESPN Reconnects design record (GREAT-1156) and the ESPN In-Product Switch (Upsells) flow anatomy and board (GREAT-1159).",
+        routeSlugs: ["experiment-monitoring-dashboards", "signup-email-screen-case-study", "subscriber-agreement-case-study", "template-architecture", "password-screen-case-study", "dob-screen-case-study", "plan-select-case-study", "billing-case-study", "purchase-confirmation-case-study", "success-screen-case-study", "espn-reconnects-board-design", "espn-ips-upsells-flow-and-board"],
+      },
+    ],
+  },
+  {
+    slug: "server-driven-ui-lab",
+    category: "disney",
+    title: "Server-Driven UI Lab",
+    description:
+      "Build and understand a server-driven UI backend from zero, mirroring Disney's Flex architecture at a scale small enough to hold in your head. One screen, one service, every file read in full — the request lifecycle, the wire contract, the Raw→Domain conversion boundary, per-surface templates, graceful degradation, and a side-by-side comparison with growth-life-client-api.",
+    version: "1.0.0",
+    icon: "\u{1F9E9}",
+    accentColor: "#5eead4",
+    moduleCount: 11,
+    totalHours: 8.5,
+    comingSoon: false,
+    learningPath: [
+      "what-we-are-building",
+      "request-lifecycle",
+      "the-wire-contract",
+      "unknown-types-and-degradation",
+      "the-conversion-boundary",
+      "the-service-layer",
+      "templates-and-fill",
+      "route-middleware-and-context",
+      "the-client-renderer",
+      "the-element-registry",
+      "flex-side-by-side",
+    ],
+    routes: [
+      { slug: "what-we-are-building", title: "What We Are Building & Why", order: 0, estimatedMinutes: 35, tags: ["foundations", "architecture", "sdui", "flex"], keywords: ["server-driven ui", "two clients web and tui", "why sdui earns its cost", "mirror the skeleton own the muscles", "decision log falsifiable", "capability divergence vs version skew"] },
+      { slug: "request-lifecycle", title: "The Request Lifecycle, End to End", order: 1, estimatedMinutes: 45, tags: ["foundations", "koa", "pipeline", "layers"], keywords: ["middleware route context handler service", "ledgerContextRouteHandler", "Promise.all parallel fetching", "layer responsibilities must never", "error to status mapping 502", "template fill"] },
+      { slug: "the-wire-contract", title: "The Wire Contract: Elements, Copy & Tokens", order: 2, estimatedMinutes: 50, tags: ["contract", "elements", "design-tokens", "i18n"], keywords: ["TextElement RowElement ListElement", "copyText variables interpolation", "presentational tokens vs semantic roles", "bounded vs unbounded vocabulary", "named slots not ordered array", "stable element ids"] },
+      { slug: "unknown-types-and-degradation", title: "Unknown Element Types & Version Skew", order: 3, estimatedMinutes: 45, tags: ["contract", "resilience", "versioning", "degradation"], keywords: ["drop and log", "UNSUPPORTED_TYPE_FROM_FLEX", "version skew permanent steady state", "WireElement type string", "closed union open runtime never", "duplicated types no shared package"] },
+      { slug: "the-conversion-boundary", title: "The Conversion Boundary: Raw → Domain", order: 4, estimatedMinutes: 50, tags: ["pipeline", "types", "conversion", "anti-corruption"], keywords: ["RawAccount DomainAccount", "toDomainAccount pure function", "parseMinorUnits strict integer", "no-restricted-imports eslint enforced", "Money amountMinor never float", "mock the client not the wrapper"] },
+      { slug: "the-service-layer", title: "The Service Layer & buildSlots", order: 5, estimatedMinutes: 50, tags: ["pipeline", "services", "orchestration"], keywords: ["buildAccountDetailsScreen", "buildSlots no surface argument", "surface vs regionConfig axis", "element builders toTextElement", "formatMoney Intl minor units", "isPartnerESPN leak pattern"] },
+      { slug: "templates-and-fill", title: "Templates, Slot Markers & Per-Surface Output", order: 6, estimatedMinutes: 50, tags: ["pipeline", "templates", "surfaces"], keywords: ["$slot marker plain json", "fillTemplate three outcomes", "loadTemplate hard failure", "templateId screen surface variant", "EJS stripQuotesFromObjects SiteConfig", "layout holes per-surface templates"] },
+      { slug: "route-middleware-and-context", title: "Route, Middleware & LedgerContext", order: 7, estimatedMinutes: 55, tags: ["pipeline", "koa", "validation", "context"], keywords: ["Joi unknown true", "x-client-surface trusted upstream", "StandardHeaders silent coercion", "LedgerContext regionConfig featureSet", "statusFor 404 502 500", "higher-order function returns middleware", "ctx.state untyped hole dependency injection", "flexContextRouteHandler analogue"] },
+      { slug: "the-client-renderer", title: "The Client Renderer: A Browser for Your Vocabulary", order: 8, estimatedMinutes: 45, tags: ["clients", "react", "rendering", "web"], keywords: ["vocabulary client vs hardcoded pages", "browser analogy unknown tags", "App.tsx Object.entries content loop", "x-client-surface fetch header", "renderCopy placeholder visible", "styleClass token to css 001a"] },
+      { slug: "the-element-registry", title: "The Element Registry & Graceful Degradation", order: 9, estimatedMinutes: 45, tags: ["clients", "registry", "resilience", "degradation"], keywords: ["ELEMENT_REGISTRY type to view dictionary", "RenderElement lookup or skip", "001b drop and log running code", "nested rows back through registry", "blast radius 502 vs dropped element", "deliberate breakage sparkline exercise"] },
+      { slug: "flex-side-by-side", title: "Side by Side with Flex", order: 10, estimatedMinutes: 40, tags: ["comparison", "flex", "disney", "mastery"], keywords: ["growth-life-client-api mapping table", "deliberate divergence log", "espn route grep trap", "reproduce constraints not workarounds", "what flex has that this does not", "how to read flex now"] },
+    ],
+    groups: [
+      {
+        id: "foundations",
+        title: "Path 1 — Foundations",
+        description:
+          "What the system is, why server-driven UI earns its complexity here, and the full path a request travels through every layer.",
+        routeSlugs: ["what-we-are-building", "request-lifecycle"],
+      },
+      {
+        id: "contract",
+        title: "Path 2 — The Contract",
+        description:
+          "What travels on the wire, why copy is an object rather than a string, and what happens when a client meets an element type it has never seen.",
+        routeSlugs: ["the-wire-contract", "unknown-types-and-degradation"],
+      },
+      {
+        id: "pipeline",
+        title: "Path 3 — The Backend Pipeline",
+        description:
+          "Every layer of the server, line by line: the conversion boundary, the service, template resolution and fill, and the Koa entry points.",
+        routeSlugs: [
+          "the-conversion-boundary",
+          "the-service-layer",
+          "templates-and-fill",
+          "route-middleware-and-context",
+        ],
+      },
+      {
+        id: "clients",
+        title: "Path 4 — The Clients",
+        description:
+          "The other half of the contract: a web renderer that knows vocabulary instead of screens, the element registry where drop-and-log becomes running code, and the deliberate-breakage exercise that proves it.",
+        routeSlugs: ["the-client-renderer", "the-element-registry"],
+      },
+      {
+        id: "comparison",
+        title: "Path 5 — Against the Real Thing",
+        description:
+          "Every layer mapped onto growth-life-client-api, with each deliberate divergence and the constraint that justified it.",
+        routeSlugs: ["flex-side-by-side"],
+      },
+    ],
+  },
+  {
+    slug: "hulu-architecture",
+    category: "disney",
+    title: "Hulu Architecture",
+    description:
+      "Zero-to-hero on Hulu inside Disney's streaming stack: the Hulu commerce app in cgi-web, the Flex BFF partner branching (isPartnerHulu everywhere), Hulu's own auth (IDM/Edna, _hulu_at cookies), its own experimentation platform (Spearmint vs WeaponX), its own analytics (HITS), legacy vs ACP subscriptions, One Hulu product context, feature flags, and how to develop and QA Hulu flows locally — all traced to real code.",
+    version: "1.0.0",
+    icon: "💚",
+    accentColor: "#1ce783",
+    moduleCount: 15,
+    totalHours: 11,
+    comingSoon: false,
+    routes: [
+      { slug: "what-is-hulu-in-the-disney-stack", title: "What Is Hulu in the Disney Stack", order: 0, estimatedMinutes: 40, tags: ["foundations", "architecture", "one-hulu", "acp", "history"], keywords: ["one hulu acp account consolidation", "legacy hulu vs unified d2c", "four first-class partners disney hulu espn star", "HULU_ENV historical artifact", "glo.staging.hulu.com infra origins", "hulu.com secure.hulu.com domains", "cgi-web apps commerce hulu", "growth-life-client-api flex bff"] },
+      { slug: "hulu-partner-detection-and-context", title: "Partner Detection & Hulu Context", order: 1, estimatedMinutes: 40, tags: ["foundations", "flex", "headers", "partner", "flexcontext"], keywords: ["x-bamtech-partner edge header", "Partner union type PARTNERS map", "isPartnerHulu 140 call sites", "x-hulu-device-capabilities", "x-disney-identity-hulu-legacy-device-id", "setValidPartner disney fallback", "standardHeaders flexContext", "isPartnerHuluStandardHeaders"] },
+      { slug: "hulu-products-plans-and-skus", title: "Hulu Products, Plans & SKUs", order: 2, estimatedMinutes: 45, tags: ["foundations", "domain-model", "skus", "bundles", "acp"], keywords: ["HULU_PRODUCT_IDS HULU_ADS HULU_NO_ADS", "extra member product ids", "HULU_STANDALONE HULU_LIVETV offer types", "HYBRID_BUNDLE hulu basic disney premium", "package cohorts hulu_basic hulu_premium", "isLegacyHuluSubscription source type HULU", "ACCOUNT_HOME_ALLOWED_AGREEMENT_SOURCE_TYPES", "agreementSortForHulu labels hulu"] },
+      { slug: "hulu-commerce-app-anatomy", title: "Hulu Commerce App Anatomy", order: 3, estimatedMinutes: 45, tags: ["cgi-web", "commerce", "nextjs", "monorepo", "routes"], keywords: ["apps commerce hulu solo commerce-hulu", "pages router page.tsx cup v2", "local.huluqa.com 5003 proxy 5030", "PRODUCT=hulu inline dev script", "hulu-layout.tsx analytics auth wiring", "commerce-base shared three brands", "route inventory plans billing cancel account", "no welcome-back route for hulu"] },
+      { slug: "hulu-identity-and-auth", title: "Hulu Identity & Auth", order: 4, estimatedMinutes: 40, tags: ["cgi-web", "identity", "auth", "cookies", "idm"], keywords: ["_hulu_at _hulu_session cookies", "generate_anonymous_token hulu edge", "EnsureHuluAuthToken blocks render", "identity-hulu web-login-ui package", "IDM Edna login-modal contract", "UnifiedCreateAccount partner hulu subpartner web", "no bam sdk session no oneid", "credentials include flex fetch"] },
+      { slug: "hulu-flex-integration", title: "Hulu ↔ Flex Integration", order: 5, estimatedMinutes: 45, tags: ["cgi-web", "flex", "server-driven-ui", "data-interface"], keywords: ["data-interface-hulu getFlexScreen", "flexScreenKeysToUrls landingPlans accountDetails", "screens v1 hulu account-home mapping", "react query dataInterfaceAtom jotai", "isFlexRedirect navigation", "FlexText FlexInteraction TextWithVariables", "cypher dictionary copy resolution client", "buildHuluDataInterface hydrate"] },
+      { slug: "hulu-signup-flow-end-to-end", title: "Hulu Signup Flow (SUF) End to End", order: 6, estimatedMinutes: 45, tags: ["cgi-web", "suf", "signup", "checkout", "hits"], keywords: ["plans billing purchase success sequence", "hitsFlowName query param suf_web_one_hulu", "suf_web_default fallback getFlowName", "landingPlans flex screen fetch", "identity sign-up edna create account", "no welcome-back for hulu suf reentry", "subscription_start page_impression hits events", "use-billing-hits-payloads"] },
+      { slug: "hulu-screens-in-flex", title: "Hulu Screens in Flex", order: 7, estimatedMinutes: 50, tags: ["flex", "screens", "account-home", "plan-switch", "templates"], keywords: ["screens v1 hulu account-home plan-switch routes", "accountHomeService 3759 lines", "huluPrioritizedAddonsPackageIds sort", "planSwitchOfferCardTermsModalBuilder", "getScreenDataWithPartner partner keyed merge", "hulu cypher keys ledger_hulu_consent", "unified-commerce shared dictionaries", "huluUnlimitedPriceIncreasePipeline message"] },
+      { slug: "hulu-in-shared-screens", title: "Hulu in Shared Screens & Platform Migration", order: 8, estimatedMinutes: 45, tags: ["flex", "shared-screens", "platform-migration", "branching"], keywords: ["isPartnerHulu branch density table", "success mlp-welcome vs welcome-back", "cancel flow ledger ips ooh branches", "accountDetailsService 107 hulu hits", "platform assemblies mirror change both", "migrationConfig migrating status", "planSelectorAssembly parity json", "glo brand header uppercase"] },
+      { slug: "hulu-experimentation-spearmint", title: "Hulu Experimentation: Spearmint (+ WeaponX)", order: 9, estimatedMinutes: 55, tags: ["experiments", "spearmint", "weaponx", "flex", "cgi-web"], keywords: ["spearmint sprmnt- prefix hulu platform", "_hulu_assignments cookie base64 v1 e t n", "x-bamtech-spearmint-assignments header", "mapSpearmintExperiments weaponx shape", "getExperimentTreatment uniform detection", "five active sprmnt-GREAT experiments", "useSpearmintExperiment copy overrides __exp__", "mystique sdk disabled for hulu fallback flags"] },
+      { slug: "hulu-feature-flags", title: "Hulu Feature Flags", order: 10, estimatedMinutes: 40, tags: ["feature-flags", "launchdarkly", "sparrow", "config"], keywords: ["six hulu launchdarkly flags flex", "enable-legacy-hulu-subscription-details", "enable-bundle-hulu-login-on-success", "enable-bundle-hulu-activation-bypass", "useCommerceFeatureFlag region inheritance", "commerceAppConfig sparrow no launchdarkly client", "parentCountry territory flags", "getFeatureFlagValue flex getter pattern"] },
+      { slug: "hulu-analytics-hits-tealium-adobe", title: "Hulu Analytics: HITS, Tealium & Adobe", order: 11, estimatedMinutes: 45, tags: ["analytics", "hits", "tealium", "adobe", "observability"], keywords: ["hits minerva vortex.hulu.com site-metrics", "hulu-acp app component name", "three trackers simultaneously hulu", "FLOW_NAMES suf_web_hisuf hi_switch", "hulu gated tealium isPartnerHulu", "ooh hits builders hulu only", "onetrust consent gating", "glimpse hits field mapping"] },
+      { slug: "hulu-local-dev-and-qa", title: "Hulu Local Dev & QA", order: 12, estimatedMinutes: 40, tags: ["local-dev", "qa", "curl", "testing", "runbook"], keywords: ["npm run local flex 3200 HULU_ENV", "pnpm dev commerce hulu 5003", "curl x-bamtech-partner hulu recipes", "force spearmint weaponx assignments base64", "createMockFlexContext experimentation tests", "staging edge qa-disney bamgrid", "jest HULU_ENV=ci trap", "PRODUCT env fixture trap"] },
+      { slug: "hulu-mastery-capstone", title: "Hulu Mastery Capstone", order: 13, estimatedMinutes: 55, tags: ["capstone", "triage", "debugging", "architecture", "checklist"], keywords: ["one page hulu full stack map", "end to end signup trace", "symptom to owning layer table", "spearmint vs weaponx decision guide", "hulu divergence checklist prs", "change both platform legacy duty", "assumption register edges of map", "self assessment by module"] },
+      { slug: "gciex-993-ooh-hard-block-cleanup", title: "Applied: GCIEX-993 — OOH Hard Block Copy Test Cleanup", order: 14, estimatedMinutes: 50, tags: ["applied", "ticket", "pop", "ooh", "spearmint", "cleanup"], keywords: ["GCIEX-993 WEB-33051 cleanup ticket", "POP-Hulu-OOH-Hard-Block-Copy-Test raw feature id", "hardBlockExperimentFeatureIds line 45", "aggressive-passive-tone-hulu variants dataKeys", "device-out-of-household template config both repos", "sibling CYOS emphasized soft block trap", "spearmint prod preflight cleanup vs productionalize", "forced variant before after evidence matrix"] },
+    ],
+    groups: [
+      {
+        id: "hulu-foundations",
+        title: "Path 1 — Foundations & Mental Model",
+        description:
+          "The map before the territory: what Hulu is inside Disney's stack (One Hulu, ACP, legacy), how every request declares itself Hulu via one header, and what is actually being sold — products, SKUs, bundles, and the legacy-vs-D2C subscription split.",
+        routeSlugs: [
+          "what-is-hulu-in-the-disney-stack",
+          "hulu-partner-detection-and-context",
+          "hulu-products-plans-and-skus",
+        ],
+      },
+      {
+        id: "hulu-frontend",
+        title: "Path 2 — The Hulu Frontend (cgi-web)",
+        description:
+          "The Hulu commerce app end to end: its Next.js anatomy and route inventory, Hulu's own cookie-based auth and IDM/Edna identity stack, the Flex data-interface boundary, and the real signup flow screen by screen.",
+        routeSlugs: [
+          "hulu-commerce-app-anatomy",
+          "hulu-identity-and-auth",
+          "hulu-flex-integration",
+          "hulu-signup-flow-end-to-end",
+        ],
+      },
+      {
+        id: "hulu-flex-server",
+        title: "Path 3 — Hulu Inside Flex (growth-life-client-api)",
+        description:
+          "The server side: the two Hulu-only routes and the Account Home service, the partner-keyed template data merge, Hulu cypher keys — and the far bigger surface of shared screens where isPartnerHulu branches live twice (legacy service + platform assembly).",
+        routeSlugs: ["hulu-screens-in-flex", "hulu-in-shared-screens"],
+      },
+      {
+        id: "hulu-levers",
+        title: "Path 4 — Experimentation & Flags",
+        description:
+          "The levers that change Hulu behaviour without a deploy: Spearmint (Hulu's own experiment platform) from cookie to middleware to treatment, why WeaponX/Mystique is inert for Hulu, and the two flag systems (flex LaunchDarkly, cgi-web Sparrow region config).",
+        routeSlugs: ["hulu-experimentation-spearmint", "hulu-feature-flags"],
+      },
+      {
+        id: "hulu-operate",
+        title: "Path 5 — Operate, Observe & Master",
+        description:
+          "Running Hulu in anger: the three simultaneous analytics systems and HITS's special role, the local-dev and QA runbook for both repos including forcing experiment assignments, and a capstone that consolidates every triage path into one map.",
+        routeSlugs: [
+          "hulu-analytics-hits-tealium-adobe",
+          "hulu-local-dev-and-qa",
+          "hulu-mastery-capstone",
+        ],
+      },
+      {
+        id: "hulu-applied",
+        title: "Path 6 — Applied: Ticket Walkthroughs",
+        description:
+          "Real assigned tickets, prepared end to end: requirement, experiment history, UI, exact code touchpoints in both repos, cleanup plan, QA/evidence matrix, and the traps specific to each ticket.",
+        routeSlugs: ["gciex-993-ooh-hard-block-cleanup"],
+      },
+    ],
+    learningPath: [
+      "what-is-hulu-in-the-disney-stack",
+      "hulu-partner-detection-and-context",
+      "hulu-products-plans-and-skus",
+      "hulu-commerce-app-anatomy",
+      "hulu-identity-and-auth",
+      "hulu-flex-integration",
+      "hulu-signup-flow-end-to-end",
+      "hulu-screens-in-flex",
+      "hulu-in-shared-screens",
+      "hulu-experimentation-spearmint",
+      "hulu-feature-flags",
+      "hulu-analytics-hits-tealium-adobe",
+      "hulu-local-dev-and-qa",
+      "hulu-mastery-capstone",
+      "gciex-993-ooh-hard-block-cleanup",
     ],
   },
 ];

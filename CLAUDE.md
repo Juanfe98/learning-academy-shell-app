@@ -406,13 +406,13 @@ Minimum requirements per module:
 - Prefer `<strong>` for key terms on first use; use `<code>` for all identifiers/values
 
 <!-- SPECKIT START -->
-Active feature: **Playground Filter Grid** (`006-playground-filter-grid`)
+Active feature: **Academy Categories & Disney Collection** (`008-categories-disney-collection`)
 
-Implementation plan: `specs/006-playground-filter-grid/plan.md`
+Implementation plan: `specs/008-categories-disney-collection/plan.md`
 
 For technical decisions, component contracts, data model, and developer quickstart, read:
-- `specs/006-playground-filter-grid/research.md`
-- `specs/006-playground-filter-grid/data-model.md`
-- `specs/006-playground-filter-grid/contracts/ui-contracts.md`
-- `specs/006-playground-filter-grid/quickstart.md`
+- `specs/008-categories-disney-collection/research.md`
+- `specs/008-categories-disney-collection/data-model.md`
+- `specs/008-categories-disney-collection/contracts/ui-contracts.md`
+- `specs/008-categories-disney-collection/quickstart.md`
 <!-- SPECKIT END -->

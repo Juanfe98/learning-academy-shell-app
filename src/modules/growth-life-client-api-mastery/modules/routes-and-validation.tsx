@@ -351,6 +351,16 @@ subscription.use('/gift-status', giftStatus.middleware());`}
           fails in CI. Skip the <code>subscription.use(...)</code> mount and every request 404s.
         </p>
       </SolutionReveal>
+      <p>
+        <strong>Want to actually build this?</strong> There&apos;s a local-only Jira-style
+        practice pack that turns this challenge into runnable tickets against the real{" "}
+        <code>growth-life-client-api</code> repo —{" "}
+        <code>challenges/FLEX-PRACTICE-ROUTES-VALIDATION-TICKETS.md</code>. It ramps from a
+        one-param warm-up (<code>GLOW-201</code>) to the full <code>/gift-status</code> screen
+        (<code>GLOW-202</code>) to a V2 POST variant with resource filters and Datadog tags (
+        <code>GLOW-203</code>), each with acceptance criteria and a supertest-based 200/400
+        proof you can run locally.
+      </p>
 
       <h2 id="takeaways">Key Takeaways</h2>
       <ul>

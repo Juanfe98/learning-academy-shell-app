@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   House,
   Map,
+  Castle,
   LayoutDashboard,
   Settings,
   Zap,
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/", label: "Home", icon: House },
   { href: "/paths", label: "Learning Paths", icon: Map },
+  { href: "/spaces/disney", label: "Disney", icon: Castle, matchPrefix: true },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/interview", label: "Interview Prep", icon: BrainCircuit },
   { href: "/playground", label: "Playground", icon: Code2, matchPrefix: true },
