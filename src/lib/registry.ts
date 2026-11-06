@@ -14,6 +14,11 @@ import webComponents from "@/modules/web-components/manifest";
 import designSystems from "@/modules/design-systems/manifest";
 import kubernetesMastery from "@/modules/kubernetes-mastery/manifest";
 import growthLifeClientApiMastery from "@/modules/growth-life-client-api-mastery/manifest";
+import commerceBaseFoundations from "@/modules/commerce-base-foundations/manifest";
+import datadogMastery from "@/modules/datadog-mastery/manifest";
+import espnArchitecture from "@/modules/espn-architecture/manifest";
+import huluArchitecture from "@/modules/hulu-architecture/manifest";
+import serverDrivenUiLab from "@/modules/server-driven-ui-lab/manifest";
 
 export const REGISTRY: AcademyManifest[] = [
   webFundamentals,
@@ -31,6 +36,11 @@ export const REGISTRY: AcademyManifest[] = [
   designSystems,
   kubernetesMastery,
   growthLifeClientApiMastery,
+  commerceBaseFoundations,
+  datadogMastery,
+  espnArchitecture,
+  huluArchitecture,
+  serverDrivenUiLab,
 ];
 
 export function findAcademy(slug: string): AcademyManifest | undefined {

@@ -21,7 +21,7 @@ const manifest: AcademyManifest = {
   version: "1.1.0",
   icon: "🧬",
   accentColor: "#113ccf",
-  totalEstimatedMinutes: 1015,
+  totalEstimatedMinutes: 1210,
   routes: [
     {
       slug: "what-is-growth-life-client-api",
@@ -250,6 +250,26 @@ const manifest: AcademyManifest = {
       component: () => import("./modules/experimentation"),
     },
     {
+      slug: "jafar-testpersona-experiments",
+      title: "Jafar & testPersona Experiments (POP)",
+      order: 20,
+      estimatedMinutes: 45,
+      tags: ["execution", "experiments", "jafar", "testpersona", "pop"],
+      keywords: [
+        "testPersona",
+        "TestPersona type",
+        "Jafar",
+        "getExperienceIdAndPersona",
+        "getExperienceIdAndPersonaForRoadblock",
+        "accountSharingExperienceId",
+        "base64 decode",
+        "pop-experiment-overrides",
+        "mapJafarSDKAssignmentsToWeaponXExperiments",
+        "server-side experiment transport",
+      ],
+      component: () => import("./modules/jafar-testpersona-experiments"),
+    },
+    {
       slug: "platform-migration",
       title: "Platform Migration",
       order: 13,
@@ -373,6 +393,62 @@ const manifest: AcademyManifest = {
       ],
       component: () => import("./modules/context-region-and-eligibility"),
     },
+    {
+      slug: "local-testing-and-the-glo-proxy",
+      title: "Local Testing & the GLO Proxy",
+      order: 21,
+      estimatedMinutes: 45,
+      tags: ["qa-harness", "testing", "proxy", "local", "evidence"],
+      keywords: [
+        "flex-qa-harness",
+        "GLO_BASE_URL",
+        "selective proxy",
+        "passthrough",
+        "PR evidence curl",
+        "states staging cannot produce",
+        "mock the minimum",
+        "port 4300",
+      ],
+      component: () => import("./modules/local-testing-and-the-glo-proxy"),
+    },
+    {
+      slug: "proxy-profiles-and-recording",
+      title: "Proxy Profiles & Recording",
+      order: 22,
+      estimatedMinutes: 50,
+      tags: ["qa-harness", "profiles", "recording", "mutation", "proxy"],
+      keywords: [
+        "server.mjs",
+        "resolveProfileName",
+        "x-qa-profile",
+        "qa-profile account id",
+        "match handle passthrough",
+        "canned vs live mutation",
+        "proxy:record",
+        "recordings",
+        "churned profile",
+      ],
+      component: () => import("./modules/proxy-profiles-and-recording"),
+    },
+    {
+      slug: "case-study-l4l-switch-ledger",
+      title: "Case Study: L4L Switch Ledger (GCIEX-18128)",
+      order: 23,
+      estimatedMinutes: 55,
+      tags: ["qa-harness", "case-study", "l4l", "ledger", "debugging"],
+      keywords: [
+        "GCIEX-18128",
+        "Case 0 baseline Case 1 treatment",
+        "payment guards redirect",
+        "checkout-purchased account",
+        "L4L_EXPIRATION recurringPrice",
+        "termPrice billingFrequency REPEAT_COUNT TOTAL_PRICE",
+        "x-bamtech-weaponx-assignments",
+        "wrong worktree lsof",
+        "billing_standalone_subcopy_2_l4l",
+      ],
+      component: () => import("./modules/case-study-l4l-switch-ledger"),
+    },
   ],
   groups: [
     {
@@ -406,7 +482,12 @@ const manifest: AcademyManifest = {
       title: "Path 3 — Execution, Flags & Experimentation",
       description:
         "The write side and the levers: state-changing action executions, LaunchDarkly feature flags, and the WeaponX experimentation system with the FeatureSet pattern.",
-      routeSlugs: ["action-executions", "feature-flags", "experimentation"],
+      routeSlugs: [
+        "action-executions",
+        "feature-flags",
+        "experimentation",
+        "jafar-testpersona-experiments",
+      ],
     },
     {
       id: "mastery",
@@ -431,6 +512,17 @@ const manifest: AcademyManifest = {
         "context-region-and-eligibility",
       ],
     },
+    {
+      id: "local-qa-harness",
+      title: "Path 6 — Local QA Harness (flex-qa-harness)",
+      description:
+        "How to make your local server render states staging cannot produce: the selective GLO proxy, its profile/recording system, and a full real-ticket case study (GCIEX-18128) from zero-mock baseline to treatment evidence.",
+      routeSlugs: [
+        "local-testing-and-the-glo-proxy",
+        "proxy-profiles-and-recording",
+        "case-study-l4l-switch-ledger",
+      ],
+    },
   ],
   learningPath: [
     "what-is-growth-life-client-api",
@@ -446,6 +538,7 @@ const manifest: AcademyManifest = {
     "action-executions",
     "feature-flags",
     "experimentation",
+    "jafar-testpersona-experiments",
     "platform-migration",
     "testing-standards",
     "build-tooling-and-ci",
@@ -453,6 +546,9 @@ const manifest: AcademyManifest = {
     "caching-and-performance",
     "error-handling-and-resilience",
     "context-region-and-eligibility",
+    "local-testing-and-the-glo-proxy",
+    "proxy-profiles-and-recording",
+    "case-study-l4l-switch-ledger",
   ],
 };
 

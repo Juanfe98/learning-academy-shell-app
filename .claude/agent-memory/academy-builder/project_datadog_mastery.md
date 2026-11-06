@@ -1,0 +1,19 @@
+---
+name: project_datadog_mastery
+description: Datadog Mastery academy — slug, structure, and module authoring status for src/modules/datadog-mastery
+type: project
+---
+
+Datadog Mastery academy (slug: `datadog-mastery`, icon "🐶", accentColor `#632ca6`) already exists as a scaffolded, uncommitted directory at `src/modules/datadog-mastery/` with a complete `manifest.ts` (11 routes, `totalEstimatedMinutes: 415`, grouped into 4 `groups`). As of 2026-08-12 the directory is untracked in git (`git status --short` shows `?? src/modules/datadog-mastery/`) — it was scaffolded in a prior session but never committed.
+
+Manifest route list (order 0–10): `observability-and-datadog-fundamentals`, `the-datadog-agent`, `metrics-and-dogstatsd`, `tagging-strategy`, `dashboards-and-visualization`, `monitors-and-alerting`, `log-management`, `apm-and-distributed-tracing`, `infrastructure-and-containers`, `synthetics-and-rum`, `query-slos-and-best-practices`.
+
+Module files that exist on disk as of 2026-08-12: `observability-and-datadog-fundamentals.tsx`, `the-datadog-agent.tsx`, `metrics-and-dogstatsd.tsx`, `tagging-strategy.tsx`, `dashboards-and-visualization.tsx`, `monitors-and-alerting.tsx` (written this session — ~930 lines, the "priority topic" module per user request, covers monitor anatomy, state machine, evaluation semantics, all monitor types, anomaly/outlier/forecast, multi-alert grouping, notification routing + templating, downtimes, alert fatigue, Terraform/API as-code), `apm-and-distributed-tracing.tsx`, `infrastructure-and-containers.tsx`, `synthetics-and-rum.tsx`.
+
+Still missing (referenced in manifest, no file yet): `log-management.tsx`, `query-slos-and-best-practices.tsx`. `npx tsc --noEmit` fails on these two missing imports — this is a pre-existing gap, not something introduced by the monitors-and-alerting work.
+
+**Why:** the user is building this academy module-by-module across sessions rather than all at once (unlike the fully-generated academies in [[MEMORY]] index). Each request so far has been "write ONE content module .tsx file," not "build the whole academy."
+
+**How to apply:** when asked to write another datadog-mastery module, do NOT recreate manifest.ts or re-scaffold the directory — it already exists correctly. Just add the requested `modules/<slug>.tsx` file matching an existing manifest route slug. This academy is NOT yet wired into `MOCK_ACADEMIES` or `REGISTRY` — check both files before assuming it is discoverable in the hub UI; wiring may need to happen once enough modules exist, or may already be pending from a prior session (verify current state, don't trust this memory blindly since it decays fast).
+
+Key research facts verified against docs.datadoghq.com (2026-08-12) worth reusing if writing sibling modules: monitor query syntax is `avg(<window>):avg:<metric>{<scope>} by {<tag>} > <threshold>`; aggregation options are average/max/min/sum (colloquially "on average"/"at least once"/"at all times"/"in total"); anomaly=own-history+seasonality, outlier=peer-group clustering (DBSCAN/MAD), forecast=trend projection; no-data options are Evaluate as zero / Show last known status / Show NO DATA / Show NO DATA and notify / Show OK; full monitor type list fetched from `https://docs.datadoghq.com/monitors/types.md` (Host, Metric, Analysis, Anomaly, APM, Audit Trail, Change Alert, CI, Cloud Cost, Composite, Data Observability, Database Monitoring, Error Tracking, Event, Forecast, Integration, Live Process, Logs, Network, Network Path, Cloud Network Monitoring, NetFlow, Outlier, Process Check, RUM, Service Check, SLO Alerts, Synthetic Monitoring, Watchdog). Terraform `datadog_monitor` resource fields verified against the official provider docs (registry raw markdown redirects when fetched directly — use `raw.githubusercontent.com/DataDog/terraform-provider-datadog/master/docs/resources/monitor.md` instead).
